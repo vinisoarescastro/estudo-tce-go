@@ -1,0 +1,43 @@
+# Implantação com Docker: a aplicação fica numa rede interna e só o Caddy é exposto.
+# O Caddy obtém e renova o certificado HTTPS (Let's Encrypt) sozinho.
+# Antes de subir: defina DOMINIO (ex.: export DOMINIO=estudo.seudominio.com.br) e aponte o DNS para a VPS.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      DATA_DIR: /app/data
+      COOKIE_SECURE: "true"
+      TRUST_PROXY: "true"
+      BACKUP_INTERVAL_HOURS: "24"
+      BACKUP_KEEP: "14"
+      LOG_LEVEL: info
+    volumes:
+      - dados:/app/data
+    expose:
+      - "3000"
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+  caddy:
+    image: caddy:2.8.4-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO:?defina a variável DOMINIO com o domínio da aplicação}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_dados:/data
+      - caddy_config:/config
+
+volumes:
+  dados:
+  caddy_dados:
+  caddy_config:

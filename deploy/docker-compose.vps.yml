@@ -1,0 +1,47 @@
+# Implantação em uma VPS que já tem outras aplicações e um proxy nas portas 80/443.
+# Sobe só o app, numa rede própria, escutando apenas em 127.0.0.1:3100. O acesso externo
+# (HTTPS) fica por conta do proxy que a VPS já usa, apontando para essa porta.
+#
+# Uso (na pasta do projeto):
+#   docker compose -f deploy/docker-compose.vps.yml up -d --build
+name: estudo-tce-go
+
+services:
+  app:
+    build:
+      context: ..
+    container_name: estudo-tce-go-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      DATA_DIR: /app/data
+      COOKIE_SECURE: "true"
+      TRUST_PROXY: "true"
+      BACKUP_INTERVAL_HOURS: "24"
+      BACKUP_KEEP: "14"
+      LOG_LEVEL: info
+    volumes:
+      - dados:/app/data
+    ports:
+      - "127.0.0.1:3100:3000"
+    # Além da rede própria, entra na rede do proxy que já atende a VPS (aqui, a do Caddy do
+    # Mandatus), para ele alcançar o app pelo nome: reverse_proxy estudo-tce-go-app:3000.
+    networks:
+      - default
+      - proxy
+    # Teto de recursos: o app é leve e não deve competir com as outras aplicações.
+    mem_limit: 512m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+networks:
+  proxy:
+    name: mandatus_default
+    external: true
+
+volumes:
+  dados:

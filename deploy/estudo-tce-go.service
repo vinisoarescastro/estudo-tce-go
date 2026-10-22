@@ -1,0 +1,27 @@
+# Serviço systemd para rodar sem Docker. Copie para /etc/systemd/system/ e ajuste os caminhos.
+#   sudo systemctl daemon-reload && sudo systemctl enable --now estudo-tce-go
+#   journalctl -u estudo-tce-go -f        (logs)
+[Unit]
+Description=Estudo TCE-GO (plataforma de estudos)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=estudo
+Group=estudo
+WorkingDirectory=/opt/estudo-tce-go
+# As variáveis ficam em /opt/estudo-tce-go/.env (lido pela aplicação na inicialização)
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node --enable-source-maps build/server.mjs
+Restart=on-failure
+RestartSec=5
+# Endurecimento: o processo só escreve na pasta de dados
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/estudo-tce-go/data
+
+[Install]
+WantedBy=multi-user.target

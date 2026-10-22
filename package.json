@@ -1,0 +1,40 @@
+{
+  "name": "estudo-tce-go",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Plataforma de estudos para o cargo B02 do TCE-GO (edital nº 01/2026): frontend React, API Node e banco SQLite.",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "tsc -b && vite build && node scripts/build-server.mjs",
+    "build:server": "node scripts/build-server.mjs",
+    "start": "node --enable-source-maps build/server.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc -b",
+    "cli": "node build/cli.mjs",
+    "usuario:criar": "node build/cli.mjs usuario:criar",
+    "usuario:senha": "node build/cli.mjs usuario:senha",
+    "usuario:foto": "node build/cli.mjs usuario:foto",
+    "usuario:nome": "node build/cli.mjs usuario:nome",
+    "backup": "node build/cli.mjs backup",
+    "restaurar": "node build/cli.mjs restaurar"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.2.8",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "esbuild": "0.21.5",
+    "typescript": "5.6.3",
+    "vite": "5.4.11",
+    "vitest": "2.1.8"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

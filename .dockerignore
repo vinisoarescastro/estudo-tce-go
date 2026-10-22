@@ -1,0 +1,10 @@
+node_modules
+build
+data
+dist
+fontes
+.env
+*.db
+*.db-wal
+*.db-shm
+.git

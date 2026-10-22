@@ -1,0 +1,17 @@
+# Proxy reverso com HTTPS automático (Let's Encrypt).
+# No Docker, o domínio vem da variável DOMINIO e a aplicação responde em app:3000.
+# Sem Docker (systemd), troque {$DOMINIO} pelo seu domínio e app:3000 por 127.0.0.1:3000.
+{$DOMINIO} {
+	encode zstd gzip
+	reverse_proxy {$UPSTREAM:app:3000} {
+		header_up X-Forwarded-Host {host}
+	}
+	# Limite de tamanho do corpo (importação de backup)
+	request_body {
+		max_size 30MB
+	}
+	log {
+		output stdout
+		format console
+	}
+}
