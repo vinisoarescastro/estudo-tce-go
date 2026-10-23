@@ -8,7 +8,7 @@ Não contém senhas.
 | Item | Valor |
 |---|---|
 | Endereço | https://tce.nucleodedados.com (registro DNS **A** `tce` → IP da VPS) |
-| Pasta na VPS | `/opt/estudo-tce-go` |
+| Pasta na VPS | `/opt/estudo-tce-go` (clone git de `github.com/vinisoarescastro/estudo-tce-go`, branch `main`) |
 | Contêiner | `estudo-tce-go-app` (projeto Compose `estudo-tce-go`) |
 | Compose | `deploy/docker-compose.vps.yml` |
 | Porta | `127.0.0.1:3100` (só local; nada exposto direto na internet) |
@@ -46,9 +46,15 @@ docker ps --filter name=estudo
 docker logs -f --tail 100 estudo-tce-go-app
 curl -s http://127.0.0.1:3100/api/saude            # {"ok":true}
 
-# Atualizar o app (depois de enviar o código novo para a pasta)
-docker compose -f deploy/docker-compose.vps.yml up -d --build
+# Atualizar o app (a pasta é um clone git; o repositório é público, sem senha)
+# 1) no seu computador: commit e `git push origin main`
+# 2) na VPS:
+git pull && docker compose -f deploy/docker-compose.vps.yml up -d --build
 # Os dados ficam no volume; as migrações do banco rodam sozinhas. O Mandatus não é afetado.
+# Depois confira: curl -s http://127.0.0.1:3100/api/saude e dê Ctrl+F5 no navegador.
+# Se o git reclamar de "dubious ownership":
+#   git config --global --add safe.directory /opt/estudo-tce-go
+# Não edite arquivos direto na VPS: o próximo `git pull` pode conflitar. Altere no repositório.
 
 # Contas
 docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email E --nome "Nome"

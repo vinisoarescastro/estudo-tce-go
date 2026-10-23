@@ -68,7 +68,7 @@ Comandos úteis:
 |---|---|
 | Logs | `sudo docker compose logs -f app` |
 | Reiniciar | `sudo docker compose restart app` |
-| Atualizar a aplicação | `git pull` (ou rsync) e `sudo -E docker compose up -d --build` |
+| Atualizar a aplicação | `git pull` e `sudo -E docker compose up -d --build` (o clone na VPS deve apontar para o repositório; veja [deploy/VPS.md](../deploy/VPS.md)) |
 | Redefinir senha esquecida | `sudo docker compose exec app node build/cli.mjs usuario:senha --email voce@exemplo.com` |
 | Definir o nome exibido na saudação | `sudo docker compose exec app node build/cli.mjs usuario:nome --email voce@exemplo.com --nome "Seu nome"` |
 | Definir a foto de perfil (.webp, .png ou .jpg, até 2 MB) | copie a imagem para o contêiner (`docker cp`) e rode `node build/cli.mjs usuario:foto --email voce@exemplo.com --arquivo /tmp/foto.webp`. A foto fica em `data/fotos/` e **não** entra nos backups do banco |
