@@ -1081,6 +1081,7 @@ main { min-width: 0; padding-bottom: 96px; outline: none; }
 .foco-pausa { --foco-cor: #4ade80; }
 .foco-pausaLonga { --foco-cor: #2dd4bf; }
 .foco-parado { --foco-cor: #fbbf24; }
+.foco-excedido { --foco-cor: #f87171; }
 .foco :focus-visible { outline: 2px solid var(--foco-cor); outline-offset: 3px; }
 
 .foco-topo { display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(16px, 3vw, 32px); }

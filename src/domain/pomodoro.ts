@@ -34,80 +34,87 @@ export function limparCfg(c: Partial<PomodoroCfg>): PomodoroCfg {
   };
 }
 
-// Estado do descanso, guardado no navegador junto do id do cronômetro a que pertence.
-// Nada começa sozinho: ao fim do foco o cronômetro para e espera (espera = 'descanso');
-// ao fim do descanso ele espera de novo (espera = 'estudo'). Quem inicia é a pessoa.
+// Estado do pomodoro, guardado no navegador junto do id do cronômetro a que pertence.
+// Nada termina sozinho: ao fim do tempo previsto o aviso toca uma vez, mas o relógio segue
+// contando o excedente até a pessoa tocar em iniciar a próxima etapa.
+//  - espera 'descanso': o foco passou do previsto (o cronômetro continua rodando);
+//  - ate (epoch ms): descanso em andamento; passado esse instante o descanso também excede,
+//    e espera vira 'estudo' para marcar que o aviso já tocou.
 export interface PomodoroEstado {
   timerId: string | null;
-  tomadas: number; // descansos já oferecidos neste cronômetro
-  ate: number | null; // epoch ms do fim do descanso em andamento
+  tomadas: number; // pomodoros de foco já concluídos neste cronômetro
+  base: number | null; // tempo do cronômetro (ms) em que o foco atual começou; null = tomadas × foco
+  ate: number | null; // epoch ms do fim previsto do descanso em andamento
   espera: 'descanso' | 'estudo' | null;
-  inicio: number | null; // quando o motor parou o cronômetro (evita confundir com retomada à mão)
+  inicio: number | null; // quando o descanso começou (evita confundir com retomada à mão)
   longa: boolean;
 }
 
-export const ESTADO_VAZIO: PomodoroEstado = { timerId: null, tomadas: 0, ate: null, espera: null, inicio: null, longa: false };
+export const ESTADO_VAZIO: PomodoroEstado = { timerId: null, tomadas: 0, base: null, ate: null, espera: null, inicio: null, longa: false };
 
 export type TipoFase = 'foco' | 'pausa' | 'pausaLonga';
 
 export interface Fase {
   tipo: TipoFase;
-  restanteMs: number;
+  restanteMs: number; // 0 quando o tempo previsto já acabou
   totalMs: number;
-  aguardando: boolean; // a fase está pronta, mas ainda não foi iniciada
+  excedidoMs: number; // quanto passou do previsto
+  excedido: boolean; // o tempo previsto acabou e falta a pessoa iniciar a próxima etapa
   concluidos: number; // pomodoros de foco completos
   naSerie: number; // pomodoros completos na série atual (0 a ciclosLonga)
 }
 
+export const inicioFoco = (cfg: PomodoroCfg, est: PomodoroEstado) => est.base ?? est.tomadas * cfg.focoMin * 60000;
+
 export function fase(ms: number, cfg: PomodoroCfg, est: PomodoroEstado, agora: number): Fase {
   const focoMs = cfg.focoMin * 60000;
-  const concluidos = Math.floor(ms / focoMs);
-  const descanso = (aguardando: boolean, restanteMs: number): Fase => {
+  const naSerie = est.longa && (est.ate !== null || est.espera === 'descanso') ? cfg.ciclosLonga : est.tomadas % cfg.ciclosLonga;
+  if (est.ate !== null) {
     const totalMs = (est.longa ? cfg.pausaLongaMin : cfg.pausaMin) * 60000;
+    const resta = est.ate - agora;
     return {
       tipo: est.longa ? 'pausaLonga' : 'pausa',
-      restanteMs: aguardando ? totalMs : restanteMs,
+      restanteMs: Math.max(0, resta),
       totalMs,
-      aguardando,
-      concluidos,
-      naSerie: est.longa ? cfg.ciclosLonga : concluidos % cfg.ciclosLonga,
+      excedidoMs: Math.max(0, -resta),
+      excedido: resta <= 0,
+      concluidos: est.tomadas,
+      naSerie,
     };
-  };
-  if (est.espera === 'descanso') return descanso(true, 0);
-  if (est.ate !== null && agora < est.ate) return descanso(false, est.ate - agora);
+  }
+  const noFoco = Math.max(0, ms - inicioFoco(cfg, est));
   return {
     tipo: 'foco',
-    restanteMs: focoMs - (ms % focoMs),
+    restanteMs: Math.max(0, focoMs - noFoco),
     totalMs: focoMs,
-    aguardando: est.espera === 'estudo',
-    concluidos,
-    naSerie: concluidos % cfg.ciclosLonga,
+    excedidoMs: Math.max(0, noFoco - focoMs),
+    excedido: est.espera === 'descanso' || noFoco >= focoMs,
+    concluidos: est.tomadas,
+    naSerie,
   };
 }
 
 export interface Passo {
-  acao: 'pausar' | null; // o que fazer no cronômetro (null = só atualizar o estado)
   estado: PomodoroEstado;
   avisar: boolean; // toca o aviso sonoro
 }
 
-// Decide, a cada segundo, se o foco terminou (para o cronômetro e oferece o descanso) ou se
-// o descanso terminou (oferece voltar a estudar). Nunca inicia nada por conta própria.
+// Decide, a cada segundo, se o foco ou o descanso chegou ao fim previsto. Só marca o estado e
+// manda avisar: nunca pausa nem inicia nada por conta própria.
 export function proximoPasso(ms: number, cfg: PomodoroCfg, est: PomodoroEstado, agora: number, pausado: boolean): Passo | null {
-  const concluidos = Math.floor(ms / (cfg.focoMin * 60000));
-  if (est.ate !== null || est.espera !== null) {
-    // Retomar o cronômetro à mão durante o descanso ou a espera equivale a pular essa etapa.
+  if (est.ate !== null) {
+    // Retomar o cronômetro à mão durante o descanso equivale a pular essa etapa.
     if (!pausado && est.inicio !== null && agora - est.inicio > 3000) {
-      return { acao: null, estado: { ...est, ate: null, espera: null, inicio: null }, avisar: false };
+      return { estado: { ...est, ate: null, espera: null, inicio: null, base: ms }, avisar: false };
     }
-    if (est.ate !== null && agora >= est.ate) {
-      return { acao: null, estado: { ...est, ate: null, espera: 'estudo', inicio: agora }, avisar: true };
+    if (est.espera !== 'estudo' && agora >= est.ate) {
+      return { estado: { ...est, espera: 'estudo' }, avisar: true };
     }
     return null;
   }
-  if (!pausado && concluidos > est.tomadas) {
-    const longa = concluidos % cfg.ciclosLonga === 0;
-    return { acao: 'pausar', estado: { ...est, tomadas: concluidos, ate: null, espera: 'descanso', inicio: agora, longa }, avisar: true };
+  if (est.espera === null && !pausado && ms - inicioFoco(cfg, est) >= cfg.focoMin * 60000) {
+    const tomadas = est.tomadas + 1;
+    return { estado: { ...est, tomadas, base: inicioFoco(cfg, est), espera: 'descanso', longa: tomadas % cfg.ciclosLonga === 0 }, avisar: true };
   }
   return null;
 }

@@ -6,7 +6,7 @@ import { fmtMin } from '../domain/util';
 import { Icone, useAgora, type NomeIcone } from '../ui/primitives';
 import { useUi } from '../ui/UiContext';
 import { FinalizarSessao } from '../ui/FinalizarSessao';
-import { definirEstadoPomodoro, usePomodoroCfg, usePomodoroEstado } from '../ui/pomodoro';
+import { useAcoesPomodoro, usePomodoroCfg, usePomodoroEstado } from '../ui/pomodoro';
 
 const RAIO = 132;
 const CIRC = 2 * Math.PI * RAIO;
@@ -21,6 +21,7 @@ export function Foco() {
   const cfg = usePomodoroCfg();
   const est = usePomodoroEstado();
   const [finalizando, setFinalizando] = useState(false);
+  const { iniciarDescanso, iniciarEstudo } = useAcoesPomodoro();
   const principal = useRef<(() => void) | null>(null);
 
   // Mantém a tela acesa enquanto o foco está aberto e sai da tela cheia ao fechar.
@@ -57,35 +58,27 @@ export function Foco() {
   const pausado = t.rodandoDesde === null;
   const f = fase(ms, cfg, est, agora);
   const emPausa = f.tipo !== 'foco';
-  const novo = !emPausa && !f.aguardando && pausado && ms === 0;
-  const aguardando = f.aguardando || novo; // a etapa está pronta, falta a pessoa iniciar
-  const progresso = aguardando ? 0 : Math.min(1, Math.max(0, 1 - f.restanteMs / f.totalMs));
-  const parado = !emPausa && pausado && !aguardando;
+  const novo = !emPausa && !f.excedido && pausado && ms === 0;
+  const progresso = novo ? 0 : f.excedido ? 1 : Math.min(1, Math.max(0, 1 - f.restanteMs / f.totalMs));
+  const parado = !emPausa && pausado && !f.excedido && !novo;
 
   const rotulo = emPausa
-    ? f.aguardando ? 'Hora de descansar' : f.tipo === 'pausaLonga' ? 'Pausa longa' : 'Pausa curta'
-    : f.aguardando ? 'Descanso concluído' : novo ? 'Pronto para começar' : pausado ? 'Em pausa' : 'Foco';
+    ? f.excedido ? 'Descanso concluído' : f.tipo === 'pausaLonga' ? 'Pausa longa' : 'Pausa curta'
+    : f.excedido ? 'Foco concluído' : novo ? 'Pronto para começar' : pausado ? 'Em pausa' : 'Foco';
+  // Passado o tempo previsto o relógio segue contando o excedente, até a pessoa mudar de etapa.
+  const relogio = f.excedido ? `+${fmtRelogio(f.excedidoMs)}` : fmtRelogio(f.restanteMs);
 
-  // Nada começa sozinho: cada etapa espera a pessoa tocar em iniciar.
-  const iniciarDescanso = () => {
-    const agoraMs = Date.now();
-    definirEstadoPomodoro({ ate: agoraMs + f.totalMs, inicio: agoraMs, espera: null });
-  };
-  const pularDescanso = () => definirEstadoPomodoro({ ate: null, espera: 'estudo', inicio: Date.now() });
-  const iniciarEstudo = () => {
-    definirEstadoPomodoro({ espera: null, inicio: null });
-    despachar({ t: 'timerRetomar' });
-  };
-
+  // Nada muda de etapa sozinho: cada transição espera a pessoa tocar no botão.
   let acao: { rotulo: string; icone: NomeIcone; fazer: () => void };
-  if (emPausa && f.aguardando) acao = { rotulo: 'Iniciar descanso', icone: 'play', fazer: iniciarDescanso };
-  else if (emPausa) acao = { rotulo: 'Pular descanso', icone: 'pular', fazer: pularDescanso };
-  else if (aguardando) acao = { rotulo: 'Iniciar estudo', icone: 'play', fazer: iniciarEstudo };
-  else if (pausado) acao = { rotulo: 'Retomar', icone: 'play', fazer: iniciarEstudo };
+  if (emPausa && f.excedido) acao = { rotulo: 'Iniciar estudo', icone: 'play', fazer: iniciarEstudo };
+  else if (emPausa) acao = { rotulo: 'Pular descanso', icone: 'pular', fazer: iniciarEstudo };
+  else if (f.excedido) acao = { rotulo: 'Iniciar descanso', icone: 'play', fazer: iniciarDescanso };
+  else if (novo) acao = { rotulo: 'Iniciar estudo', icone: 'play', fazer: iniciarEstudo };
+  else if (pausado) acao = { rotulo: 'Retomar', icone: 'play', fazer: () => despachar({ t: 'timerRetomar' }) };
   else acao = { rotulo: 'Pausar', icone: 'pause', fazer: () => despachar({ t: 'timerPausar' }) };
   principal.current = acao.fazer;
 
-  const classes = ['foco', `foco-${f.tipo}`, parado ? 'foco-parado' : ''].join(' ');
+  const classes = ['foco', `foco-${f.tipo}`, parado ? 'foco-parado' : '', f.excedido ? 'foco-excedido' : ''].join(' ');
 
   return (
     <div className={classes}>
@@ -100,13 +93,13 @@ export function Foco() {
           {top && <b>nº {top.numero} · {top.titulo}</b>}
         </div>
 
-        <div className="foco-anel" role="timer" aria-label={`${rotulo}: faltam ${fmtRelogio(f.restanteMs)}`}>
+        <div className="foco-anel" role="timer" aria-label={`${rotulo}: ${f.excedido ? 'excedido em' : 'faltam'} ${relogio}`}>
           <svg viewBox="0 0 300 300" aria-hidden="true">
             <circle className="foco-trilha" cx="150" cy="150" r={RAIO} />
             <circle className="foco-prog" cx="150" cy="150" r={RAIO} strokeDasharray={CIRC} strokeDashoffset={CIRC * (1 - progresso)} />
           </svg>
           <div className="foco-relogio">
-            <b>{fmtRelogio(f.restanteMs)}</b>
+            <b>{relogio}</b>
             <span>{rotulo}</span>
           </div>
         </div>
@@ -114,7 +107,7 @@ export function Foco() {
         <div className="foco-acoes">
           <button className="foco-cta" onClick={acao.fazer}><Icone nome={acao.icone} tam={18} /> {acao.rotulo}</button>
           <div className="foco-sec">
-            {emPausa && f.aguardando && <button className="foco-texto" onClick={pularDescanso}><Icone nome="pular" tam={15} /> Pular descanso</button>}
+            {!emPausa && f.excedido && <button className="foco-texto" onClick={iniciarEstudo}><Icone nome="pular" tam={15} /> Pular descanso</button>}
             <button className="foco-texto" onClick={() => { despachar({ t: 'timerPausar' }); setFinalizando(true); }}><Icone nome="check" tam={15} /> Finalizar</button>
             <button
               className="foco-texto perigo"
@@ -129,7 +122,7 @@ export function Foco() {
       </main>
 
       <footer className="foco-rodape">
-        {fmtCronometro(ms)} estudados · Pomodoro {Math.min(f.naSerie + (emPausa ? 0 : 1), cfg.ciclosLonga)} de {cfg.ciclosLonga}
+        {fmtCronometro(ms)} estudados · Pomodoro {Math.min(f.naSerie + (emPausa || f.excedido ? 0 : 1), cfg.ciclosLonga)} de {cfg.ciclosLonga}
       </footer>
 
       <FinalizarSessao aberto={finalizando} onFechar={() => setFinalizando(false)} />

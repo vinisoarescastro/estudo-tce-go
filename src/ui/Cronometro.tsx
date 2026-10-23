@@ -6,7 +6,7 @@ import { fmtMin } from '../domain/util';
 import { Icone, useAgora } from './primitives';
 import { useUi } from './UiContext';
 import { FinalizarSessao } from './FinalizarSessao';
-import { usePomodoroCfg, usePomodoroEstado } from './pomodoro';
+import { useAcoesPomodoro, usePomodoroCfg, usePomodoroEstado } from './pomodoro';
 
 // Cronômetro flutuante. O estado fica no servidor, então sobrevive a recarregar a página
 // e acompanha o usuário em qualquer dispositivo.
@@ -17,6 +17,7 @@ export function Cronometro() {
   const agora = useAgora(1000, !!t);
   const cfg = usePomodoroCfg();
   const est = usePomodoroEstado();
+  const { iniciarDescanso, iniciarEstudo } = useAcoesPomodoro();
   const [finalizando, setFinalizando] = useState(false);
   if (!t) return null;
   const ms = decorridoMs(t, agora);
@@ -26,13 +27,13 @@ export function Cronometro() {
   const pct = Math.min(1, ms / (t.planejadoMin * 60000));
   const f = fase(ms, cfg, est, agora);
   const emPausa = f.tipo !== 'foco';
-  const estado = emPausa ? (f.aguardando ? 'Hora do descanso' : 'Descanso') : pausado ? 'Pausado' : 'Estudando';
+  const estado = emPausa ? (f.excedido ? 'Descanso concluído' : 'Descanso') : f.excedido ? 'Hora do descanso' : pausado ? 'Pausado' : 'Estudando';
 
   return (
     <div className={`cronometro ${pausado ? 'pausado' : ''} ${emPausa ? 'descanso' : ''}`} role="region" aria-label="Cronômetro de estudo">
       <span className="cr-estado"><span className="ponto" aria-hidden="true" />{estado}</span>
       <span className="cr-tempo" aria-live="off">{fmtCronometro(ms)}</span>
-      <span className="cr-pomo" title={emPausa ? 'Tempo restante da pausa' : 'Tempo restante deste pomodoro'}>{fmtRelogio(f.restanteMs)}</span>
+      <span className="cr-pomo" title={f.excedido ? 'Tempo além do previsto' : emPausa ? 'Tempo restante da pausa' : 'Tempo restante deste pomodoro'}>{f.excedido ? `+${fmtRelogio(f.excedidoMs)}` : fmtRelogio(f.restanteMs)}</span>
       <span className="cr-desc" title={top ? `nº ${top.numero} ${top.titulo}` : undefined}>
         <b>{disc?.nomeCurto}</b>
         {top ? ` · ${top.titulo}` : ''}
@@ -40,7 +41,12 @@ export function Cronometro() {
       </span>
       <span className="cr-acoes">
         <button className="btn" onClick={() => navegar('foco')} title="Abrir a tela de foco"><Icone nome="alvo" tam={14} /> Foco</button>
-        {pausado ? (
+        {f.excedido && (
+          <button className="btn primario" onClick={emPausa ? iniciarEstudo : iniciarDescanso}>
+            <Icone nome="play" tam={13} /> {emPausa ? 'Iniciar estudo' : 'Iniciar descanso'}
+          </button>
+        )}
+        {emPausa ? null : pausado ? (
           <button className="btn" onClick={() => despachar({ t: 'timerRetomar' })}><Icone nome="play" tam={13} /> Retomar</button>
         ) : (
           <button className="btn" onClick={() => despachar({ t: 'timerPausar' })}><Icone nome="pause" tam={13} /> Pausar</button>
