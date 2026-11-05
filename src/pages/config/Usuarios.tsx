@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApp } from '../../store/AppStore';
 import { api } from '../../api';
-import { Cabecalho, Icone, Painel } from '../../ui/primitives';
+import { Barra, Cabecalho, Icone, Painel } from '../../ui/primitives';
+import { fmtMin, fmtPct } from '../../domain/util';
+import { ChipSituacao, DetalhePessoa, textoUltimo, type Resumo } from './Acompanhamento';
 import { useUi } from '../../ui/UiContext';
 
 interface Conta {
@@ -17,11 +19,8 @@ interface Conta {
 }
 interface CargoOpcao { id: string; codigo: string; nome: string; nomeCurto: string }
 
-const quando = (iso: string | null) =>
-  iso ? new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'nunca entrou';
-
 // Administração de contas: só aparece para administradores (o servidor também confere).
-// O administrador cria e gerencia contas, mas não vê os dados de estudo de ninguém.
+// O administrador cria e gerencia contas e acompanha o progresso (só números: nada de notas nem de texto das sessões).
 export function ConfigUsuarios() {
   const { usuario, avisar } = useApp();
   const { confirmar } = useUi();
@@ -31,6 +30,8 @@ export function ConfigUsuarios() {
   const [form, setForm] = useState({ nome: '', email: '', cargoId: '', senha: '' });
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [resumos, setResumos] = useState<Record<number, Resumo | null>>({});
+  const [vendo, setVendo] = useState<number | null>(null);
   const [redefinindo, setRedefinindo] = useState<{ id: number; nova: string } | null>(null);
 
   const carregar = useCallback(() => {
@@ -41,6 +42,7 @@ export function ConfigUsuarios() {
         setErroLista(null);
       })
       .catch((e: Error) => setErroLista(e.message));
+    api<{ resumos: Record<number, Resumo | null> }>('/api/admin/acompanhamento').then((r) => setResumos(r.resumos)).catch(() => undefined);
   }, []);
   useEffect(carregar, [carregar]);
 
@@ -139,7 +141,7 @@ export function ConfigUsuarios() {
         ) : (
           <div className="tabela-wrap">
             <table className="tabela">
-              <thead><tr><th>Pessoa</th><th>Cargo</th><th>Situação</th><th>Último acesso</th><th><span className="sr-only">Ações</span></th></tr></thead>
+              <thead><tr><th>Pessoa</th><th>Cargo</th><th>Progresso do edital</th><th>Últimos 7 dias</th><th>Último estudo</th><th>Conta</th><th><span className="sr-only">Ações</span></th></tr></thead>
               <tbody>
                 {contas.map((c) => (
                   <tr key={c.id}>
@@ -148,13 +150,26 @@ export function ConfigUsuarios() {
                       <div className="nota">{c.email}</div>
                     </td>
                     <td><span className="chip chip-pri">{nomeCargo(c.cargoId)}</span></td>
+                    <td style={{ minWidth: 170 }}>
+                      {resumos[c.id] ? (
+                        <>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
+                            <Barra valor={resumos[c.id]!.pct} rotulo={`Progresso de ${c.nome}`} />
+                            <b style={{ fontWeight: 550 }}>{fmtPct(resumos[c.id]!.pct)}</b>
+                          </div>
+                          <div className="nota">{resumos[c.id]!.concluidos} de {resumos[c.id]!.totalConteudos} · <ChipSituacao r={resumos[c.id]!} /></div>
+                        </>
+                      ) : <span className="nota">ainda não entrou</span>}
+                    </td>
+                    <td className="nota">{resumos[c.id] ? <>{fmtMin(resumos[c.id]!.minutos7)}<br />de {fmtMin(resumos[c.id]!.metaSemanalMin)}</> : '—'}</td>
+                    <td className="nota">{resumos[c.id] ? <>{textoUltimo(resumos[c.id]!)}{resumos[c.id]!.diasSemEstudar !== null && resumos[c.id]!.diasSemEstudar! >= 4 && <> <span className="chip chip-aviso">parado</span></>}</> : '—'}</td>
                     <td>
                       <span className={`chip ${c.ativo ? 'chip-ok' : 'chip-erro'}`}>{c.ativo ? 'Ativa' : 'Desativada'}</span>{' '}
                       {c.papel === 'admin' && <span className="chip">Administrador</span>}{' '}
                       {c.senhaProvisoria && <span className="chip chip-aviso">Senha provisória</span>}
                     </td>
-                    <td className="nota">{quando(c.ultimoAcesso)}</td>
                     <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <button className="btn pq" onClick={() => setVendo(vendo === c.id ? null : c.id)} aria-expanded={vendo === c.id}>Acompanhar</button>{' '}
                       {c.id !== usuario.id && (
                         <>
                           <button className="btn pq" onClick={() => setRedefinindo({ id: c.id, nova: '' })}>Redefinir senha</button>{' '}
@@ -170,6 +185,8 @@ export function ConfigUsuarios() {
           </div>
         )}
       </Painel>
+
+      {vendo !== null && <DetalhePessoa id={vendo} nome={contas?.find((c) => c.id === vendo)?.nome || 'conta'} aoFechar={() => setVendo(null)} />}
 
       {redefinindo && (
         <Painel titulo="Redefinir senha">

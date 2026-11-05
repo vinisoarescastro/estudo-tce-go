@@ -53,7 +53,7 @@ A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (co
 | **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/ANALISE-A01.md)) |
 
 - **O cargo é fixo e definido na criação da conta.** Cada conta só enxerga o edital e os dados do seu cargo; o servidor recusa ids de outro cargo e não existe forma de trocar o cargo depois.
-- **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador gerencia contas, mas não vê os dados de estudo de ninguém.
+- **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador também acompanha o progresso de cada conta (números agregados: % do edital, horas, último estudo, ritmo, disciplinas e pendências prioritárias), sem acesso a notas nem ao texto das sessões.
 - Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` e `node build/cli.mjs cargos`.
 
 ### Trazer os dados da versão anterior
@@ -240,7 +240,7 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 75 testes:
+`npm test` roda 80 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
 - **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; a migração 3 mantém intactos contas, edital e dados de estudo existentes;

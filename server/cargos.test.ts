@@ -193,6 +193,48 @@ describe('vários usuários e cargos (API)', () => {
     expect((await req('/api/perfil/foto', { cookie: ck })).status).toBe(404);
   });
 
+  test('acompanhamento: o administrador vê números de progresso, nunca notas; usuário comum não vê nada', async () => {
+    const adm = await adminCk();
+    const maria = (await entrar('minha-senha-propria-77', 'maria@exemplo.com')).cookie!;
+    const dA = (await req('/api/dados', { cookie: maria })).json;
+    // A Maria escreve uma nota privada e conclui um conteúdo prioritário.
+    expect((await acoes(maria, { t: 'notas', topicoId: 'a053', texto: 'NOTA-PRIVADA-DA-MARIA' }, dA.versao)).status).toBe(200);
+    expect((await acoes(maria, { t: 'status', topicoId: 'a053', status: 'estudado' })).status).toBe(200);
+    const id = auth.buscarPorEmail(db, 'maria@exemplo.com')!.id;
+
+    const lista = await req('/api/admin/acompanhamento', { cookie: adm });
+    expect(lista.status).toBe(200);
+    const r = lista.json.resumos[id];
+    expect(r.totalConteudos).toBe(seedA01.topicos.length);
+    expect(r.concluidos).toBeGreaterThanOrEqual(2); // a052 (sessão) e a053
+    expect(r.pct).toBeCloseTo(r.concluidos / r.totalConteudos);
+    expect(r.prioritarios.total).toBeGreaterThan(0);
+    expect(r.sessoes).toBe(1);
+    expect(r.minutosTotais).toBe(55);
+    expect(r.ultimoEstudo).toBe('2026-10-20');
+
+    const det = await req(`/api/admin/acompanhamento/detalhe?id=${id}`, { cookie: adm });
+    expect(det.status).toBe(200);
+    expect(det.json.detalhe.porDisciplina).toHaveLength(14);
+    expect(det.json.detalhe.semanas).toHaveLength(8);
+    expect(det.json.detalhe.pendentesPrioritarios.length).toBeGreaterThan(0);
+    // Privacidade: nada de notas nem de texto das sessões nas respostas.
+    const bruto = JSON.stringify([lista.json, det.json]);
+    expect(bruto).not.toMatch(/NOTA-PRIVADA|só da Maria/);
+
+    // Quem ainda não entrou aparece sem dados, e a consulta não cria o plano inicial dela.
+    const nova = await auth.criarUsuario(db, { email: 'nunca@exemplo.com', nome: 'Nunca', senha: 'frase-secreta-4455', cargoId: 'B02' });
+    expect((await req('/api/admin/acompanhamento', { cookie: adm })).json.resumos[nova.id]).toBeNull();
+    expect((await req(`/api/admin/acompanhamento/detalhe?id=${nova.id}`, { cookie: adm })).json).toEqual({ resumo: null, detalhe: null });
+    expect(db.prepare('SELECT COUNT(*) AS n FROM configuracoes WHERE usuario_id = ?').get(nova.id)).toMatchObject({ n: 0 });
+    expect((await req('/api/admin/acompanhamento/detalhe?id=99999', { cookie: adm })).status).toBe(404);
+
+    // Usuário comum: 403 nas duas rotas; sem login: 401.
+    expect((await req('/api/admin/acompanhamento', { cookie: maria })).status).toBe(403);
+    expect((await req(`/api/admin/acompanhamento/detalhe?id=${id}`, { cookie: maria })).status).toBe(403);
+    expect((await req('/api/admin/acompanhamento')).status).toBe(401);
+  });
+
   test('o administrador redefine senhas e não vê dados de estudo alheios', async () => {
     const adm = await adminCk();
     const id = auth.buscarPorEmail(db, 'maria@exemplo.com')!.id;

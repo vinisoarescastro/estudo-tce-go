@@ -64,6 +64,13 @@ export class ServicoDados {
     return novo;
   }
 
+  // Leitura para o acompanhamento do administrador: nunca cria o plano inicial de quem ainda não entrou.
+  lerSemCriar(usuarioId: number): AppData | null {
+    const c = this.cache.get(usuarioId);
+    if (c && c.versao === this.versao(usuarioId)) return c.dados;
+    return carregarDados(this.db, usuarioId);
+  }
+
   // Aplica uma ação. Devolve a nova versão e, quando o resultado pode diferir do que o
   // cliente calculou (versão desatualizada, ids ou relógio recusados), os dados completos.
   aplicar(

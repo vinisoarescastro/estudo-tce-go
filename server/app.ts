@@ -10,6 +10,8 @@ import { listarCargos } from './edital';
 import type { Config } from './config';
 import * as auth from './auth';
 import { ServicoDados } from './servico';
+import { detalhar, resumir } from '../src/domain/acompanhamento';
+import { definirFuso, isoDia } from '../src/domain/util';
 import { acharFoto, removerFoto, salvarFotoBytes } from './foto';
 import { criarBackup, rotacionarBackups } from './backup';
 import { log, logErro } from './log';
@@ -223,7 +225,38 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
     if (!u) throw new ErroHttp(404, 'Usuário não encontrado.');
     return u;
   };
+  // Acompanhamento: números agregados de progresso. Não inclui notas nem texto das sessões.
+  const acompanhar = (id: number) => {
+    const dados = servico.lerSemCriar(id);
+    if (!dados) return null; // a pessoa ainda não entrou
+    const seed = servico.seedDe(id);
+    definirFuso(dados.user.config.fusoHorario);
+    const hoje = isoDia();
+    return { dados, seed, hoje };
+  };
   rotas.push(
+    {
+      metodo: 'GET', caminho: '/api/admin/acompanhamento', privada: true,
+      h: (r) => {
+        exigirAdmin(r);
+        const resumos: Record<number, unknown> = {};
+        for (const u of auth.listarUsuarios(db)) {
+          const a = acompanhar(u.id);
+          resumos[u.id] = a ? resumir(a.seed, a.dados.user, a.hoje) : null;
+        }
+        return { resumos };
+      },
+    },
+    {
+      metodo: 'GET', caminho: '/api/admin/acompanhamento/detalhe', privada: true,
+      h: (r) => {
+        exigirAdmin(r);
+        const u = alvo({ id: r.url.searchParams.get('id') });
+        const a = acompanhar(u.id);
+        if (!a) return { resumo: null, detalhe: null };
+        return { resumo: resumir(a.seed, a.dados.user, a.hoje), detalhe: detalhar(a.seed, a.dados.user, a.hoje) };
+      },
+    },
     {
       metodo: 'GET', caminho: '/api/admin/usuarios', privada: true,
       h: (r) => {
