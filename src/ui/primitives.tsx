@@ -333,7 +333,7 @@ export function LinkEdital({ pagina, children }: { pagina: number; children?: Re
 }
 
 // Diálogo modal acessível (foco preso, Esc fecha). Com `lado`, abre como painel lateral.
-export function Modal({ titulo, aberto, onFechar, children, largura, lado, subtitulo }: { titulo: string; aberto: boolean; onFechar: () => void; children: ReactNode; largura?: number; lado?: boolean; subtitulo?: ReactNode }) {
+export function Modal({ titulo, aberto, onFechar, children, largura, lado, subtitulo, obrigatorio }: { obrigatorio?: boolean; titulo: string; aberto: boolean; onFechar: () => void; children: ReactNode; largura?: number; lado?: boolean; subtitulo?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!aberto) return;
@@ -371,9 +371,11 @@ export function Modal({ titulo, aberto, onFechar, children, largura, lado, subti
             <h2>{titulo}</h2>
             {subtitulo && <p className="modal-sub">{subtitulo}</p>}
           </div>
-          <button className="btn-icone" onClick={onFechar} aria-label="Fechar">
-            <Icone nome="x" />
-          </button>
+          {!obrigatorio && (
+            <button className="btn-icone" onClick={onFechar} aria-label="Fechar">
+              <Icone nome="x" />
+            </button>
+          )}
         </header>
         <div className="modal-c">{children}</div>
       </div>

@@ -10,7 +10,7 @@ import { listarCargos } from './edital';
 import type { Config } from './config';
 import * as auth from './auth';
 import { ServicoDados } from './servico';
-import { acharFoto } from './foto';
+import { acharFoto, removerFoto, salvarFotoBytes } from './foto';
 import { criarBackup, rotacionarBackups } from './backup';
 import { log, logErro } from './log';
 
@@ -38,6 +38,8 @@ const TIPOS: Record<string, string> = {
   '.woff2': 'font/woff2',
   '.txt': 'text/plain; charset=utf-8',
 };
+
+const LIBERADAS_COM_SENHA_PROVISORIA = new Set(['/api/auth/eu', '/api/auth/senha', '/api/auth/sair']);
 
 // Arquivos estáticos que só usuários autenticados podem baixar.
 const ESTATICOS_PRIVADOS = new Set(['/edital.pdf']);
@@ -161,6 +163,27 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
         r.res.writeHead(200, { 'Content-Type': foto.tipo, 'Content-Length': statSync(foto.arquivo).size, 'Cache-Control': 'private, max-age=86400' });
         if (r.req.method === 'HEAD') r.res.end();
         else createReadStream(foto.arquivo).pipe(r.res);
+      },
+    },
+    {
+      // Foto enviada pelo próprio usuário: JSON { imagem: "data:image/...;base64,..." }.
+      metodo: 'POST', caminho: '/api/perfil/foto', privada: true, limite: 3.5 * 1024 * 1024,
+      h: (r, corpo) => {
+        const m = typeof corpo?.imagem === 'string' ? /^data:image\/(?:png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$/.exec(corpo.imagem) : null;
+        if (!m) throw new ErroHttp(400, 'Envie uma imagem .webp, .png ou .jpg.');
+        try {
+          salvarFotoBytes(cfg.pastaDados, r.usuario!.id, Buffer.from(m[1], 'base64'));
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+        return { usuario: publico(auth.buscarUsuario(db, r.usuario!.id)!) };
+      },
+    },
+    {
+      metodo: 'POST', caminho: '/api/perfil/foto/remover', privada: true, limite: 1024,
+      h: (r) => {
+        removerFoto(cfg.pastaDados, r.usuario!.id);
+        return { usuario: publico(auth.buscarUsuario(db, r.usuario!.id)!) };
       },
     },
     {
@@ -374,6 +397,10 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
     if (rota.privada && !r.usuario) {
       if (r.token) limparCookie(r.res);
       throw new ErroHttp(401, 'Sessão expirada ou inexistente. Entre novamente.');
+    }
+    // Senha provisória: até trocá-la, a conta só pode ver quem é, trocar a senha ou sair.
+    if (rota.privada && r.usuario!.senhaProvisoria && !LIBERADAS_COM_SENHA_PROVISORIA.has(r.url.pathname)) {
+      throw new ErroHttp(403, 'Troque a senha provisória para continuar.', { senhaProvisoria: true });
     }
     const corpo = altera ? await lerCorpo(r.req, rota.limite ?? 64 * 1024) : undefined;
     const out = await rota.h(r, corpo);

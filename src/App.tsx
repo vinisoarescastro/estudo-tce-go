@@ -267,12 +267,6 @@ function Shell() {
         {menu && <div className="veu" onClick={() => setMenu(false)} aria-hidden="true" />}
 
         <main id="conteudo" tabIndex={-1}>
-          {usuario.senhaProvisoria && loc.rota !== 'config/conta' && (
-            <div className="aviso-senha" role="alert">
-              <Icone nome="escudo" tam={16} />
-              <span>Sua senha foi definida por um administrador. <a href="#/config/conta">Crie uma senha só sua</a> para proteger seus estudos.</span>
-            </div>
-          )}
           {pagina}
         </main>
         <Cronometro />

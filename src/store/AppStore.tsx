@@ -6,6 +6,7 @@ import { api, definirAoExpirar, ErroApi, type Preferencias, type UsuarioPublico 
 import { POMODORO_PADRAO } from '../domain/pomodoro';
 import { definirSeed, seed } from './seed';
 import { Login } from '../pages/Login';
+import { SenhaObrigatoria } from '../pages/SenhaObrigatoria';
 
 export { seed };
 
@@ -21,6 +22,7 @@ interface Ctx {
   salvo: EstadoSalvo;
   usuario: UsuarioPublico;
   sair: () => Promise<void>;
+  recarregarUsuario: () => Promise<void>;
   prefs: Preferencias;
   definirPrefs: (p: Partial<Preferencias>) => void;
 }
@@ -166,7 +168,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const entrou = useCallback((u: UsuarioPublico) => {
     setUsuario(u);
-    void carregar(u);
+    // Com senha provisória, nada é carregado até a pessoa criar a própria senha.
+    if (!u.senhaProvisoria) void carregar(u);
   }, [carregar]);
 
   // Verifica a sessão ao abrir.
@@ -270,9 +273,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUsuario(null);
   }, [avisar]);
 
+  // Atualiza os dados da conta (foto, senha provisória) sem recarregar os estudos.
+  const recarregarUsuario = useCallback(async () => {
+    const r = await api<{ usuario: UsuarioPublico }>('/api/auth/eu');
+    setUsuario(r.usuario);
+  }, []);
+
   const value = useMemo(
-    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, prefs, definirPrefs } : null),
-    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, prefs, definirPrefs],
+    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs } : null),
+    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs],
   );
 
   if (erroCarga)
@@ -286,6 +295,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       </div>
     );
   if (usuario === null) return <Login onEntrar={entrou} toasts={toasts} fecharToast={fecharToast} />;
+  if (usuario?.senhaProvisoria) return <SenhaObrigatoria usuario={usuario} aoTrocar={entrou} aoSair={sair} />;
   if (!value) return <div className="carregando" role="status"><span className="girador" aria-hidden="true" />Carregando seus dados…</div>;
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

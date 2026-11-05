@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
 // Foto de perfil: um arquivo por usuário em <pasta de dados>/fotos/<id>.<ext>. Fica fora da
@@ -38,4 +38,27 @@ export function salvarFoto(pastaDados: string, usuarioId: number, origem: string
   const destino = join(pasta, `${usuarioId}${ext}`);
   copyFileSync(origem, destino);
   return destino;
+}
+
+// Reconhece o formato pelos primeiros bytes do arquivo (o tipo informado pelo navegador não é confiável).
+function extensaoPorConteudo(b: Buffer): '.png' | '.jpg' | '.webp' | null {
+  if (b.length > 12 && b.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return '.png';
+  if (b.length > 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return '.jpg';
+  if (b.length > 12 && b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP') return '.webp';
+  return null;
+}
+
+// Grava a foto enviada pelo próprio usuário (bytes já decodificados), no lugar da anterior.
+export function salvarFotoBytes(pastaDados: string, usuarioId: number, bytes: Buffer): void {
+  if (bytes.length > TAMANHO_MAX_FOTO) throw new Error('A imagem passa de 2 MB.');
+  const ext = extensaoPorConteudo(bytes);
+  if (!ext) throw new Error('Use uma imagem .webp, .png ou .jpg.');
+  const pasta = join(pastaDados, 'fotos');
+  mkdirSync(pasta, { recursive: true });
+  removerFoto(pastaDados, usuarioId);
+  writeFileSync(join(pasta, `${usuarioId}${ext}`), bytes);
+}
+
+export function removerFoto(pastaDados: string, usuarioId: number): void {
+  for (const e of Object.keys(TIPOS_FOTO)) rmSync(join(pastaDados, 'fotos', `${usuarioId}${e}`), { force: true });
 }

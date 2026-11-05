@@ -240,7 +240,7 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 73 testes:
+`npm test` roda 75 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
 - **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; a migração 3 mantém intactos contas, edital e dados de estudo existentes;

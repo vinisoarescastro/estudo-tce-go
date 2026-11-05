@@ -6,7 +6,7 @@ export function Avatar({ usuario, tam = 30, className = '' }: { usuario: Usuario
   const [falhou, setFalhou] = useState(false);
   const estilo = { width: tam, height: tam, fontSize: Math.round(tam * 0.42) };
   if (usuario.foto && !falhou) {
-    return <img className={`avatar avatar-foto ${className}`} style={estilo} src={`/api/perfil/foto?v=${usuario.foto}`} alt="" width={tam} height={tam} onError={() => setFalhou(true)} />;
+    return <img key={usuario.foto} className={`avatar avatar-foto ${className}`} style={estilo} src={`/api/perfil/foto?v=${usuario.foto}`} alt="" width={tam} height={tam} onError={() => setFalhou(true)} />;
   }
   const nome = usuario.nome || usuario.email;
   return <span className={`avatar ${className}`} style={estilo} aria-hidden="true">{nome.slice(0, 1).toUpperCase()}</span>;

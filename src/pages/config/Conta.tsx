@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Avatar } from '../../ui/Avatar';
 import { useApp, seed } from '../../store/AppStore';
 import { api } from '../../api';
 import { Cabecalho, Icone, Painel, Vazio } from '../../ui/primitives';
@@ -15,8 +16,68 @@ function navegador(ua: string): string {
   return so ? `${nav} · ${so}` : nav;
 }
 
+// Lê a imagem escolhida, recorta o centro em quadrado e reduz para 400 × 400 (WebP, ou JPEG se o
+// navegador não gerar WebP). Assim qualquer foto de celular cabe no limite de 2 MB.
+function prepararFoto(arquivo: File): Promise<string> {
+  return new Promise((ok, falha) => {
+    if (!/^image\/(png|jpeg|webp)$/.test(arquivo.type)) return falha(new Error('Use uma imagem .webp, .png ou .jpg.'));
+    const leitor = new FileReader();
+    leitor.onerror = () => falha(new Error('Não foi possível ler o arquivo.'));
+    leitor.onload = () => {
+      const img = new Image();
+      img.onerror = () => falha(new Error('Não foi possível abrir a imagem.'));
+      img.onload = () => {
+        const lado = Math.min(img.naturalWidth, img.naturalHeight);
+        const tam = Math.min(400, lado);
+        const tela = document.createElement('canvas');
+        tela.width = tam;
+        tela.height = tam;
+        const ctx = tela.getContext('2d');
+        if (!ctx) return falha(new Error('Seu navegador não conseguiu preparar a imagem.'));
+        ctx.drawImage(img, (img.naturalWidth - lado) / 2, (img.naturalHeight - lado) / 2, lado, lado, 0, 0, tam, tam);
+        let url = tela.toDataURL('image/webp', 0.85);
+        if (!url.startsWith('data:image/webp')) url = tela.toDataURL('image/jpeg', 0.88);
+        ok(url);
+      };
+      img.src = String(leitor.result);
+    };
+    leitor.readAsDataURL(arquivo);
+  });
+}
+
 export function ConfigConta() {
-  const { usuario, avisar, sair } = useApp();
+  const { usuario, avisar, sair, recarregarUsuario } = useApp();
+  const entradaFoto = useRef<HTMLInputElement>(null);
+  const [enviandoFoto, setEnviandoFoto] = useState(false);
+
+  const escolherFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const arquivo = e.target.files?.[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    setEnviandoFoto(true);
+    try {
+      const imagem = await prepararFoto(arquivo);
+      await api('/api/perfil/foto', { metodo: 'POST', corpo: { imagem } });
+      await recarregarUsuario();
+      avisar('ok', 'Foto atualizada.');
+    } catch (err) {
+      avisar('erro', (err as Error).message);
+    } finally {
+      setEnviandoFoto(false);
+    }
+  };
+  const removerFoto = async () => {
+    setEnviandoFoto(true);
+    try {
+      await api('/api/perfil/foto/remover', { metodo: 'POST' });
+      await recarregarUsuario();
+      avisar('ok', 'Foto removida.');
+    } catch (err) {
+      avisar('erro', (err as Error).message);
+    } finally {
+      setEnviandoFoto(false);
+    }
+  };
   const { confirmar } = useUi();
   const [sessoes, setSessoes] = useState<SessaoLogin[] | null>(null);
   const [form, setForm] = useState({ atual: '', nova: '', repetir: '' });
@@ -69,6 +130,18 @@ export function ConfigConta() {
       />
       <Painel>
         <div className="config">
+          <div className="config-secao">
+            <div className="config-desc">
+              <h2>Foto de perfil</h2>
+              <p>Aparece no menu lateral. Aceita .png, .jpg ou .webp; a imagem é recortada em quadrado e reduzida automaticamente.</p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <Avatar usuario={usuario} tam={72} />
+              <input ref={entradaFoto} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={escolherFoto} />
+              <button className="btn" onClick={() => entradaFoto.current?.click()} disabled={enviandoFoto}>{enviandoFoto ? 'Enviando…' : usuario.foto ? 'Trocar foto' : 'Escolher foto'}</button>
+              {usuario.foto && <button className="btn" onClick={() => void removerFoto()} disabled={enviandoFoto}>Remover foto</button>}
+            </div>
+          </div>
           <div className="config-secao">
             <div className="config-desc">
               <h2>Conta</h2>

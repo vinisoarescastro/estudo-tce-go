@@ -156,6 +156,43 @@ describe('vários usuários e cargos (API)', () => {
     expect((await req('/api/admin/usuarios/ativo', { metodo: 'POST', cookie: adm, corpo: { id: 99999, ativo: false } })).status).toBe(404);
   });
 
+  test('com senha provisória, o servidor bloqueia tudo até a pessoa criar a própria senha', async () => {
+    const adm = await adminCk();
+    expect((await criarConta(adm, { email: 'luiza@exemplo.com', nome: 'Luiza', senha: 'provisoria-alfa-5555', cargoId: 'A01' })).status).toBe(200);
+    const ck = (await entrar('provisoria-alfa-5555', 'luiza@exemplo.com')).cookie!;
+    for (const c of ['/api/edital', '/api/dados', '/api/preferencias', '/api/exportar']) {
+      const r = await req(c, { cookie: ck });
+      expect(r.status, c).toBe(403);
+      expect(r.json.senhaProvisoria).toBe(true);
+    }
+    expect((await acoes(ck, { t: 'cicloPular' })).status).toBe(403);
+    expect((await req('/api/perfil/foto/remover', { metodo: 'POST', cookie: ck, corpo: {} })).status).toBe(403);
+    expect((await req('/api/auth/eu', { cookie: ck })).json.usuario.senhaProvisoria).toBe(true);
+    expect((await req('/api/auth/senha', { metodo: 'POST', cookie: ck, corpo: { atual: 'provisoria-alfa-5555', nova: 'frase-longa-segura-2026' } })).status).toBe(200);
+    expect((await req('/api/auth/eu', { cookie: ck })).json.usuario.senhaProvisoria).toBe(false);
+    expect((await req('/api/edital', { cookie: ck })).status).toBe(200);
+  });
+
+  test('o usuário envia, troca e remove a própria foto, com validação do arquivo', async () => {
+    const ck = (await entrar('minha-senha-propria-77', 'maria@exemplo.com')).cookie!;
+    const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==';
+    expect((await req('/api/perfil/foto', { cookie: ck })).status).toBe(404);
+    const ok = await req('/api/perfil/foto', { metodo: 'POST', cookie: ck, corpo: { imagem: `data:image/png;base64,${png}` } });
+    expect(ok.status).toBe(200);
+    expect(typeof ok.json.usuario.foto).toBe('number');
+    expect((await req('/api/perfil/foto', { cookie: ck })).status).toBe(200);
+    // Conteúdo que não é imagem é recusado, mesmo declarado como PNG; outros formatos também.
+    const falso = Buffer.from('<script>alert(1)</script>').toString('base64');
+    expect((await req('/api/perfil/foto', { metodo: 'POST', cookie: ck, corpo: { imagem: `data:image/png;base64,${falso}` } })).status).toBe(400);
+    expect((await req('/api/perfil/foto', { metodo: 'POST', cookie: ck, corpo: { imagem: `data:image/svg+xml;base64,${falso}` } })).status).toBe(400);
+    expect((await req('/api/perfil/foto', { metodo: 'POST', cookie: ck, corpo: { imagem: 'qualquer coisa' } })).status).toBe(400);
+    // A foto é de cada conta: o administrador não ganha a da Maria.
+    expect((await req('/api/perfil/foto', { cookie: await adminCk() })).status).toBe(404);
+    const rem = await req('/api/perfil/foto/remover', { metodo: 'POST', cookie: ck, corpo: {} });
+    expect(rem.json.usuario.foto).toBeNull();
+    expect((await req('/api/perfil/foto', { cookie: ck })).status).toBe(404);
+  });
+
   test('o administrador redefine senhas e não vê dados de estudo alheios', async () => {
     const adm = await adminCk();
     const id = auth.buscarPorEmail(db, 'maria@exemplo.com')!.id;
