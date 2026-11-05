@@ -335,13 +335,17 @@ export function LinkEdital({ pagina, children }: { pagina: number; children?: Re
 // Diálogo modal acessível (foco preso, Esc fecha). Com `lado`, abre como painel lateral.
 export function Modal({ titulo, aberto, onFechar, children, largura, lado, subtitulo, obrigatorio }: { obrigatorio?: boolean; titulo: string; aberto: boolean; onFechar: () => void; children: ReactNode; largura?: number; lado?: boolean; subtitulo?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  // O efeito abaixo move o foco para o primeiro campo; ele só pode rodar quando o modal abre, não a cada
+  // redesenho (senão o foco pularia de volta enquanto a pessoa digita). Por isso onFechar fica numa ref.
+  const aoFechar = useRef(onFechar);
+  aoFechar.current = onFechar;
   useEffect(() => {
     if (!aberto) return;
     const anterior = document.activeElement as HTMLElement | null;
     const el = ref.current;
     el?.querySelector<HTMLElement>('[data-foco], input:not([type="hidden"]), select, textarea, .modal-c button')?.focus();
     const h = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onFechar();
+      if (e.key === 'Escape') aoFechar.current();
       if (e.key === 'Tab' && el) {
         const f = Array.from(el.querySelectorAll<HTMLElement>('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter((x) => !x.hasAttribute('disabled') && x.offsetParent !== null);
         if (!f.length) return;
@@ -361,7 +365,7 @@ export function Modal({ titulo, aberto, onFechar, children, largura, lado, subti
       document.body.classList.remove('sem-rolagem');
       anterior?.focus();
     };
-  }, [aberto, onFechar]);
+  }, [aberto]);
   if (!aberto) return null;
   return (
     <div className={`modal-fundo ${lado ? 'modal-fundo-lado' : ''}`} onMouseDown={(e) => e.target === e.currentTarget && onFechar()}>
