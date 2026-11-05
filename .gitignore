@@ -1,9 +1,11 @@
 node_modules/
 *.tsbuildinfo
 build/
-data/
+/data/
 .env
 *.db
 *.db-wal
 *.db-shm
 dist/
+# provas da FCC baixadas para a análise do A01 (direitos reservados; veja scripts/a01/PROVAS.md)
+fontes/provas-fcc/

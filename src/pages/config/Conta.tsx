@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useApp } from '../../store/AppStore';
+import { useApp, seed } from '../../store/AppStore';
 import { api } from '../../api';
 import { Cabecalho, Icone, Painel, Vazio } from '../../ui/primitives';
 import { useUi } from '../../ui/UiContext';
@@ -72,12 +72,13 @@ export function ConfigConta() {
           <div className="config-secao">
             <div className="config-desc">
               <h2>Conta</h2>
-              <p>A conta é criada e gerenciada pelo terminal do servidor.</p>
+              <p>A conta e o cargo são definidos na criação e não mudam depois.</p>
             </div>
             <dl className="dados-linhas">
               <div><dt>E-mail</dt><dd>{usuario.email}</dd></div>
               {usuario.nome && <div><dt>Nome</dt><dd>{usuario.nome}</dd></div>}
               <div><dt>Perfil</dt><dd>{usuario.papel === 'admin' ? 'Administrador' : 'Usuário'}</dd></div>
+              {seed.cargo && <div><dt>Cargo</dt><dd>{seed.cargo.codigo} · {seed.cargo.nome}</dd></div>}
               <div><dt>Criada em</dt><dd>{quando(usuario.criadoEm)}</dd></div>
               <div><dt>Senha alterada em</dt><dd>{quando(usuario.senhaAlteradaEm)}</dd></div>
             </dl>
@@ -103,7 +104,7 @@ export function ConfigConta() {
               </div>
               {erro && <p className="erro-form" role="alert"><Icone nome="alerta" tam={16} /> {erro}</p>}
               <div><button className="btn primario" type="submit" disabled={enviando || !form.atual || !form.nova}>{enviando ? 'Salvando…' : 'Alterar senha'}</button></div>
-              <p className="campo-ajuda">Esqueceu a senha? Redefina no servidor com <code>npm run usuario:senha -- --email {usuario.email}</code>.</p>
+              <p className="campo-ajuda">Esqueceu a senha? Peça ao administrador para redefini-la.</p>
             </form>
           </div>
           <div className="config-secao">

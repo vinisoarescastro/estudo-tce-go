@@ -1,9 +1,7 @@
 import { createServer } from 'node:http';
-import seedJson from '../src/data/seed.json';
-import type { Seed } from '../src/domain/types';
 import { carregarEnv, lerConfig } from './config';
 import { abrirBanco } from './db';
-import { lerEdital, sincronizarEdital } from './edital';
+import { prepararEditais } from './cargos';
 import { criarApp } from './app';
 import { contarUsuarios } from './auth';
 import { criarBackup, listarBackups, rotacionarBackups } from './backup';
@@ -14,13 +12,13 @@ const cfg = lerConfig();
 configurarLog(cfg.logNivel);
 
 const db = abrirBanco(cfg.arquivoBanco);
-if (sincronizarEdital(db, seedJson as unknown as Seed)) log('info', 'estrutura do edital gravada no banco', { seedVersion: (seedJson as { seedVersion: number }).seedVersion });
-const seed = lerEdital(db);
+const editais = prepararEditais(db);
+if (editais.gravados.length) log('info', 'estrutura do edital gravada no banco', { cargos: editais.gravados });
 
 if (cfg.producao && !cfg.cookieSeguro) log('aviso', 'COOKIE_SECURE está desligado em produção: o login só deve trafegar por HTTPS.');
-if (contarUsuarios(db) === 0) log('aviso', 'Nenhuma conta cadastrada. Crie a primeira com: npm run usuario:criar -- --email voce@exemplo.com');
+if (contarUsuarios(db) === 0) log('aviso', 'Nenhuma conta cadastrada. Crie a primeira com: npm run usuario:criar -- --email voce@exemplo.com --cargo B02');
 
-const servidor = createServer(criarApp(db, seed, cfg));
+const servidor = createServer(criarApp(db, editais.porCargo, cfg));
 servidor.requestTimeout = 60_000;
 servidor.headersTimeout = 20_000;
 servidor.keepAliveTimeout = 5_000;

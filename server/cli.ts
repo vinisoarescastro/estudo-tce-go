@@ -1,10 +1,10 @@
 import { copyFileSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createInterface } from 'node:readline';
-import seedJson from '../src/data/seed.json';
-import type { AppData, Seed } from '../src/domain/types';
+import type { AppData } from '../src/domain/types';
 import { carregarEnv, lerConfig } from './config';
 import { abrirBanco } from './db';
-import { lerEdital, sincronizarEdital } from './edital';
+import { prepararEditais } from './cargos';
+import { listarCargos } from './edital';
 import * as auth from './auth';
 import { ServicoDados } from './servico';
 import { conferirArquivoBanco, criarBackup, listarBackups, rotacionarBackups } from './backup';
@@ -16,7 +16,9 @@ import { salvarFoto } from './foto';
 
 const AJUDA = `Uso: node build/cli.mjs <comando> [opções]   (ou npm run <script> -- [opções])
 
-  usuario:criar  --email E [--nome N] [--importar backup.json]   cria uma conta (pede a senha)
+  usuario:criar  --email E --cargo B02|A01 [--nome N] [--importar backup.json]
+                                                                 cria uma conta (pede a senha). O cargo é fixo e não muda depois
+  cargos                                                         lista os cargos disponíveis
   usuario:senha  --email E                                       redefine a senha e encerra as sessões
   usuario:nome   --email E --nome N                              define o nome exibido na saudação
   usuario:foto   --email E --arquivo imagem.png                  define a foto de perfil (.webp, .png ou .jpg, até 2 MB)
@@ -109,9 +111,7 @@ async function main() {
   }
 
   const db = abrirBanco(cfg.arquivoBanco);
-  sincronizarEdital(db, seedJson as unknown as Seed);
-  const seed = lerEdital(db);
-  const servico = new ServicoDados(db, seed);
+  const servico = new ServicoDados(db, prepararEditais(db).porCargo);
   const conta = () => {
     const e = typeof o.email === 'string' ? o.email : sair('Informe --email.');
     return auth.buscarPorEmail(db, e) ?? sair(`Não existe conta com o e-mail ${e}.`);
@@ -140,9 +140,12 @@ async function main() {
         const email = typeof o.email === 'string' ? o.email.trim().toLowerCase() : sair('Informe --email.');
         if (!auth.emailValido(email)) sair('E-mail inválido.');
         if (auth.buscarPorEmail(db, email)) sair('Já existe uma conta com esse e-mail.');
+        const validos = listarCargos(db).map((c) => c.id);
+        const cargoId = typeof o.cargo === 'string' ? o.cargo.trim().toUpperCase() : sair(`Informe --cargo (${validos.join(' ou ')}). O cargo é fixo: não pode ser trocado depois.`);
+        if (!validos.includes(cargoId)) sair(`Cargo desconhecido: ${cargoId}. Opções: ${validos.join(', ')}.`);
         const senha = await lerSenhaNova(email);
-        const u = await auth.criarUsuario(db, { email, nome: typeof o.nome === 'string' ? o.nome : '', senha, papel: auth.contarUsuarios(db) === 0 ? 'admin' : 'usuario' });
-        console.log(`Conta criada: ${u.email} (${u.papel}).`);
+        const u = await auth.criarUsuario(db, { email, nome: typeof o.nome === 'string' ? o.nome : '', senha, cargoId, papel: auth.contarUsuarios(db) === 0 ? 'admin' : 'usuario' });
+        console.log(`Conta criada: ${u.email} (${u.papel}, cargo ${u.cargoId}).`);
         if (typeof o.importar === 'string') importar(u.id, o.importar);
         break;
       }
@@ -170,7 +173,10 @@ async function main() {
         break;
       }
       case 'usuario:listar':
-        for (const u of db.prepare('SELECT id, email, nome, papel, ativo, criado_em FROM usuarios ORDER BY id').all()) console.log(u);
+        for (const u of db.prepare('SELECT id, email, nome, papel, cargo_id, ativo, criado_em FROM usuarios ORDER BY id').all()) console.log(u);
+        break;
+      case 'cargos':
+        for (const c of listarCargos(db)) console.log(`${c.id}  ${c.nome}`);
         break;
       case 'importar':
         importar(conta().id, typeof o.arquivo === 'string' ? o.arquivo : sair('Informe --arquivo.'));

@@ -107,7 +107,10 @@ nucleos = [
  {'id':'CG','nome':'Conhecimentos Gerais','apelido':'Núcleo comum','descricao':'Conhecimentos Gerais para os cargos A01 e B02 (Anexo II). Prova objetiva com 25 questões, peso 1 (item 7.1).','pagina':19},
  {'id':'CE','nome':'Conhecimentos Específicos','apelido':'Núcleo específico','descricao':'Conhecimentos Específicos para o cargo B02 (Anexo II). Prova objetiva com 45 questões, peso 2 (item 7.1).','pagina':20},
 ]
-seed = {'seedVersion':1,'fonte':{'edital':'Edital nº 01/2026 – Abertura de Inscrições (TCE-GO, FCC)','planilha':'Edital Verticalizado TCE-GO 2026 – B02, versão 2.0 (planilha do usuário)'},
+cargo = {'id':'B02','codigo':'B02','nome':'Técnico de Controle Externo – Especialidade: Tecnologia da Informação','nomeCurto':'Cargo B02 · TI',
+         'escolaridade':'Ensino médio ou curso profissionalizante','dataProva':'2027-01-17','metaDiariaMin':390,'metaSemanalMin':2370,'duracaoPadraoMin':90,
+         'cicloInicial':[['es',90],['lp',90],['redes',90],['bd',60],['seg',90],['leginst',90],['ds',90],['gov',60],['esia',90],['mat',90],['devops',90],['es',90],['legti',90],['lp',90],['redes',90],['bd',60],['seg',90],['ia',90],['ds',90],['leginst',60],['gov',60],['ing',30]]}
+seed = {'seedVersion':1,'cargo':cargo,'fonte':{'edital':'Edital nº 01/2026 – Abertura de Inscrições (TCE-GO, FCC)','planilha':'Edital Verticalizado TCE-GO 2026 – B02, versão 2.0 (planilha do usuário)'},
         'nucleos':nucleos,'disciplinas':disciplinas,'topicos':topicos,'dependenciasSugeridas':deps,'fatos':fatos}
 json.dump(seed, open(out,'w'), ensure_ascii=False, indent=1)
 print(len(disciplinas), len(topicos), len(deps), 'baixa confianca:', low)

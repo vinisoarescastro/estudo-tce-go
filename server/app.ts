@@ -6,6 +6,7 @@ import { ErroAcao } from '../src/domain/actions';
 import { limparCfg, POMODORO_PADRAO } from '../src/domain/pomodoro';
 import type { BD } from './sqlite';
 import { prep } from './db';
+import { listarCargos } from './edital';
 import type { Config } from './config';
 import * as auth from './auth';
 import { ServicoDados } from './servico';
@@ -50,8 +51,8 @@ interface Req {
   usuario?: auth.Usuario;
 }
 
-export function criarApp(db: BD, seed: Seed, cfg: Config) {
-  const servico = new ServicoDados(db, seed);
+export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
+  const servico = new ServicoDados(db, seeds);
   const nomeCookie = cfg.cookieSeguro ? '__Host-sid' : 'sid';
 
   const backupAntesDeSubstituir = () => {
@@ -129,7 +130,8 @@ export function criarApp(db: BD, seed: Seed, cfg: Config) {
       },
     },
 
-    { metodo: 'GET', caminho: '/api/edital', privada: true, h: () => seed },
+    // O edital devolvido é sempre o do cargo da conta; não há como pedir o de outro cargo.
+    { metodo: 'GET', caminho: '/api/edital', privada: true, h: (r) => servico.seedDe(r.usuario!.id) },
     {
       metodo: 'GET', caminho: '/api/dados', privada: true,
       h: (r) => {
@@ -182,6 +184,81 @@ export function criarApp(db: BD, seed: Seed, cfg: Config) {
     },
   ];
 
+  // -------------------------------------------------------------------------
+  // Administração de contas. Só o administrador acessa; ele gerencia contas, nunca vê dados de estudo alheios.
+
+  const exigirAdmin = (r: Req) => {
+    if (r.usuario!.papel !== 'admin') throw new ErroHttp(403, 'Apenas administradores podem gerenciar contas.');
+  };
+  const contaAdmin = (u: ReturnType<typeof auth.listarUsuarios>[number]) => ({
+    id: u.id, email: u.email, nome: u.nome, papel: u.papel, ativo: u.ativo, cargoId: u.cargoId,
+    senhaProvisoria: u.senhaProvisoria, criadoEm: u.criadoEm, ultimoAcesso: u.ultimoAcesso,
+  });
+  const alvo = (corpo: any) => {
+    const id = Number(corpo?.id);
+    const u = Number.isInteger(id) ? auth.buscarUsuario(db, id) : null;
+    if (!u) throw new ErroHttp(404, 'Usuário não encontrado.');
+    return u;
+  };
+  rotas.push(
+    {
+      metodo: 'GET', caminho: '/api/admin/usuarios', privada: true,
+      h: (r) => {
+        exigirAdmin(r);
+        return { usuarios: auth.listarUsuarios(db).map(contaAdmin), cargos: listarCargos(db) };
+      },
+    },
+    {
+      metodo: 'POST', caminho: '/api/admin/usuarios', privada: true, limite: 4096,
+      h: async (r, corpo) => {
+        exigirAdmin(r);
+        const email = typeof corpo?.email === 'string' ? corpo.email.trim().toLowerCase() : '';
+        const nome = typeof corpo?.nome === 'string' ? corpo.nome.trim() : '';
+        const senha = typeof corpo?.senha === 'string' ? corpo.senha : '';
+        const cargoId = typeof corpo?.cargoId === 'string' ? corpo.cargoId : '';
+        if (!nome || nome.length > 80) throw new ErroHttp(400, 'Informe o nome (até 80 caracteres).');
+        try {
+          const u = await auth.criarUsuario(db, { email, nome, senha, cargoId, papel: 'usuario', provisoria: true });
+          log('info', 'conta criada pelo administrador', { admin: r.usuario!.id, usuario: u.id, cargo: u.cargoId });
+          return { usuario: contaAdmin({ ...u, ultimoAcesso: null }) };
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+      },
+    },
+    {
+      metodo: 'POST', caminho: '/api/admin/usuarios/ativo', privada: true, limite: 1024,
+      h: (r, corpo) => {
+        exigirAdmin(r);
+        const u = alvo(corpo);
+        if (typeof corpo?.ativo !== 'boolean') throw new ErroHttp(400, 'Informe se a conta deve ficar ativa.');
+        if (u.id === r.usuario!.id) throw new ErroHttp(400, 'Você não pode desativar a sua própria conta.');
+        try {
+          auth.definirAtivo(db, u.id, corpo.ativo);
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+        log('info', corpo.ativo ? 'conta reativada' : 'conta desativada', { admin: r.usuario!.id, usuario: u.id });
+        return { ok: true };
+      },
+    },
+    {
+      metodo: 'POST', caminho: '/api/admin/usuarios/senha', privada: true, limite: 4096,
+      h: async (r, corpo) => {
+        exigirAdmin(r);
+        const u = alvo(corpo);
+        if (u.id === r.usuario!.id) throw new ErroHttp(400, 'Para trocar a sua própria senha, use Conta e segurança.');
+        try {
+          await auth.definirSenha(db, u.id, String(corpo?.nova ?? ''), undefined, true);
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+        log('info', 'senha redefinida pelo administrador', { admin: r.usuario!.id, usuario: u.id });
+        return { ok: true };
+      },
+    },
+  );
+
   function lerPreferencias(usuarioId: number) {
     const p = prep(db, 'SELECT tema, menu_recolhido, pomodoro FROM preferencias WHERE usuario_id = ?').get(usuarioId) as { tema: string; menu_recolhido: number; pomodoro: string } | undefined;
     let pomodoro = POMODORO_PADRAO;
@@ -193,7 +270,7 @@ export function criarApp(db: BD, seed: Seed, cfg: Config) {
     return { tema: (p?.tema ?? 'sistema') as 'sistema' | 'claro' | 'escuro', menuRecolhido: p?.menu_recolhido === 1, pomodoro };
   }
 
-  const publico = (u: auth.Usuario) => ({ id: u.id, email: u.email, nome: u.nome, papel: u.papel, criadoEm: u.criadoEm, senhaAlteradaEm: u.senhaAlteradaEm, foto: acharFoto(cfg.pastaDados, u.id)?.versao ?? null });
+  const publico = (u: auth.Usuario) => ({ id: u.id, email: u.email, nome: u.nome, papel: u.papel, cargoId: u.cargoId, senhaProvisoria: u.senhaProvisoria, criadoEm: u.criadoEm, senhaAlteradaEm: u.senhaAlteradaEm, foto: acharFoto(cfg.pastaDados, u.id)?.versao ?? null });
 
   // -------------------------------------------------------------------------
   // Cookies

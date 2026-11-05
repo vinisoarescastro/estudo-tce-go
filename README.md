@@ -23,7 +23,7 @@ Requer **Node.js 22.13 ou superior** (o computador já tem o Node 24).
 ```bash
 npm install                 # uma vez
 npm run build               # gera o frontend e o servidor em build/
-npm run usuario:criar -- --email voce@exemplo.com --nome "Seu nome"   # cria a conta (pede a senha)
+npm run usuario:criar -- --email voce@exemplo.com --nome "Seu nome" --cargo B02   # cria a conta (pede a senha)
 COOKIE_SECURE=false npm start                                         # http://127.0.0.1:3000
 ```
 
@@ -37,11 +37,24 @@ npm test           # testes automáticos (domínio, banco, API e segurança)
 npm run typecheck  # verificação de tipos
 ```
 
-Para criar a conta em desenvolvimento, rode `npm run build:server` uma vez e depois `npm run usuario:criar -- --email ...`.
+Para criar a conta em desenvolvimento, rode `npm run build:server` uma vez e depois `npm run usuario:criar -- --email ... --cargo B02`.
 
 ### Na VPS (produção, com HTTPS)
 
 Veja o passo a passo em **[docs/IMPLANTACAO.md](docs/IMPLANTACAO.md)**: Docker Compose com Caddy (HTTPS automático) ou Node + systemd, criação segura da conta, backups, restauração, logs e atualização.
+
+### Vários usuários e cargos
+
+A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (conteúdos, progresso, horas, ciclo, metas, histórico, pomodoro e preferências). O edital tem dois cargos:
+
+| Cargo | Edital verticalizado |
+|---|---|
+| **B02** · Técnico de Controle Externo, Tecnologia da Informação | 14 disciplinas, 253 conteúdos |
+| **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/ANALISE-A01.md)) |
+
+- **O cargo é fixo e definido na criação da conta.** Cada conta só enxerga o edital e os dados do seu cargo; o servidor recusa ids de outro cargo e não existe forma de trocar o cargo depois.
+- **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador gerencia contas, mas não vê os dados de estudo de ninguém.
+- Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` e `node build/cli.mjs cargos`.
 
 ### Trazer os dados da versão anterior
 
@@ -194,7 +207,8 @@ Cada recomendação mostra os motivos.
 
 ```
 src/
-  data/seed.json      estrutura do edital (gerada pelos scripts; o servidor grava no banco)
+  data/seed.json      edital verticalizado do cargo B02 (gerado por scripts/seed.py; o servidor grava no banco)
+  data/seed-a01.json  edital verticalizado do cargo A01 (gerado por scripts/a01/seed_a01.py)
   domain/             regras de negócio puras, usadas pela tela e pelo servidor
   api.ts              cliente da API (cookie de sessão + cabeçalho anti-CSRF)
   store/              estado da tela: carrega do servidor, aplica ações e sincroniza
@@ -226,12 +240,17 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 52 testes:
+`npm test` roda 73 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
+- **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; a migração 3 mantém intactos contas, edital e dados de estudo existentes;
 - **API e segurança**: nada é acessível sem login; cabeçalhos de segurança; CSRF e origem; senha errada não revela se o e-mail existe; ações persistidas e versionadas; dados intactos após reiniciar; importação validada com backup; preferências; troca de senha encerra as outras sessões; bloqueio após tentativas; expiração de sessão; senhas e tokens só com hash.
 
-### Atualizar o edital ou a planilha
+### Edital do cargo A01
+
+O edital verticalizado do A01 é gerado por `scripts/a01/` (taxonomia, contagem de questões das provas FCC e geração do seed). Método, fontes e limites estão em [docs/ANALISE-A01.md](docs/ANALISE-A01.md).
+
+### Atualizar o edital ou a planilha (B02)
 
 Se sair uma retificação do edital ou uma nova versão da planilha:
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppProvider, useApp } from './store/AppStore';
+import { AppProvider, useApp, seed } from './store/AppStore';
 import { Ui, type PresetSessao, type UiCtx } from './ui/UiContext';
 import { Icone, useConfirmacao, type NomeIcone } from './ui/primitives';
 import { TopicoDetalhe } from './ui/TopicoDetalhe';
@@ -21,8 +21,9 @@ import { ConfigPomodoro } from './pages/config/Pomodoro';
 import { ConfigPersonalizacao } from './pages/config/Personalizacao';
 import { ConfigDados } from './pages/config/Dados';
 import { ConfigConta } from './pages/config/Conta';
+import { ConfigUsuarios } from './pages/config/Usuarios';
 
-interface ItemMenu { id: string; rotulo: string; icone: NomeIcone }
+interface ItemMenu { id: string; rotulo: string; icone: NomeIcone; soAdmin?: boolean }
 interface GrupoMenu { id: string; rotulo: string; itens: ItemMenu[] }
 
 // Estrutura de navegação: "Início" fica solto; os demais itens ficam em grupos que abrem e fecham.
@@ -47,6 +48,7 @@ const GRUPOS: GrupoMenu[] = [
     { id: 'config/personalizacao', rotulo: 'Personalização', icone: 'paleta' },
     { id: 'config/dados', rotulo: 'Dados e backup', icone: 'banco' },
     { id: 'config/conta', rotulo: 'Conta e segurança', icone: 'escudo' },
+    { id: 'config/usuarios', rotulo: 'Usuários', icone: 'usuario', soAdmin: true },
   ] },
 ];
 // "foco" é a tela cheia de estudo: fica fora do menu.
@@ -160,6 +162,7 @@ function Shell() {
     case 'config/personalizacao': pagina = <ConfigPersonalizacao />; break;
     case 'config/dados': pagina = <ConfigDados />; break;
     case 'config/conta': pagina = <ConfigConta />; break;
+    case 'config/usuarios': pagina = usuario.papel === 'admin' ? <ConfigUsuarios /> : <Inicio />; break;
     default: pagina = <Inicio />;
   }
 
@@ -221,7 +224,7 @@ function Shell() {
           <div className="lat-topo">
             <a href="#/inicio" className="marca" aria-label="Estudo TCE-GO, início">
               <Logo />
-              <span className="marca-txt"><b>Estudo TCE-GO</b><span>Cargo B02 · TI</span></span>
+              <span className="marca-txt"><b>Estudo TCE-GO</b><span>{seed.cargo?.nomeCurto ?? ''}</span></span>
             </a>
           </div>
 
@@ -240,7 +243,7 @@ function Shell() {
                     <Icone nome="abaixo" tam={14} className="icone-seta" />
                   </button>
                   <div className={`nav-sub ${aberto ? '' : 'fechado'}`} id={`grupo-${g.id}`}>
-                    <ul>{g.itens.map(item)}</ul>
+                    <ul>{g.itens.filter((i) => !i.soAdmin || usuario.papel === 'admin').map(item)}</ul>
                   </div>
                 </div>
               );
@@ -264,6 +267,12 @@ function Shell() {
         {menu && <div className="veu" onClick={() => setMenu(false)} aria-hidden="true" />}
 
         <main id="conteudo" tabIndex={-1}>
+          {usuario.senhaProvisoria && loc.rota !== 'config/conta' && (
+            <div className="aviso-senha" role="alert">
+              <Icone nome="escudo" tam={16} />
+              <span>Sua senha foi definida por um administrador. <a href="#/config/conta">Crie uma senha só sua</a> para proteger seus estudos.</span>
+            </div>
+          )}
           {pagina}
         </main>
         <Cronometro />

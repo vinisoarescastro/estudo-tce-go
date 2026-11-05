@@ -203,6 +203,43 @@ export const MIGRACOES: { versao: number; nome: string; sql: string }[] = [
     nome: 'tempos do pomodoro nas preferencias',
     sql: `ALTER TABLE preferencias ADD COLUMN pomodoro TEXT NOT NULL DEFAULT '';`,
   },
+  {
+    versao: 3,
+    nome: 'cargos: cada conta pertence a um cargo, com o seu próprio edital',
+    // Só acrescenta. Tudo o que já existe (contas, edital e dados de estudo) passa a pertencer ao cargo B02,
+    // que é o valor padrão das colunas novas, então nada muda para quem já usa a plataforma.
+    sql: `
+      CREATE TABLE cargos (
+        id TEXT PRIMARY KEY,
+        codigo TEXT NOT NULL,
+        nome TEXT NOT NULL DEFAULT '',
+        nome_curto TEXT NOT NULL DEFAULT '',
+        escolaridade TEXT NOT NULL DEFAULT '',
+        data_prova TEXT NOT NULL DEFAULT '',
+        meta_diaria_min INTEGER NOT NULL DEFAULT 390,
+        meta_semanal_min INTEGER NOT NULL DEFAULT 2370,
+        duracao_padrao_min INTEGER NOT NULL DEFAULT 90,
+        ciclo_inicial TEXT NOT NULL DEFAULT '[]',
+        fonte TEXT NOT NULL DEFAULT '{}',
+        seed_versao INTEGER NOT NULL DEFAULT 0
+      );
+      CREATE TABLE cargo_nucleos (
+        cargo_id TEXT NOT NULL REFERENCES cargos(id),
+        nucleo_id TEXT NOT NULL REFERENCES nucleos(id),
+        descricao TEXT NOT NULL,
+        pagina INTEGER NOT NULL,
+        PRIMARY KEY (cargo_id, nucleo_id)
+      );
+      ALTER TABLE disciplinas ADD COLUMN cargo_id TEXT NOT NULL DEFAULT 'B02';
+      ALTER TABLE fatos ADD COLUMN cargo_id TEXT NOT NULL DEFAULT 'B02';
+      ALTER TABLE usuarios ADD COLUMN cargo_id TEXT NOT NULL DEFAULT 'B02';
+      ALTER TABLE usuarios ADD COLUMN senha_provisoria INTEGER NOT NULL DEFAULT 0 CHECK (senha_provisoria IN (0, 1));
+      CREATE INDEX ix_disciplinas_cargo ON disciplinas(cargo_id);
+      INSERT INTO cargos (id, codigo, seed_versao)
+        VALUES ('B02', 'B02', COALESCE((SELECT CAST(valor AS INTEGER) FROM meta WHERE chave = 'seed_versao'), 0));
+      INSERT INTO cargo_nucleos (cargo_id, nucleo_id, descricao, pagina) SELECT 'B02', id, descricao, pagina FROM nucleos;
+    `,
+  },
 ];
 
 export function abrirBanco(caminho: string): BD {

@@ -1,6 +1,7 @@
 import { createHash, randomBytes, scrypt as scryptCb, timingSafeEqual, type ScryptOptions } from 'node:crypto';
 import type { BD } from './sqlite';
 import { prep } from './db';
+import { cargoExiste } from './edital';
 
 // Senhas: scrypt (memória alta, resistente a força bruta em GPU) com sal aleatório.
 // Formato guardado: scrypt$N$r$p$sal$hash (base64url).
@@ -51,6 +52,8 @@ export interface Usuario {
   nome: string;
   papel: 'admin' | 'usuario';
   ativo: boolean;
+  cargoId: string; // cargo fixo da conta, definido na criação
+  senhaProvisoria: boolean; // criada por um administrador: o dono deve trocá-la
   criadoEm: string;
   senhaAlteradaEm: string;
 }
@@ -62,6 +65,8 @@ const usuarioDeLinha = (r: Linha): Usuario => ({
   nome: r.nome as string,
   papel: r.papel as Usuario['papel'],
   ativo: r.ativo === 1,
+  cargoId: r.cargo_id as string,
+  senhaProvisoria: r.senha_provisoria === 1,
   criadoEm: r.criado_em as string,
   senhaAlteradaEm: r.senha_alterada_em as string,
 });
@@ -80,29 +85,52 @@ export function buscarPorEmail(db: BD, email: string): (Usuario & { senhaHash: s
   return r ? { ...usuarioDeLinha(r), senhaHash: r.senha_hash as string } : null;
 }
 
-export async function criarUsuario(db: BD, p: { email: string; nome: string; senha: string; papel?: Usuario['papel'] }): Promise<Usuario> {
+export async function criarUsuario(
+  db: BD,
+  p: { email: string; nome: string; senha: string; cargoId: string; papel?: Usuario['papel']; provisoria?: boolean },
+): Promise<Usuario> {
   if (!emailValido(p.email)) throw new Error('E-mail inválido.');
+  if (!cargoExiste(db, p.cargoId)) throw new Error(`Cargo desconhecido: ${p.cargoId}.`);
   const prob = problemaNaSenha(p.senha, p.email);
   if (prob) throw new Error(prob);
   if (buscarPorEmail(db, p.email)) throw new Error('Já existe uma conta com esse e-mail.');
   const hash = await gerarHashSenha(p.senha);
   const agora = new Date().toISOString();
-  const r = prep(db, `INSERT INTO usuarios (email, nome, senha_hash, papel, senha_alterada_em, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?)`)
-    .run(p.email.trim().toLowerCase(), p.nome.trim().slice(0, 120), hash, p.papel ?? 'admin', agora, agora, agora);
+  const r = prep(db, `INSERT INTO usuarios (email, nome, senha_hash, papel, cargo_id, senha_provisoria, senha_alterada_em, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .run(p.email.trim().toLowerCase(), p.nome.trim().slice(0, 120), hash, p.papel ?? 'usuario', p.cargoId, p.provisoria ? 1 : 0, agora, agora, agora);
   return buscarUsuario(db, Number(r.lastInsertRowid))!;
 }
 
 // Troca a senha e encerra todas as sessões do usuário, exceto a indicada.
-export async function definirSenha(db: BD, usuarioId: number, senha: string, manterSessao?: string): Promise<void> {
+// `provisoria`: a senha foi definida por um administrador e o dono deve trocá-la no primeiro acesso.
+export async function definirSenha(db: BD, usuarioId: number, senha: string, manterSessao?: string, provisoria = false): Promise<void> {
   const u = buscarUsuario(db, usuarioId);
   if (!u) throw new Error('Usuário não encontrado.');
   const prob = problemaNaSenha(senha, u.email);
   if (prob) throw new Error(prob);
   const hash = await gerarHashSenha(senha);
   const agora = new Date().toISOString();
-  prep(db, 'UPDATE usuarios SET senha_hash = ?, senha_alterada_em = ?, atualizado_em = ? WHERE id = ?').run(hash, agora, agora, usuarioId);
+  prep(db, 'UPDATE usuarios SET senha_hash = ?, senha_provisoria = ?, senha_alterada_em = ?, atualizado_em = ? WHERE id = ?').run(hash, provisoria ? 1 : 0, agora, agora, usuarioId);
   if (manterSessao) prep(db, 'DELETE FROM sessoes_login WHERE usuario_id = ? AND token_hash <> ?').run(usuarioId, hashToken(manterSessao));
   else prep(db, 'DELETE FROM sessoes_login WHERE usuario_id = ?').run(usuarioId);
+}
+
+// Administração de contas (usada pelas rotas /api/admin e pela CLI).
+export function listarUsuarios(db: BD): (Usuario & { ultimoAcesso: string | null })[] {
+  return (prep(db, `SELECT u.*, (SELECT MAX(ultimo_uso) FROM sessoes_login s WHERE s.usuario_id = u.id) AS ultimo_acesso FROM usuarios u ORDER BY u.id`).all() as Linha[])
+    .map((r) => ({ ...usuarioDeLinha(r), ultimoAcesso: (r.ultimo_acesso as string | null) ?? null }));
+}
+
+// Ativa ou desativa uma conta. Desativar encerra as sessões abertas. Os dados de estudo são mantidos.
+export function definirAtivo(db: BD, usuarioId: number, ativo: boolean): void {
+  const u = buscarUsuario(db, usuarioId);
+  if (!u) throw new Error('Usuário não encontrado.');
+  if (!ativo && u.papel === 'admin' && u.ativo) {
+    const outros = (prep(db, "SELECT COUNT(*) AS n FROM usuarios WHERE papel = 'admin' AND ativo = 1 AND id <> ?").get(usuarioId) as { n: number }).n;
+    if (!outros) throw new Error('Não é possível desativar o único administrador ativo.');
+  }
+  prep(db, 'UPDATE usuarios SET ativo = ?, atualizado_em = ? WHERE id = ?').run(ativo ? 1 : 0, new Date().toISOString(), usuarioId);
+  if (!ativo) prep(db, 'DELETE FROM sessoes_login WHERE usuario_id = ?').run(usuarioId);
 }
 
 // ---------------------------------------------------------------------------

@@ -29,7 +29,15 @@ interface Cache { versao: number; dados: AppData }
 
 export class ServicoDados {
   private cache = new Map<number, Cache>();
-  constructor(private db: BD, private seed: Seed) {}
+  // `seeds`: o edital verticalizado de cada cargo, por id do cargo. Cada conta usa o do seu cargo.
+  constructor(private db: BD, private seeds: Record<string, Seed>) {}
+
+  seedDe(usuarioId: number): Seed {
+    const r = prep(this.db, 'SELECT cargo_id FROM usuarios WHERE id = ?').get(usuarioId) as { cargo_id: string } | undefined;
+    const seed = r && this.seeds[r.cargo_id];
+    if (!seed) throw new Error(`Cargo sem edital carregado para o usuário ${usuarioId}.`);
+    return seed;
+  }
 
   versao(usuarioId: number): number {
     return (prep(this.db, 'SELECT versao_dados FROM usuarios WHERE id = ?').get(usuarioId) as { versao_dados: number } | undefined)?.versao_dados ?? 0;
@@ -43,7 +51,7 @@ export class ServicoDados {
     let dados = carregarDados(this.db, usuarioId);
     if (!dados) {
       definirFuso(null);
-      dados = criarDados(this.seed);
+      dados = criarDados(this.seedDe(usuarioId));
       const d = dados;
       transacao(this.db, () => {
         gravarDados(this.db, usuarioId, null, d);
@@ -66,7 +74,7 @@ export class ServicoDados {
     const acao = entrada.acao as Acao;
     if (!acao || typeof acao !== 'object' || !ACOES.has(acao.t)) throw new ErroAcao('Ação desconhecida.');
     if (acao.t === 'importar') {
-      const erros = validarAppData(acao.dados, this.seed);
+      const erros = validarAppData(acao.dados, this.seedDe(usuarioId));
       if (erros.length) throw new ErroAcao(`Arquivo recusado: ${erros.slice(0, 3).join(' ')}${erros.length > 3 ? ` (+${erros.length - 3} problemas)` : ''}`);
     }
     const atual = this.obter(usuarioId);
@@ -92,7 +100,7 @@ export class ServicoDados {
     };
 
     definirFuso(atual.dados.user.config.fusoHorario);
-    const novo = reduzir(atual.dados, acao, { seed: this.seed, agora, gerarId });
+    const novo = reduzir(atual.dados, acao, { seed: this.seedDe(usuarioId), agora, gerarId });
     if (novo === atual.dados) return { versao: atual.versao, alterou: false, dados: divergiu ? atual.dados : undefined };
 
     const substitui = ACOES_SUBSTITUTIVAS.has(acao.t);

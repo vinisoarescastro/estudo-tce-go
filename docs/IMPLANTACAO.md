@@ -50,7 +50,7 @@ Para o `DOMINIO` valer também em reinícios sem `export`, crie um arquivo `.env
 **Criar a sua conta** (só pelo terminal do servidor, nunca pela internet):
 
 ```bash
-sudo docker compose exec app node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome"
+sudo docker compose exec app node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome" --cargo B02
 ```
 
 A senha é pedida sem aparecer na tela: mínimo de 10 caracteres, e ela não pode conter o seu e-mail. Abra `https://estudo.seudominio.com.br` e entre.
@@ -99,7 +99,7 @@ cd /opt/estudo-tce-go
 sudo -u estudo npm ci
 sudo -u estudo npm run build
 sudo -u estudo cp .env.example .env           # revise: HOST=127.0.0.1, COOKIE_SECURE=true, TRUST_PROXY=true
-sudo -u estudo node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome"
+sudo -u estudo node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome" --cargo B02
 
 # Serviço
 sudo cp deploy/estudo-tce-go.service /etc/systemd/system/
@@ -136,7 +136,7 @@ alcançá-lo pelo nome:
 
 ```bash
 docker compose -f deploy/docker-compose.vps.yml up -d --build
-docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome"
+docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email voce@exemplo.com --nome "Seu nome" --cargo B02
 ```
 
 Depois, acrescente um bloco ao proxy existente (exemplo para Caddy; o nome do contêiner vem do compose):
@@ -236,7 +236,11 @@ O comando confere a integridade do arquivo, guarda uma cópia do banco atual (`-
 
 ## Mais usuários no futuro
 
-O banco já separa todos os dados por `usuario_id`, e cada conta tem dados, preferências e sessões próprios. Para criar outra conta: `node build/cli.mjs usuario:criar --email outra@pessoa.com`. Não há cadastro aberto pela internet, de propósito.
+O banco separa todos os dados por `usuario_id`, e cada conta tem dados, preferências e sessões próprios. Cada conta pertence a **um cargo fixo** (`B02` ou `A01`), definido na criação, que determina o edital verticalizado que ela vê.
+
+Para criar outra conta, o administrador usa **Configurações → Usuários** na própria plataforma (nome, e-mail, cargo e senha provisória) ou o terminal: `node build/cli.mjs usuario:criar --email outra@pessoa.com --nome "Nome" --cargo A01`. Não há cadastro aberto pela internet, de propósito.
+
+**Atualização e segurança dos dados:** a atualização aplica a migração 3 do banco automaticamente na primeira inicialização. Ela só acrescenta colunas e tabelas; contas, dados de estudo e o edital do B02 existentes permanecem como estão (o cargo padrão é `B02`). Antes de atualizar, faça `node build/cli.mjs backup`. Se for preciso voltar a uma versão anterior do sistema depois que contas do A01 tiverem sido criadas, restaure o backup feito antes da atualização, pois as versões antigas não conhecem cargos.
 
 ## Limitações conhecidas
 

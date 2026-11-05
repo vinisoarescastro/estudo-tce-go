@@ -2,7 +2,7 @@
   "name": "estudo-tce-go",
   "private": true,
   "version": "1.0.0",
-  "description": "Plataforma de estudos para o cargo B02 do TCE-GO (edital nº 01/2026): frontend React, API Node e banco SQLite.",
+  "description": "Plataforma de estudos para os cargos B02 e A01 do TCE-GO (edital nº 01/2026): frontend React, API Node e banco SQLite.",
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.mjs",

@@ -57,7 +57,7 @@ git pull && docker compose -f deploy/docker-compose.vps.yml up -d --build
 # Não edite arquivos direto na VPS: o próximo `git pull` pode conflitar. Altere no repositório.
 
 # Contas
-docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email E --nome "Nome"
+docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email E --nome "Nome" --cargo B02   # ou A01 (o cargo é fixo)
 docker exec -it estudo-tce-go-app node build/cli.mjs usuario:senha --email E     # redefinir senha
 docker exec    estudo-tce-go-app node build/cli.mjs usuario:nome  --email E --nome "Nome"
 docker exec    estudo-tce-go-app node build/cli.mjs usuario:listar

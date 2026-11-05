@@ -69,6 +69,28 @@ export function reduzir(dados: AppData, a: Acao, ctx: Contexto): AppData {
   const setU = (nu: UserData) => ({ ...dados, user: nu });
   const setTop = (id: string, fn: (e: ReturnType<typeof estadoDe>) => ReturnType<typeof estadoDe>) => ({ ...u.topicos, [id]: fn(estadoDe(u, id)) });
 
+  // Conteúdos e disciplinas precisam existir no edital do cargo da conta. Isso também impede que ids
+  // de outro cargo (que existem no banco) entrem nos dados de estudo.
+  const exigirTopico = (id: unknown) => {
+    if (typeof id !== 'string' || !ctx.seed.topicos.some((t) => t.id === id)) throw new ErroAcao('Conteúdo desconhecido.');
+  };
+  switch (a.t) {
+    case 'status': case 'dominado': case 'prioridade': case 'notas': case 'revisao':
+      exigirTopico(a.topicoId);
+      break;
+    case 'prioridadeDisciplina':
+      if (!ctx.seed.disciplinas.some((d) => d.id === a.disciplinaId)) throw new ErroAcao('Disciplina desconhecida.');
+      break;
+    case 'depAdicionar':
+      exigirTopico(a.de);
+      exigirTopico(a.para);
+      break;
+    case 'timerIniciar':
+      if (!ctx.seed.disciplinas.some((d) => d.id === a.disciplinaId)) throw new ErroAcao('Disciplina desconhecida.');
+      if (a.topicoId) exigirTopico(a.topicoId);
+      break;
+  }
+
   switch (a.t) {
     case 'status': {
       const antes = estadoDe(u, a.topicoId).status;

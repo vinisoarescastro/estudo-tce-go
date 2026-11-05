@@ -48,7 +48,7 @@ export function ConfigEstudo() {
       <Painel
         titulo="Disciplinas"
         semPadding
-        info="As 14 disciplinas do Anexo II para o B02. Tirar uma disciplina do ciclo desativa as sessões dela, sem apagar progresso nem histórico. A prioridade da disciplina é estratégica (não oficial) e entra na distribuição sugerida de tempo. A prioridade de cada conteúdo é ajustada na ficha do conteúdo."
+        info={`As ${seed.disciplinas.length} disciplinas do Anexo II para o cargo ${seed.cargo?.codigo ?? ''}. Tirar uma disciplina do ciclo desativa as sessões dela, sem apagar progresso nem histórico. A prioridade da disciplina é estratégica (não oficial) e entra na distribuição sugerida de tempo. A prioridade de cada conteúdo é ajustada na ficha do conteúdo.`}
       >
         <div className="tabela-wrap">
           <table className="tabela">

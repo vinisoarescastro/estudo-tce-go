@@ -66,8 +66,23 @@ export interface Dependencia {
   origem: 'sugestao' | 'usuario';
 }
 
+// Dados do cargo ao qual o edital verticalizado pertence. Cada conta é ligada a um único cargo.
+export interface CargoInfo {
+  id: string; // 'B02', 'A01'
+  codigo: string;
+  nome: string;
+  nomeCurto: string; // aparece no menu lateral
+  escolaridade: string;
+  dataProva: string; // AAAA-MM-DD
+  metaDiariaMin: number;
+  metaSemanalMin: number;
+  duracaoPadraoMin: number;
+  cicloInicial: [string, number][]; // [disciplinaId, minutos]
+}
+
 export interface Seed {
   seedVersion: number;
+  cargo?: CargoInfo;
   fonte: { edital: string; planilha: string };
   nucleos: Nucleo[];
   disciplinas: Disciplina[];

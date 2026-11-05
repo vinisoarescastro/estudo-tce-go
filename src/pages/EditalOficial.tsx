@@ -22,7 +22,7 @@ export function EditalOficial() {
       />
 
       <div className="grade-3-2">
-        <Painel titulo="Concurso e cargo B02">
+        <Painel titulo={`Concurso e cargo ${seed.cargo?.codigo ?? ''}`}>
           <dl className="fatos">
             {seed.fatos.map((f) => (
               <div key={f.id}>

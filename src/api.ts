@@ -45,6 +45,8 @@ export interface UsuarioPublico {
   email: string;
   nome: string;
   papel: 'admin' | 'usuario';
+  cargoId: string; // cargo fixo da conta
+  senhaProvisoria: boolean; // criada por um administrador: o dono deve trocá-la
   criadoEm: string;
   senhaAlteradaEm: string;
   foto: number | null; // versão da foto de perfil; null = sem foto

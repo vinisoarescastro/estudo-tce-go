@@ -10,6 +10,7 @@ import { reduzir, type Acao } from '../src/domain/actions';
 import { definirFuso, uid } from '../src/domain/util';
 import { abrirBanco, transacao } from './db';
 import { lerEdital, sincronizarEdital } from './edital';
+import { prepararEditais } from './cargos';
 import { carregarDados, gravarDados } from './repositorio';
 import { criarApp, VALOR_CSRF } from './app';
 import { lerConfig } from './config';
@@ -22,7 +23,7 @@ configurarLog('erro', true);
 
 function bancoNovo(arquivo = ':memory:'): BD {
   const db = abrirBanco(arquivo);
-  sincronizarEdital(db, seed);
+  prepararEditais(db);
   return db;
 }
 
@@ -124,7 +125,7 @@ describe('API e segurança', () => {
 
   async function subir(arquivo: string) {
     db = bancoNovo(arquivo);
-    srv = createServer(criarApp(db, lerEdital(db), cfg()));
+    srv = createServer(criarApp(db, prepararEditais(db).porCargo, cfg()));
     await new Promise<void>((ok) => srv.listen(0, '127.0.0.1', ok));
     base = `http://127.0.0.1:${(srv.address() as AddressInfo).port}`;
   }
@@ -136,7 +137,7 @@ describe('API e segurança', () => {
   beforeAll(async () => {
     pasta = mkdtempSync(join(tmpdir(), 'estudo-'));
     await subir(join(pasta, 'estudo.db'));
-    await auth.criarUsuario(db, { email: 'eu@exemplo.com', nome: 'Eu', senha: 'senha-bem-forte-123' });
+    await auth.criarUsuario(db, { email: 'eu@exemplo.com', nome: 'Eu', senha: 'senha-bem-forte-123', cargoId: 'B02', papel: 'admin' });
   });
   afterAll(async () => {
     await descer();
@@ -282,7 +283,7 @@ describe('API e segurança', () => {
   });
 
   test('tentativas repetidas bloqueiam o login daquele e-mail', async () => {
-    await auth.criarUsuario(db, { email: 'alvo@exemplo.com', nome: '', senha: 'cofre-fechado-987' });
+    await auth.criarUsuario(db, { email: 'alvo@exemplo.com', nome: '', senha: 'cofre-fechado-987', cargoId: 'B02' });
     for (let i = 0; i < 5; i++) expect((await entrar('chute-errado-' + i, 'alvo@exemplo.com')).status).toBe(401);
     const r = await entrar('cofre-fechado-987', 'alvo@exemplo.com');
     expect(r.status).toBe(429);

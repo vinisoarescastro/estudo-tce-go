@@ -1,0 +1,1763 @@
+{
+ "provas": {
+  "TCE-GO 2009 Téc. Adm.": {
+   "descricao": "TCE-GO 2009 · Técnico de Controle Externo – Técnica Administrativa",
+   "tipo": "tecnico-go",
+   "questoes_lidas": 56,
+   "repetidas_de_outra_prova": 0,
+   "sem_classificacao": 3
+  },
+  "TCE-GO 2014 Analista Adm.": {
+   "descricao": "TCE-GO 2014 · Analista de Controle Externo – Administrativa",
+   "tipo": "analista-go",
+   "questoes_lidas": 98,
+   "repetidas_de_outra_prova": 0,
+   "sem_classificacao": 6
+  },
+  "TCE-GO 2014 Orç. e Finanças": {
+   "descricao": "TCE-GO 2014 · Analista de Controle Externo – Orçamento e Finanças",
+   "tipo": "analista-go",
+   "questoes_lidas": 99,
+   "repetidas_de_outra_prova": 59,
+   "sem_classificacao": 6
+  },
+  "TCE-GO 2014 Contabilidade": {
+   "descricao": "TCE-GO 2014 · Analista de Controle Externo – Contabilidade",
+   "tipo": "analista-go",
+   "questoes_lidas": 99,
+   "repetidas_de_outra_prova": 59,
+   "sem_classificacao": 8
+  },
+  "TCE-GO 2014 Gestão de Pessoas": {
+   "descricao": "TCE-GO 2014 · Analista de Controle Externo – Gestão de Pessoas",
+   "tipo": "analista-go",
+   "questoes_lidas": 98,
+   "repetidas_de_outra_prova": 59,
+   "sem_classificacao": 1
+  },
+  "TCE-GO 2014 Planej. e DO": {
+   "descricao": "TCE-GO 2014 · Analista de Controle Externo – Planejamento e Desenvolvimento Organizacional",
+   "tipo": "analista-go",
+   "questoes_lidas": 99,
+   "repetidas_de_outra_prova": 59,
+   "sem_classificacao": 6
+  },
+  "TCE-CE 2015 Téc. Administração": {
+   "descricao": "TCE-CE 2015 · Técnico de Controle Externo – Administração",
+   "tipo": "outro-tce",
+   "questoes_lidas": 58,
+   "repetidas_de_outra_prova": 0,
+   "sem_classificacao": 4
+  },
+  "TCE-SP 2012 Agente Adm.": {
+   "descricao": "TCE-SP 2012 · Agente de Fiscalização Financeira – Administração",
+   "tipo": "outro-tce",
+   "questoes_lidas": 75,
+   "repetidas_de_outra_prova": 0,
+   "sem_classificacao": 13
+  },
+  "TCE-PR 2011 Analista Adm.": {
+   "descricao": "TCE-PR 2011 · Analista de Controle – Administrativa",
+   "tipo": "outro-tce",
+   "questoes_lidas": 99,
+   "repetidas_de_outra_prova": 0,
+   "sem_classificacao": 9
+  }
+ },
+ "disciplinas": {
+  "a01lp": {
+   "TCE-GO 2009 Téc. Adm.": 10,
+   "TCE-GO 2014 Analista Adm.": 34,
+   "TCE-GO 2014 Orç. e Finanças": 5,
+   "TCE-GO 2014 Contabilidade": 3,
+   "TCE-GO 2014 Gestão de Pessoas": 7,
+   "TCE-GO 2014 Planej. e DO": 3,
+   "TCE-CE 2015 Téc. Administração": 14,
+   "TCE-SP 2012 Agente Adm.": 25,
+   "TCE-PR 2011 Analista Adm.": 16
+  },
+  "a01mat": {
+   "TCE-GO 2009 Téc. Adm.": 13,
+   "TCE-GO 2014 Analista Adm.": 8,
+   "TCE-GO 2014 Orç. e Finanças": 4,
+   "TCE-GO 2014 Contabilidade": 3,
+   "TCE-GO 2014 Gestão de Pessoas": 8,
+   "TCE-GO 2014 Planej. e DO": 5,
+   "TCE-CE 2015 Téc. Administração": 11,
+   "TCE-SP 2012 Agente Adm.": 10,
+   "TCE-PR 2011 Analista Adm.": 25
+  },
+  "a01leginst": {
+   "TCE-GO 2009 Téc. Adm.": 8,
+   "TCE-GO 2014 Analista Adm.": 12,
+   "TCE-GO 2014 Orç. e Finanças": 1,
+   "TCE-GO 2014 Contabilidade": 3,
+   "TCE-GO 2014 Gestão de Pessoas": 14,
+   "TCE-CE 2015 Téc. Administração": 6,
+   "TCE-SP 2012 Agente Adm.": 4,
+   "TCE-PR 2011 Analista Adm.": 9
+  },
+  "a01da": {
+   "TCE-GO 2009 Téc. Adm.": 7,
+   "TCE-GO 2014 Analista Adm.": 20,
+   "TCE-GO 2014 Contabilidade": 2,
+   "TCE-GO 2014 Gestão de Pessoas": 5,
+   "TCE-GO 2014 Planej. e DO": 2,
+   "TCE-CE 2015 Téc. Administração": 13,
+   "TCE-SP 2012 Agente Adm.": 16,
+   "TCE-PR 2011 Analista Adm.": 16
+  },
+  "a01lic": {
+   "TCE-GO 2009 Téc. Adm.": 2,
+   "TCE-GO 2014 Analista Adm.": 5,
+   "TCE-CE 2015 Téc. Administração": 3,
+   "TCE-SP 2012 Agente Adm.": 6,
+   "TCE-PR 2011 Analista Adm.": 5
+  },
+  "a01dc": {
+   "TCE-GO 2009 Téc. Adm.": 8,
+   "TCE-GO 2014 Analista Adm.": 17,
+   "TCE-GO 2014 Orç. e Finanças": 1,
+   "TCE-GO 2014 Contabilidade": 1,
+   "TCE-GO 2014 Gestão de Pessoas": 4,
+   "TCE-CE 2015 Téc. Administração": 14,
+   "TCE-SP 2012 Agente Adm.": 8,
+   "TCE-PR 2011 Analista Adm.": 18
+  },
+  "a01ce": {
+   "TCE-GO 2009 Téc. Adm.": 4,
+   "TCE-GO 2014 Analista Adm.": 8,
+   "TCE-GO 2014 Orç. e Finanças": 6,
+   "TCE-GO 2014 Contabilidade": 5,
+   "TCE-GO 2014 Planej. e DO": 2,
+   "TCE-CE 2015 Téc. Administração": 3,
+   "TCE-SP 2012 Agente Adm.": 8,
+   "TCE-PR 2011 Analista Adm.": 12
+  },
+  "a01afo": {
+   "TCE-GO 2009 Téc. Adm.": 11,
+   "TCE-GO 2014 Analista Adm.": 8,
+   "TCE-GO 2014 Orç. e Finanças": 21,
+   "TCE-GO 2014 Contabilidade": 9,
+   "TCE-GO 2014 Gestão de Pessoas": 4,
+   "TCE-GO 2014 Planej. e DO": 4,
+   "TCE-CE 2015 Téc. Administração": 6,
+   "TCE-SP 2012 Agente Adm.": 15,
+   "TCE-PR 2011 Analista Adm.": 13
+  },
+  "a01cont": {
+   "TCE-GO 2009 Téc. Adm.": 1,
+   "TCE-GO 2014 Analista Adm.": 4,
+   "TCE-GO 2014 Orç. e Finanças": 7,
+   "TCE-GO 2014 Contabilidade": 18,
+   "TCE-CE 2015 Téc. Administração": 1,
+   "TCE-SP 2012 Agente Adm.": 1,
+   "TCE-PR 2011 Analista Adm.": 7
+  },
+  "a01ap": {
+   "TCE-GO 2014 Analista Adm.": 13,
+   "TCE-GO 2014 Gestão de Pessoas": 5,
+   "TCE-GO 2014 Planej. e DO": 9,
+   "TCE-CE 2015 Téc. Administração": 4,
+   "TCE-SP 2012 Agente Adm.": 3,
+   "TCE-PR 2011 Analista Adm.": 8
+  },
+  "a01ag": {
+   "TCE-GO 2009 Téc. Adm.": 1,
+   "TCE-GO 2014 Analista Adm.": 4,
+   "TCE-GO 2014 Gestão de Pessoas": 1,
+   "TCE-GO 2014 Planej. e DO": 7,
+   "TCE-CE 2015 Téc. Administração": 1,
+   "TCE-SP 2012 Agente Adm.": 2,
+   "TCE-PR 2011 Analista Adm.": 7
+  },
+  "a01ae": {
+   "TCE-GO 2009 Téc. Adm.": 1,
+   "TCE-GO 2014 Analista Adm.": 7,
+   "TCE-GO 2014 Orç. e Finanças": 1,
+   "TCE-GO 2014 Gestão de Pessoas": 4,
+   "TCE-GO 2014 Planej. e DO": 9,
+   "TCE-CE 2015 Téc. Administração": 2,
+   "TCE-SP 2012 Agente Adm.": 6,
+   "TCE-PR 2011 Analista Adm.": 6
+  },
+  "a01co": {
+   "TCE-GO 2009 Téc. Adm.": 1,
+   "TCE-GO 2014 Analista Adm.": 6,
+   "TCE-GO 2014 Orç. e Finanças": 1,
+   "TCE-GO 2014 Gestão de Pessoas": 13,
+   "TCE-GO 2014 Planej. e DO": 9,
+   "TCE-CE 2015 Téc. Administração": 2,
+   "TCE-SP 2012 Agente Adm.": 2,
+   "TCE-PR 2011 Analista Adm.": 8
+  },
+  "a01gp": {
+   "TCE-GO 2009 Téc. Adm.": 1,
+   "TCE-GO 2014 Analista Adm.": 7,
+   "TCE-GO 2014 Orç. e Finanças": 1,
+   "TCE-GO 2014 Contabilidade": 2,
+   "TCE-GO 2014 Gestão de Pessoas": 15,
+   "TCE-GO 2014 Planej. e DO": 15,
+   "TCE-CE 2015 Téc. Administração": 1,
+   "TCE-SP 2012 Agente Adm.": 6,
+   "TCE-PR 2011 Analista Adm.": 12
+  }
+ },
+ "topicos": {
+  "a01lp": {
+   "Redação Oficial": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1
+    }
+   },
+   "Ortografia e acentuação": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 4
+    }
+   },
+   "Emprego do sinal indicativo de crase": {
+    "h": 0,
+    "por": {}
+   },
+   "Compreensão e interpretação de textos de gêneros variados": {
+    "h": 64,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 6,
+     "TCE-GO 2014 Analista Adm.": 20,
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 10,
+     "TCE-SP 2012 Agente Adm.": 14,
+     "TCE-PR 2011 Analista Adm.": 6
+    }
+   },
+   "Relação do texto com seu contexto histórico": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Denotação e conotação": {
+    "h": 0,
+    "por": {}
+   },
+   "Discurso direto, indireto e indireto livre": {
+    "h": 0,
+    "por": {}
+   },
+   "Intertextualidade": {
+    "h": 0,
+    "por": {}
+   },
+   "Figuras de linguagem": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Morfossintaxe": {
+    "h": 18,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 3,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Elementos estruturais e processos de formação de palavras": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Sinonímia e antonímia": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 2
+    }
+   },
+   "Pontuação": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Pronomes: emprego e colocação": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-SP 2012 Agente Adm.": 4
+    }
+   },
+   "Concordância nominal e verbal": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Flexão nominal e verbal": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 4,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Vozes do verbo": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Correlação de tempos e modos verbais": {
+    "h": 2,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Regência nominal e verbal": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Coordenação e subordinação": {
+    "h": 10,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Conectivos: valor semântico": {
+    "h": 14,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Orç. e Finanças": 3,
+     "TCE-GO 2014 Contabilidade": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Redação: frases corretas e incorretas; reorganização e equivalência de estruturas": {
+    "h": 20,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 9,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 7
+    }
+   }
+  },
+  "a01mat": {
+   "Números inteiros e racionais: operações e expressões numéricas": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1
+    }
+   },
+   "Múltiplos e divisores; problemas": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Frações e operações com frações": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Razões e proporções; divisão em partes proporcionais": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Regra de três simples": {
+    "h": 0,
+    "por": {}
+   },
+   "Porcentagem, acréscimos e descontos": {
+    "h": 19,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-GO 2014 Contabilidade": 2,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 13
+    }
+   },
+   "Estrutura lógica de relações arbitrárias (associação lógica)": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 4,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Dedução de novas informações a partir de relações dadas": {
+    "h": 13,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-CE 2015 Téc. Administração": 3,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Raciocínio verbal, matemático e sequencial (sequências)": {
+    "h": 16,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 4,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Orientação espacial e temporal": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Gestão de Pessoas": 1
+    }
+   },
+   "Formação de conceitos e discriminação de elementos": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Lógica proposicional: hipóteses, validade e conclusões": {
+    "h": 32,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 6,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 3,
+     "TCE-CE 2015 Téc. Administração": 7,
+     "TCE-SP 2012 Agente Adm.": 6,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   }
+  },
+  "a01leginst": {
+   "CF/88: Administração Pública (arts. 37 a 41)": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "CF/88: fiscalização contábil, financeira, orçamentária, operacional e patrimonial (arts. 70 a 75)": {
+    "h": 11,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 5
+    }
+   },
+   "CF/88: controle interno e controle externo": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Contabilidade": 1
+    }
+   },
+   "Constituição do Estado de Goiás: disposições sobre o TCE-GO": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Lei 16.168/2007 (Lei Orgânica do TCE-GO): natureza, competências e jurisdição": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1
+    }
+   },
+   "Lei 16.168/2007: julgamento de contas, fiscalização e poder normativo": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Lei 16.168/2007: composição, Conselheiros, Auditores e MP de Contas": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1
+    }
+   },
+   "Resolução 22/2008 (Regimento Interno): organização, Plenário e Câmaras": {
+    "h": 11,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 4,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Resolução 22/2008: processos, sessões e atos processuais": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Lei 15.122/2005 (PCCR do TCE-GO): cargos, carreiras e atribuições": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 5
+    }
+   },
+   "Lei 20.756/2020: provimento, posse, exercício e estágio probatório": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Lei 20.756/2020: direitos, vantagens e indenizações": {
+    "h": 13,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 5,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Lei 20.756/2020: deveres, proibições e regime disciplinar": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-CE 2015 Téc. Administração": 2
+    }
+   },
+   "Lei 20.756/2020: teletrabalho": {
+    "h": 0,
+    "por": {}
+   },
+   "Código de Ética dos Servidores do TCE-GO": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Políticas institucionais do TCE-GO: Governança, Gestão de Pessoas, Segurança da Informação, Riscos e Proteção de Dados": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 3
+    }
+   },
+   "Resolução Administrativa 15/2024: Sistema de Planejamento e Gestão": {
+    "h": 0,
+    "por": {}
+   }
+  },
+  "a01da": {
+   "Administração Pública e regime jurídico-administrativo": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 6,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Princípios constitucionais e legais da Administração Pública": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Princípios administrativos implícitos": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "LINDB (Decreto-Lei 4.657/1942) e aplicação na Administração Pública": {
+    "h": 0,
+    "por": {}
+   },
+   "Poderes da Administração: hierárquico, disciplinar, regulamentar e de polícia": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Uso e abuso do poder: excesso de poder e desvio de finalidade": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Lei de abuso de autoridade (Lei 13.869/2019)": {
+    "h": 0,
+    "por": {}
+   },
+   "Ato administrativo: conceito, características e atributos": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Elementos e requisitos de validade do ato administrativo": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1
+    }
+   },
+   "Classificação dos atos administrativos": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Formação e efeitos; extinção: revogação, invalidação, convalidação, cassação e caducidade": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Organização administrativa: administração direta e indireta; descentralização e desconcentração": {
+    "h": 19,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 9,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Processo administrativo: Lei estadual 13.800/2001": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Controle da Administração: classificações; controle interno e externo; judicial, legislativo, Tribunal de Contas e MP": {
+    "h": 13,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-CE 2015 Téc. Administração": 5,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Responsabilidade civil do Estado": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Serviços públicos: concessão, permissão e autorização": {
+    "h": 22,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-CE 2015 Téc. Administração": 4,
+     "TCE-SP 2012 Agente Adm.": 8,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Bens públicos": {
+    "h": 1,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Responsabilização do agente público; Decreto Federal 9.830/2019": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Lei de Improbidade Administrativa (Lei 8.429/1992, alterada pela Lei 14.230/2021)": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Licitação e contratos administrativos no Direito Administrativo; Lei 12.232/2010 (publicidade)": {
+    "h": 0,
+    "por": {}
+   },
+   "Direito de acesso à informação: Lei 12.527/2011 e Lei estadual 18.025/2013": {
+    "h": 0,
+    "por": {}
+   }
+  },
+  "a01lic": {
+   "Princípios e governança das contratações públicas": {
+    "h": 2,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Planejamento das contratações: PAC, ETP, Termo de Referência e matriz de riscos": {
+    "h": 0,
+    "por": {}
+   },
+   "Modalidades de licitação e critérios de julgamento": {
+    "h": 12,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 5,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Fases da licitação: preparatória, divulgação, julgamento, habilitação, recursal e homologação": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1
+    }
+   },
+   "Contratação direta: dispensa e inexigibilidade": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Sistema de registro de preços; credenciamento e pré-qualificação": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Contratos administrativos: formalização, execução, fiscalização e gestão contratual": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Recebimento do objeto": {
+    "h": 0,
+    "por": {}
+   },
+   "Alterações contratuais e equilíbrio econômico-financeiro": {
+    "h": 2,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Sanções administrativas e processo sancionador": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1
+    }
+   },
+   "Portal Nacional de Contratações Públicas (PNCP)": {
+    "h": 0,
+    "por": {}
+   }
+  },
+  "a01dc": {
+   "Aplicabilidade das normas constitucionais: eficácia plena, contida e limitada; normas programáticas": {
+    "h": 1,
+    "por": {
+     "TCE-CE 2015 Téc. Administração": 1
+    }
+   },
+   "Princípios fundamentais": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Direitos e garantias fundamentais: direitos e deveres individuais e coletivos": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Direitos sociais": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 1
+    }
+   },
+   "Direitos de nacionalidade": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Direitos políticos e partidos políticos": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Organização político-administrativa: União, Estados, Municípios e competências": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Administração Pública: disposições gerais e servidores públicos": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Poder Executivo: Presidente e Vice-Presidente da República; atribuições e responsabilidades": {
+    "h": 23,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 9,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-CE 2015 Téc. Administração": 4,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 7
+    }
+   },
+   "Poder Legislativo: Congresso, Câmara, Senado, parlamentares e processo legislativo": {
+    "h": 19,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 5,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 5
+    }
+   },
+   "Fiscalização contábil, financeira e orçamentária: controle externo, Tribunais de Contas e MP de Contas": {
+    "h": 29,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 8,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-CE 2015 Téc. Administração": 5,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 8
+    }
+   },
+   "Poder Judiciário: disposições gerais, STF, CNJ e STJ": {
+    "h": 18,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 6,
+     "TCE-CE 2015 Téc. Administração": 7,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Funções essenciais à Justiça: Ministério Público, Advocacia Pública, Advocacia e Defensoria": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   }
+  },
+  "a01ce": {
+   "Sistema constitucional de controle: controle interno e controle externo": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Competências e natureza jurídica dos Tribunais de Contas; jurisdição sobre os jurisdicionados": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Instrumentos de fiscalização: auditoria, levantamento, monitoramento, acompanhamento e inspeção": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Tipos de auditoria: conformidade, operacional e financeira": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-SP 2012 Agente Adm.": 4
+    }
+   },
+   "Normas de auditoria governamental: INTOSAI e NBASP 100, 200, 300 e 400": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 4,
+     "TCE-GO 2014 Contabilidade": 2
+    }
+   },
+   "Planejamento de auditoria: escopo, amostragem estatística e matriz de risco": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Programas de auditoria e papéis de trabalho": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Técnicas e procedimentos de auditoria": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Evidências, achados de auditoria, matriz de achados e matriz de responsabilização": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Comunicação dos resultados: relatórios de auditoria e monitoramento de determinações e recomendações": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 4,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Prestações e tomadas de contas; processo de controle externo; contraditório, ampla defesa, responsabilização e sanções": {
+    "h": 14,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   }
+  },
+  "a01afo": {
+   "Orçamento público: conceito e princípios orçamentários": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Ciclo orçamentário": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 2,
+     "TCE-SP 2012 Agente Adm.": 2
+    }
+   },
+   "Orçamento-Programa; emendas parlamentares e orçamento impositivo": {
+    "h": 0,
+    "por": {}
+   },
+   "Orçamento na CF/88 (arts. 165 a 169): PPA, LDO e LOA; elaboração, discussão, votação e aprovação": {
+    "h": 17,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 3,
+     "TCE-GO 2014 Contabilidade": 5,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Receita orçamentária: conceito, etapas, estágios, fontes e classificações": {
+    "h": 28,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 5,
+     "TCE-GO 2014 Orç. e Finanças": 8,
+     "TCE-GO 2014 Contabilidade": 3,
+     "TCE-CE 2015 Téc. Administração": 3,
+     "TCE-SP 2012 Agente Adm.": 5,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Despesa orçamentária: conceito, etapas, estágios e estrutura programática": {
+    "h": 36,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 4,
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Orç. e Finanças": 5,
+     "TCE-GO 2014 Contabilidade": 3,
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-GO 2014 Planej. e DO": 3,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 5,
+     "TCE-PR 2011 Analista Adm.": 7
+    }
+   },
+   "Classificações da despesa: esfera, institucional, funcional e por natureza": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-SP 2012 Agente Adm.": 2
+    }
+   },
+   "Dispêndios extraorçamentários": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1
+    }
+   },
+   "Restos a pagar e despesas de exercícios anteriores": {
+    "h": 11,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 4,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-SP 2012 Agente Adm.": 2
+    }
+   },
+   "Créditos orçamentários iniciais e adicionais": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 3,
+     "TCE-GO 2014 Contabilidade": 2,
+     "TCE-SP 2012 Agente Adm.": 2
+    }
+   },
+   "Dívida flutuante e fundada; suprimento de fundos": {
+    "h": 14,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 3,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Programação financeira": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Despesa obrigatória de caráter continuado e despesas com pessoal: definições e limites": {
+    "h": 22,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 10,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-SP 2012 Agente Adm.": 4,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Dívida e endividamento público; operações de crédito e ARO": {
+    "h": 23,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 2,
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 7,
+     "TCE-GO 2014 Contabilidade": 4,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 4,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Lei de Responsabilidade Fiscal (LC 101/2000): planejamento, receita, transparência e relatórios": {
+    "h": 24,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 4,
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Orç. e Finanças": 4,
+     "TCE-GO 2014 Contabilidade": 3,
+     "TCE-CE 2015 Téc. Administração": 3,
+     "TCE-SP 2012 Agente Adm.": 5,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Lei 4.320/1964 e alterações": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 3,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 3,
+     "TCE-GO 2014 Contabilidade": 1
+    }
+   },
+   "MCASP 11ª edição: Parte I – Procedimentos Contábeis Orçamentários": {
+    "h": 0,
+    "por": {}
+   }
+  },
+  "a01cont": {
+   "NBC TSP Estrutura Conceitual": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "NBC TSP 01 e 02: receitas de transação com e sem contraprestação": {
+    "h": 1,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "NBC TSP 03 e 04: provisões, passivos e ativos contingentes; estoques": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 2,
+     "TCE-GO 2014 Contabilidade": 4,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "NBC TSP 06 a 10: propriedade para investimento, ativo imobilizado, ativo intangível e redução ao valor recuperavel": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 6
+    }
+   },
+   "NBC TSP 11 a 13: apresentação das demonstrações contábeis, fluxos de caixa e informação orçamentária": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Contabilidade": 3,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "NBC TSP 15, 23, 25 e 34: benefícios a empregados, políticas contábeis e erros, evento subsequente e custos": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Contabilidade": 2
+    }
+   },
+   "MCASP Parte II – Procedimentos Contábeis Patrimoniais": {
+    "h": 15,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 5,
+     "TCE-GO 2014 Contabilidade": 6,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Plano de Contas Aplicado ao Setor Público (PCASP) e MCASP Parte IV": {
+    "h": 0,
+    "por": {}
+   },
+   "MCASP Parte V – Demonstrações Contábeis Aplicadas ao Setor Público": {
+    "h": 10,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 6,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "MCASP Parte I e Lei 4.320/1964 na contabilidade: procedimentos orçamentários e balanços": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1
+    }
+   },
+   "Prestação de contas ao Tribunal de Contas": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1
+    }
+   }
+  },
+  "a01ap": {
+   "Organizações formais modernas: tipos de estrutura organizacional e critérios de departamentalização": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Processo organizacional: planejamento, organização, direção, coordenação, comunicação, controle e avaliação": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Princípios básicos da Administração Pública e administração gerencial": {
+    "h": 4,
+    "por": {
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Gestão da qualidade: excelência nos serviços públicos, simplificação e Decreto 9.094/2017": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Gestão estratégica do Poder Judiciário brasileiro": {
+    "h": 0,
+    "por": {}
+   },
+   "Ferramentas de análise e planejamento estratégico, tático e operacional; Balanced Scorecard": {
+    "h": 12,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 7,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Gestão de projetos": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 4,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Gestão de processos": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Metodologias de avaliação de desempenho e indicadores de gestão": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Governança e governabilidade; transparência e acesso à informação": {
+    "h": 3,
+    "por": {
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Gestão por competências": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 1
+    }
+   },
+   "Processo decisório e gestão de conflitos": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Gestão pública eficiente, eficaz e efetiva; convergências e diferenças entre gestão pública e privada": {
+    "h": 2,
+    "por": {
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   }
+  },
+  "a01ag": {
+   "Teorias da Administração e evolução das escolas administrativas": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Planej. e DO": 4,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Metáforas organizacionais": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Planej. e DO": 1
+    }
+   },
+   "Funções do administrador: papéis gerenciais e habilidades": {
+    "h": 0,
+    "por": {}
+   },
+   "Tipos de organização e estrutura organizacional": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1
+    }
+   },
+   "Processo decisório e tipos de decisão": {
+    "h": 1,
+    "por": {
+     "TCE-CE 2015 Téc. Administração": 1
+    }
+   },
+   "Organização racional do trabalho; eficiência e eficácia; divisão do trabalho e especialização": {
+    "h": 4,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Ambientes organizacionais": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Organizações formais e informais; centralização e descentralização; departamentalização": {
+    "h": 3,
+    "por": {
+     "TCE-SP 2012 Agente Adm.": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Visão sistêmica": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Noções básicas de gerenciamento de projetos": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   }
+  },
+  "a01ae": {
+   "Planejamento estratégico: missão, visão e valores": {
+    "h": 27,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 5,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-GO 2014 Planej. e DO": 4,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 6,
+     "TCE-PR 2011 Analista Adm.": 4
+    }
+   },
+   "Diagnóstico estratégico dos ambientes externo e interno": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 5,
+     "TCE-PR 2011 Analista Adm.": 3
+    }
+   },
+   "Formulação, implementação e controle da estratégia": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1
+    }
+   },
+   "Análise SWOT": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Cinco forças competitivas de Porter": {
+    "h": 0,
+    "por": {}
+   },
+   "Visão Baseada em Recursos (RBV)": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Planej. e DO": 1
+    }
+   },
+   "Business Model Canvas": {
+    "h": 0,
+    "por": {}
+   },
+   "Escolas do Planejamento Estratégico": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Balanced Scorecard (BSC)": {
+    "h": 5,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Planej. e DO": 3,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Cadeia de Valor": {
+    "h": 0,
+    "por": {}
+   }
+  },
+  "a01co": {
+   "Fundamentos do Comportamento Organizacional e individual": {
+    "h": 1,
+    "por": {
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Valores, atitudes e satisfação no trabalho": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-CE 2015 Téc. Administração": 2,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Personalidade": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Emoções e motivação": {
+    "h": 11,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 5,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Equipes de trabalho": {
+    "h": 9,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Liderança": {
+    "h": 10,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 4,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Conflito e negociação": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Desenvolvimento Organizacional": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 3
+    }
+   },
+   "Comunicação organizacional": {
+    "h": 2,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Planej. e DO": 1
+    }
+   },
+   "Clima e cultura organizacional": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   }
+  },
+  "a01gp": {
+   "Departamento pessoal e rotinas administrativas": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Recrutamento, seleção e integração": {
+    "h": 8,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Treinamento, capacitação e desenvolvimento": {
+    "h": 10,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-GO 2014 Planej. e DO": 4,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Gestão e avaliação de desempenho": {
+    "h": 15,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 6,
+     "TCE-GO 2014 Planej. e DO": 4,
+     "TCE-CE 2015 Téc. Administração": 1,
+     "TCE-SP 2012 Agente Adm.": 1,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Remuneração e benefícios": {
+    "h": 18,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 3,
+     "TCE-GO 2014 Orç. e Finanças": 1,
+     "TCE-GO 2014 Contabilidade": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 4,
+     "TCE-SP 2012 Agente Adm.": 3,
+     "TCE-PR 2011 Analista Adm.": 6
+    }
+   },
+   "Gestão Estratégica de RH: planejamento, retenção de talentos e plano de carreira": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 3,
+     "TCE-GO 2014 Planej. e DO": 2,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   },
+   "Gestão do conhecimento, aprendizagem organizacional e gestão da informação": {
+    "h": 6,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 1,
+     "TCE-GO 2014 Planej. e DO": 3,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Gestão por competências": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Planej. e DO": 1
+    }
+   },
+   "Clima e cultura organizacional": {
+    "h": 7,
+    "por": {
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-GO 2014 Planej. e DO": 3,
+     "TCE-PR 2011 Analista Adm.": 2
+    }
+   },
+   "Qualidade de vida no trabalho": {
+    "h": 0,
+    "por": {}
+   },
+   "Diversidade, inclusão e acessibilidade": {
+    "h": 4,
+    "por": {
+     "TCE-GO 2009 Téc. Adm.": 1,
+     "TCE-GO 2014 Gestão de Pessoas": 2,
+     "TCE-PR 2011 Analista Adm.": 1
+    }
+   },
+   "Teletrabalho e trabalho híbrido; trabalho em equipe": {
+    "h": 1,
+    "por": {
+     "TCE-GO 2014 Planej. e DO": 1
+    }
+   },
+   "Legislação aplicável ao servidor público estadual: Lei estadual 20.756/2020": {
+    "h": 3,
+    "por": {
+     "TCE-GO 2014 Analista Adm.": 2,
+     "TCE-SP 2012 Agente Adm.": 1
+    }
+   }
+  }
+ }
+}

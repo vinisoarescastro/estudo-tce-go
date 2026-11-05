@@ -1155,3 +1155,10 @@ main { min-width: 0; padding-bottom: 96px; outline: none; }
   .hero-acoes { width: 100%; }
   .hero-acoes .btn { width: 100%; }
 }
+
+/* Gerenciamento de contas e aviso de senha provisória */
+.aviso-senha { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; padding: 10px 14px; border-radius: var(--r); background: var(--alerta-suave); color: var(--alerta); font-size: 13.5px; font-weight: 500; }
+.aviso-senha a { color: inherit; text-decoration: underline; }
+.form-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 16px; align-items: start; }
+.form-grade .erro-form, .form-grade > div:last-child { grid-column: 1 / -1; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

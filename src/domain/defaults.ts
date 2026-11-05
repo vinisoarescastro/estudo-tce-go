@@ -22,7 +22,9 @@ export function criarDados(seed: Seed, hoje = isoDia(), agora = Date.now()): App
     const st = STATUS_PLANILHA[t.statusPlanilha] ?? 'nao_iniciado';
     if (st !== 'nao_iniciado') topicos[t.id] = { status: st, dominado: false, notas: '', revisoesFeitas: 0, ultimoEstudo: hoje };
   }
-  const itens = CICLO_INICIAL.map(([d, m], i) => ({ id: `ci${String(i + 1).padStart(2, '0')}`, disciplinaId: d, minutos: m, ativo: true }));
+  const cargo = seed.cargo;
+  const ciclo = cargo?.cicloInicial ?? CICLO_INICIAL;
+  const itens = ciclo.map(([d, m], i) => ({ id: `ci${String(i + 1).padStart(2, '0')}`, disciplinaId: d, minutos: m, ativo: true }));
   const user: UserData = {
     topicos,
     prioridadeDisciplina: {},
@@ -30,13 +32,22 @@ export function criarDados(seed: Seed, hoje = isoDia(), agora = Date.now()): App
     dependencias: seed.dependenciasSugeridas.map((d) => ({ ...d })),
     sessoes: [],
     timer: null,
-    config: { metaDiariaMin: 390, metaSemanalMin: 2370, duracaoPadraoMin: 90, revisaoDias: [1, 7, 30], dataProva: '2027-01-17', fusoHorario: FUSO_PADRAO },
+    config: {
+      metaDiariaMin: cargo?.metaDiariaMin ?? 390,
+      metaSemanalMin: cargo?.metaSemanalMin ?? 2370,
+      duracaoPadraoMin: cargo?.duracaoPadraoMin ?? 90,
+      revisaoDias: [1, 7, 30],
+      dataProva: cargo?.dataProva ?? '2027-01-17',
+      fusoHorario: FUSO_PADRAO,
+    },
     historico: [
       {
         id: 'ev-inicio',
         ts: new Date(agora).toISOString(),
         tipo: 'importacao',
-        descricao: 'Plano criado a partir do edital nº 01/2026 e da planilha Edital Verticalizado v2.0.',
+        descricao: cargo
+          ? `Plano criado a partir do edital nº 01/2026 (${cargo.nomeCurto}).`
+          : 'Plano criado a partir do edital nº 01/2026 e da planilha Edital Verticalizado v2.0.',
       },
     ],
   };

@@ -31,8 +31,8 @@ export function Login({ onEntrar, toasts, fecharToast }: { onEntrar: (u: Usuario
         <img className="login-logo" src="marca/logo-tce-go.webp" alt="Tribunal de Contas do Estado de Goiás" width={160} height={133} />
         <div className="login-txt">
           <p className="login-sobre-rot">TCE-GO · Edital nº 01/2026</p>
-          <h2 id="login-sobre">Sua preparação para Tecnologia da Informação</h2>
-          <p>Cargo B02. Organize seu ciclo de estudos, acompanhe o edital e registre suas horas, tudo em um só lugar.</p>
+          <h2 id="login-sobre">Sua preparação para o concurso do TCE-GO</h2>
+          <p>Organize seu ciclo de estudos, acompanhe o edital do seu cargo e registre suas horas, tudo em um só lugar.</p>
         </div>
       </aside>
 
