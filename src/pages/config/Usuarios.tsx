@@ -3,7 +3,7 @@ import { useApp } from '../../store/AppStore';
 import { api } from '../../api';
 import { Barra, Cabecalho, Icone, Painel } from '../../ui/primitives';
 import { fmtMin, fmtPct } from '../../domain/util';
-import { ChipSituacao, DetalhePessoa, textoUltimo, type Resumo } from './Acompanhamento';
+import { ChipSituacao, textoUltimo, type Resumo } from './Acompanhamento';
 import { useUi } from '../../ui/UiContext';
 
 interface Conta {
@@ -31,7 +31,6 @@ export function ConfigUsuarios() {
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [resumos, setResumos] = useState<Record<number, Resumo | null>>({});
-  const [vendo, setVendo] = useState<number | null>(null);
   const [redefinindo, setRedefinindo] = useState<{ id: number; nova: string } | null>(null);
 
   const carregar = useCallback(() => {
@@ -146,7 +145,7 @@ export function ConfigUsuarios() {
                 {contas.map((c) => (
                   <tr key={c.id}>
                     <td>
-                      <b style={{ fontWeight: 550 }}>{c.nome || c.email.split('@')[0]}</b>
+                      <a href={`#/config/usuarios/acompanhar?id=${c.id}`} style={{ fontWeight: 550, color: 'inherit' }}>{c.nome || c.email.split('@')[0]}</a>
                       <div className="nota">{c.email}</div>
                     </td>
                     <td><span className="chip chip-pri">{nomeCargo(c.cargoId)}</span></td>
@@ -169,7 +168,7 @@ export function ConfigUsuarios() {
                       {c.senhaProvisoria && <span className="chip chip-aviso">Senha provisória</span>}
                     </td>
                     <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <button className="btn pq" onClick={() => setVendo(vendo === c.id ? null : c.id)} aria-expanded={vendo === c.id}>Acompanhar</button>{' '}
+                      <a className="btn pq" href={`#/config/usuarios/acompanhar?id=${c.id}`} aria-label={`Acompanhar ${c.nome || c.email}`}>Acompanhar</a>{' '}
                       {c.id !== usuario.id && (
                         <>
                           <button className="btn pq" onClick={() => setRedefinindo({ id: c.id, nova: '' })}>Redefinir senha</button>{' '}
@@ -185,8 +184,6 @@ export function ConfigUsuarios() {
           </div>
         )}
       </Painel>
-
-      {vendo !== null && <DetalhePessoa id={vendo} nome={contas?.find((c) => c.id === vendo)?.nome || 'conta'} aoFechar={() => setVendo(null)} />}
 
       {redefinindo && (
         <Painel titulo="Redefinir senha">

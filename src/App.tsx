@@ -22,6 +22,7 @@ import { ConfigPersonalizacao } from './pages/config/Personalizacao';
 import { ConfigDados } from './pages/config/Dados';
 import { ConfigConta } from './pages/config/Conta';
 import { ConfigUsuarios } from './pages/config/Usuarios';
+import { PaginaAcompanhamento } from './pages/config/Acompanhamento';
 
 interface ItemMenu { id: string; rotulo: string; icone: NomeIcone; soAdmin?: boolean }
 interface GrupoMenu { id: string; rotulo: string; itens: ItemMenu[] }
@@ -52,7 +53,8 @@ const GRUPOS: GrupoMenu[] = [
   ] },
 ];
 // "foco" é a tela cheia de estudo: fica fora do menu.
-const ROTAS = new Set([INICIO.id, 'foco', ...GRUPOS.flatMap((g) => g.itens.map((i) => i.id))]);
+const ROTA_ACOMPANHAR = 'config/usuarios/acompanhar';
+const ROTAS = new Set([INICIO.id, 'foco', ROTA_ACOMPANHAR, ...GRUPOS.flatMap((g) => g.itens.map((i) => i.id))]);
 // Endereços antigos continuam funcionando.
 const ALIASES: Record<string, string> = { painel: 'dashboard', sessoes: 'historico', config: 'config/metas' };
 
@@ -63,7 +65,7 @@ function lerHash(): { rota: string; params: URLSearchParams } {
   const r = ALIASES[r0] ?? r0;
   return { rota: ROTAS.has(r) ? r : 'inicio', params: new URLSearchParams(q ?? '') };
 }
-const grupoDe = (rota: string) => GRUPOS.find((g) => g.itens.some((i) => i.id === rota))?.id ?? null;
+const grupoDe = (rota: string) => (rota === ROTA_ACOMPANHAR ? 'config' : null) ?? GRUPOS.find((g) => g.itens.some((i) => i.id === rota))?.id ?? null;
 
 function lerFechados(): Set<string> {
   try {
@@ -163,6 +165,7 @@ function Shell() {
     case 'config/dados': pagina = <ConfigDados />; break;
     case 'config/conta': pagina = <ConfigConta />; break;
     case 'config/usuarios': pagina = usuario.papel === 'admin' ? <ConfigUsuarios /> : <Inicio />; break;
+    case ROTA_ACOMPANHAR: pagina = usuario.papel === 'admin' ? <PaginaAcompanhamento key={loc.params.get('id')} id={Number(loc.params.get('id'))} /> : <Inicio />; break;
     default: pagina = <Inicio />;
   }
 
@@ -180,9 +183,10 @@ function Shell() {
       return n;
     });
 
+  const ativoNoMenu = (id: string) => loc.rota === id || (id === 'config/usuarios' && loc.rota === ROTA_ACOMPANHAR);
   const item = (i: ItemMenu) => (
     <li key={i.id}>
-      <a href={`#/${i.id}`} className={`nav-item ${loc.rota === i.id ? 'ativo' : ''}`} aria-current={loc.rota === i.id ? 'page' : undefined} title={recolhido ? i.rotulo : undefined}>
+      <a href={`#/${i.id}`} className={`nav-item ${ativoNoMenu(i.id) ? 'ativo' : ''}`} aria-current={loc.rota === i.id ? 'page' : undefined} title={recolhido ? i.rotulo : undefined}>
         <Icone nome={i.icone} />
         <span className="nav-txt">{i.rotulo}</span>
       </a>
