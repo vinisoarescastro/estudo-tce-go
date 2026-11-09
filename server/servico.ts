@@ -11,7 +11,7 @@ import { carregarDados, gravarDados } from './repositorio';
 // que a interface usa e grava o resultado no banco, numa transação.
 
 const ACOES = new Set<Acao['t']>([
-  'status', 'dominado', 'prioridade', 'prioridadeDisciplina', 'notas', 'revisao',
+  'status', 'dominado', 'prioridade', 'prioridadeDisciplina', 'notas', 'revisao', 'topicoPular',
   'cicloMover', 'cicloMinutos', 'cicloAtivo', 'cicloAdicionar', 'cicloRemover', 'cicloDistribuicao', 'cicloProximo', 'cicloPular',
   'timerIniciar', 'timerPausar', 'timerRetomar', 'timerDescartar', 'timerFinalizar',
   'sessaoSalvar', 'sessaoExcluir', 'depAdicionar', 'depRemover', 'depTipo', 'depRestaurar', 'config', 'importar', 'reiniciar',

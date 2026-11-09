@@ -108,6 +108,9 @@ export interface TopicoEstado {
   concluidoEm?: string; // AAAA-MM-DD em que passou a contar como concluído
   ultimoEstudo?: string; // AAAA-MM-DD da última vez que foi estudado ou revisado
   revisoesFeitas: number;
+  // Pulado "por agora": fica de fora enquanto o ciclo estiver nesta mesma sessão (item) e volta.
+  // Quando a disciplina cai de novo (outro item ou outra volta), o conteúdo volta sozinho.
+  pulado?: { itemId: string; volta: number };
 }
 
 export interface CicloItem {

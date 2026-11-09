@@ -3,7 +3,7 @@ import type { CicloItem } from '../domain/types';
 import { useApp, seed } from '../store/AppStore';
 import { ativos, distribuicaoSugerida, minutosPorVolta, prioridadeTopico, proximoItem } from '../domain/cycle';
 import { contar, estadoDe, topicosDaDisciplina } from '../domain/progress';
-import { proximoTopico } from '../domain/recommend';
+import { candidatos, proximoTopico } from '../domain/recommend';
 import { fmtMin, fmtPct } from '../domain/util';
 import { Barra, Cabecalho, Icone, Info, MenuAcoes, NucleoTag, Painel, PrioridadeTag, Vazio } from '../ui/primitives';
 import { BarrasH } from '../ui/charts';
@@ -80,7 +80,12 @@ export function Ciclo() {
             </div>
           </div>
           <div className="agora-acoes">
-            <button className="btn" onClick={() => despachar({ t: 'cicloPular' }, `${discProx.nomeCurto} pulada.`)}><Icone nome="pular" tam={15} /> Pular</button>
+            {recProx && candidatos(seed.topicos, u, prox.disciplinaId).length > 1 && (
+              <button className="btn" title="Continua pendente e volta na próxima vez que esta disciplina cair" onClick={() => despachar({ t: 'topicoPular', topicoId: recProx.topico.id }, `nº ${recProx.topico.numero} pulado: volta na próxima vez que a disciplina cair.`)}>
+                <Icone nome="pular" tam={15} /> Pular conteúdo
+              </button>
+            )}
+            <button className="btn" onClick={() => despachar({ t: 'cicloPular' }, `${discProx.nomeCurto} pulada.`)}><Icone nome="pular" tam={15} /> Pular disciplina</button>
             <button className="btn" onClick={() => abrirSessao({ disciplinaId: prox.disciplinaId, topicoId: recProx?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos, realizadoMin: prox.minutos })}>Registrar</button>
             <button className="btn primario" disabled={!!u.timer} title={u.timer ? 'Já há um cronômetro em andamento' : ''} onClick={() => iniciarEstudo({ disciplinaId: prox.disciplinaId, topicoId: recProx?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos })}>
               <Icone nome="play" tam={13} /> Estudar agora

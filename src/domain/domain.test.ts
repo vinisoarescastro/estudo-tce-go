@@ -224,6 +224,31 @@ describe('pré-requisitos e recomendações', () => {
     expect(antes).not.toBe('t033');
     expect(d.user.sessoes).toHaveLength(1);
   });
+  it('pular um conteúdo o tira da vez só até a disciplina cair de novo', () => {
+    let d = novo();
+    const item = proximoItem(d.user.ciclo)!;
+    const disc = item.disciplinaId;
+    const primeiro = proximoTopico(seed.topicos, seed.disciplinas, d.user, d.user.dependencias, disc)!.topico.id;
+    d = run(d, { t: 'topicoPular', topicoId: primeiro });
+    // Sai da vez, mas continua pendente e sem mudar de status.
+    const depois = proximoTopico(seed.topicos, seed.disciplinas, d.user, d.user.dependencias, disc)!.topico.id;
+    expect(depois).not.toBe(primeiro);
+    expect(d.user.topicos[primeiro].status).toBe('nao_iniciado');
+    // Não avança o ciclo.
+    expect(proximoItem(d.user.ciclo)!.id).toBe(item.id);
+    // A disciplina cai de novo (o ciclo avança): o conteúdo volta ao topo.
+    for (let k = 0; k < ativos(d.user.ciclo).length; k++) d = run(d, { t: 'cicloPular' });
+    expect(proximoItem(d.user.ciclo)!.id).toBe(item.id);
+    expect(proximoTopico(seed.topicos, seed.disciplinas, d.user, d.user.dependencias, disc)!.topico.id).toBe(primeiro);
+  });
+  it('se só restar o conteúdo pulado, ele aparece mesmo assim', () => {
+    let d = novo();
+    const disc = proximoItem(d.user.ciclo)!.disciplinaId;
+    const ids = seed.topicos.filter((t) => t.disciplinaId === disc).map((t) => t.id);
+    for (const id of ids.slice(1)) d = run(d, { t: 'status', topicoId: id, status: 'estudado' });
+    d = run(d, { t: 'topicoPular', topicoId: ids[0] });
+    expect(proximoTopico(seed.topicos, seed.disciplinas, d.user, d.user.dependencias, disc)!.topico.id).toBe(ids[0]);
+  });
   it('bloqueia dependência circular', () => {
     const d = novo();
     expect(() => run(d, { t: 'depAdicionar', de: 't144', para: 't143', tipo: 'obrigatorio' })).toThrow(/ciclo/);

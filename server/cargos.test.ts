@@ -271,7 +271,7 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO sessoes_estudo (usuario_id, id, seq, data, disciplina_id, topico_id, planejado_min, realizado_min, origem, criado_em, atualizado_em)
         VALUES (1, 's1', 1, '2026-10-01', 'lp', 't001', 60, 50, 'manual', '${agora}', '${agora}');`);
 
-    expect(migrar(db)).toEqual([3]);
+    expect(migrar(db)).toEqual([3, 4]);
 
     expect(db.prepare('SELECT email, cargo_id, senha_provisoria, versao_dados FROM usuarios').get()).toMatchObject({ email: 'antigo@exemplo.com', cargo_id: 'B02', senha_provisoria: 0, versao_dados: 7 });
     expect(db.prepare('SELECT cargo_id FROM disciplinas').all()).toMatchObject([{ cargo_id: 'B02' }]);

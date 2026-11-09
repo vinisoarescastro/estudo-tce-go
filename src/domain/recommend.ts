@@ -15,15 +15,26 @@ export interface Recomendacao {
 
 const rank = (p: Prioridade) => PRIORIDADES.indexOf(p);
 
+// Um conteúdo pulado fica de fora só enquanto o ciclo está na mesma sessão e volta em que foi pulado.
+// Assim ele volta sozinho na próxima vez em que a disciplina cair, sem precisar limpar nada.
+export function estaPulado(user: UserData, topicoId: string): boolean {
+  const p = estadoDe(user, topicoId).pulado;
+  const item = proximoItem(user.ciclo);
+  return !!p && !!item && p.itemId === item.id && p.volta === user.ciclo.numero;
+}
+
 // Ordem de estudo dentro de uma disciplina: em andamento primeiro, depois prioridade, depois a ordem do edital.
+// Os pulados saem da lista, a não ser que não sobre mais nada (aí aparecem, para a disciplina nunca ficar sem conteúdo).
 export function candidatos(topicos: Topico[], user: UserData, disciplinaId: string): Topico[] {
-  return topicos
+  const lista = topicos
     .filter((t) => t.disciplinaId === disciplinaId && !isConcluido(estadoDe(user, t.id).status))
     .sort((a, b) => {
       const ea = estadoDe(user, a.id).status === 'em_andamento' ? 0 : 1;
       const eb = estadoDe(user, b.id).status === 'em_andamento' ? 0 : 1;
       return ea - eb || rank(prioridadeTopico(a, user)) - rank(prioridadeTopico(b, user)) || a.numero - b.numero;
     });
+  const livres = lista.filter((t) => !estaPulado(user, t.id));
+  return livres.length ? livres : lista;
 }
 
 // Próximo tópico de uma disciplina, respeitando pré-requisitos obrigatórios:
@@ -37,10 +48,24 @@ export function proximoTopico(
 ): Recomendacao | null {
   const lista = candidatos(topicos, user, disciplinaId);
   if (!lista.length) return null;
-  const alvo = lista[0];
   const byId = new Map(topicos.map((t) => [t.id, t]));
-  const cadeia = cadeiaObrigatoria(deps, user, alvo.id);
-  const estudar = byId.get(cadeia[cadeia.length - 1]) as Topico;
+  const resolver = (t: Topico) => {
+    const cadeia = cadeiaObrigatoria(deps, user, t.id);
+    return byId.get(cadeia[cadeia.length - 1]) as Topico;
+  };
+  // Se o que seria estudado é um pré-requisito que foi pulado, passa para o próximo alvo.
+  let alvo = lista[0];
+  let estudar = resolver(alvo);
+  if (estaPulado(user, estudar.id)) {
+    for (const t of lista.slice(1)) {
+      const e = resolver(t);
+      if (!estaPulado(user, e.id)) {
+        alvo = t;
+        estudar = e;
+        break;
+      }
+    }
+  }
   const disc = disciplinas.find((d) => d.id === estudar.disciplinaId) as Disciplina;
   const motivos: string[] = [];
   if (estudar.id !== alvo.id) {

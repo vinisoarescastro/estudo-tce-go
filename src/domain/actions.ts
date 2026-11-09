@@ -17,6 +17,7 @@ export type Acao =
   | { t: 'prioridadeDisciplina'; disciplinaId: string; valor: Prioridade | null }
   | { t: 'notas'; topicoId: string; texto: string }
   | { t: 'revisao'; topicoId: string }
+  | { t: 'topicoPular'; topicoId: string }
   | { t: 'cicloMover'; de: number; para: number }
   | { t: 'cicloMinutos'; itemId: string; minutos: number }
   | { t: 'cicloAtivo'; itemId: string; ativo: boolean }
@@ -75,7 +76,7 @@ export function reduzir(dados: AppData, a: Acao, ctx: Contexto): AppData {
     if (typeof id !== 'string' || !ctx.seed.topicos.some((t) => t.id === id)) throw new ErroAcao('Conteúdo desconhecido.');
   };
   switch (a.t) {
-    case 'status': case 'dominado': case 'prioridade': case 'notas': case 'revisao':
+    case 'status': case 'dominado': case 'prioridade': case 'notas': case 'revisao': case 'topicoPular':
       exigirTopico(a.topicoId);
       break;
     case 'prioridadeDisciplina':
@@ -120,6 +121,13 @@ export function reduzir(dados: AppData, a: Acao, ctx: Contexto): AppData {
       if (!(e.status === 'estudado' || e.status === 'em_revisao')) throw new ErroAcao('Só é possível registrar revisão de um tópico já estudado.');
       const nu = { ...u, topicos: setTop(a.topicoId, (x) => registrarRevisao(x, hoje)) };
       return setU(log(nu, { tipo: 'revisao', topicoId: a.topicoId, descricao: `${nomeT(a.topicoId)}: revisão nº ${e.revisoesFeitas + 1} registrada` }, ctx));
+    }
+    case 'topicoPular': {
+      // Não muda o status nem avança o ciclo: só deixa o conteúdo de fora nesta aparição da disciplina.
+      const p = cyc.proximoItem(u.ciclo);
+      if (!p) return dados;
+      const pulado = { itemId: p.id, volta: u.ciclo.numero };
+      return setU(log({ ...u, topicos: setTop(a.topicoId, (x) => ({ ...x, pulado })) }, { tipo: 'status', topicoId: a.topicoId, descricao: `${nomeT(a.topicoId)}: pulado até a disciplina cair de novo` }, ctx));
     }
     case 'cicloMover': {
       const it = u.ciclo.itens[a.de];

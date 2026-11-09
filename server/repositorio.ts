@@ -67,6 +67,7 @@ function estadoDeLinha(r: Linha): TopicoEstado {
   if (r.prioridade) e.prioridade = r.prioridade as Prioridade;
   if (r.concluido_em) e.concluidoEm = r.concluido_em as string;
   if (r.ultimo_estudo) e.ultimoEstudo = r.ultimo_estudo as string;
+  if (r.pulado_item_id) e.pulado = { itemId: r.pulado_item_id as string, volta: r.pulado_volta as number };
   return e;
 }
 
@@ -162,10 +163,11 @@ export function gravarDados(db: BD, usuarioId: number, antes: AppData | null, de
   sincronizar(
     new Map(Object.entries(a?.topicos ?? {})),
     new Map(Object.entries(u.topicos)),
-    (id, e) => prep(db, `INSERT INTO estados_topico (usuario_id, topico_id, status, dominado, prioridade, notas, concluido_em, ultimo_estudo, revisoes_feitas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (id, e) => prep(db, `INSERT INTO estados_topico (usuario_id, topico_id, status, dominado, prioridade, notas, concluido_em, ultimo_estudo, revisoes_feitas, pulado_item_id, pulado_volta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(usuario_id, topico_id) DO UPDATE SET status = excluded.status, dominado = excluded.dominado, prioridade = excluded.prioridade, notas = excluded.notas,
-        concluido_em = excluded.concluido_em, ultimo_estudo = excluded.ultimo_estudo, revisoes_feitas = excluded.revisoes_feitas`)
-      .run(usuarioId, id, e.status, e.dominado ? 1 : 0, e.prioridade ?? null, e.notas ?? '', e.concluidoEm ?? null, e.ultimoEstudo ?? null, e.revisoesFeitas ?? 0),
+        concluido_em = excluded.concluido_em, ultimo_estudo = excluded.ultimo_estudo, revisoes_feitas = excluded.revisoes_feitas,
+        pulado_item_id = excluded.pulado_item_id, pulado_volta = excluded.pulado_volta`)
+      .run(usuarioId, id, e.status, e.dominado ? 1 : 0, e.prioridade ?? null, e.notas ?? '', e.concluidoEm ?? null, e.ultimoEstudo ?? null, e.revisoesFeitas ?? 0, e.pulado?.itemId ?? null, e.pulado?.volta ?? null),
     (id) => prep(db, 'DELETE FROM estados_topico WHERE usuario_id = ? AND topico_id = ?').run(usuarioId, id),
   );
 

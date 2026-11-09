@@ -240,6 +240,15 @@ export const MIGRACOES: { versao: number; nome: string; sql: string }[] = [
       INSERT INTO cargo_nucleos (cargo_id, nucleo_id, descricao, pagina) SELECT 'B02', id, descricao, pagina FROM nucleos;
     `,
   },
+  {
+    versao: 4,
+    nome: 'conteúdo pulado até a disciplina cair de novo',
+    // Só acrescenta duas colunas opcionais: nada do que já foi estudado muda.
+    sql: `
+      ALTER TABLE estados_topico ADD COLUMN pulado_item_id TEXT;
+      ALTER TABLE estados_topico ADD COLUMN pulado_volta INTEGER;
+    `,
+  },
 ];
 
 export function abrirBanco(caminho: string): BD {

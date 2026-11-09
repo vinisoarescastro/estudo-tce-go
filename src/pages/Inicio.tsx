@@ -3,7 +3,7 @@ import { FRASES, horaNoFuso, primeiroNome, proximaFrase, saudacaoDoDia, type Bar
 import { useApp, seed } from '../store/AppStore';
 import { contar, estadoDe, isConcluido } from '../domain/progress';
 import { ativos, prioridadeTopico, proximoItem } from '../domain/cycle';
-import { proximoTopico } from '../domain/recommend';
+import { candidatos, proximoTopico } from '../domain/recommend';
 import { prereqsDe } from '../domain/deps';
 import { somaMin } from '../domain/stats';
 import { diffDias, fmtDia, fmtMin, fmtPct, inicioSemana, isoDia, parseDia } from '../domain/util';
@@ -53,6 +53,7 @@ export function Inicio() {
   const prox = proximoItem(u.ciclo);
   const disc = prox ? seed.disciplinas.find((d) => d.id === prox.disciplinaId)! : null;
   const rec = prox ? proximoTopico(seed.topicos, seed.disciplinas, u, u.dependencias, prox.disciplinaId) : null;
+  const podePular = !!prox && !!rec && candidatos(seed.topicos, u, prox.disciplinaId).length > 1;
   const pos = prox ? at.findIndex((i) => i.id === prox.id) : -1;
   const pre = rec ? prereqsDe(u.dependencias, rec.topico.id) : [];
   const byId = new Map(seed.topicos.map((t) => [t.id, t]));
@@ -171,6 +172,11 @@ export function Inicio() {
                 <button className="btn" onClick={() => abrirSessao({ disciplinaId: prox.disciplinaId, topicoId: rec?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos, realizadoMin: prox.minutos })}>
                   Registrar sessão
                 </button>
+                {rec && podePular && (
+                  <button className="btn fantasma" title="Continua pendente e volta na próxima vez que esta disciplina cair" onClick={() => despachar({ t: 'topicoPular', topicoId: rec.topico.id }, `nº ${rec.topico.numero} pulado: volta na próxima vez que a disciplina cair.`)}>
+                    <Icone nome="pular" tam={15} /> Pular este conteúdo
+                  </button>
+                )}
                 {rec && !isConcluido(estadoDe(u, rec.topico.id).status) && (
                   <button className="btn fantasma" onClick={() => despachar({ t: 'status', topicoId: rec.topico.id, status: 'estudado' }, `nº ${rec.topico.numero} marcado como estudado.`)}>
                     <Icone nome="check" tam={15} /> Marcar como estudado
