@@ -32,9 +32,8 @@ function sortearFrase(): number {
 
 const INICIAL = 4;
 const PASSO = 5;
-// Revisões listadas na Início: em tela larga a lista rola dentro do painel; em tela estreita, só as primeiras.
-const REVISOES_NA_TELA = 20;
-const REVISOES_TELA_ESTREITA = 5; // o CSS esconde as demais abaixo de 1240 px
+// Revisões listadas na Início: só as mais atrasadas; as demais em "Ver todas" (Conteúdos filtrado).
+const REVISOES_NA_TELA = 3;
 
 const num = (x: number) => x.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
 const dias = (n: number) => `${n} ${n === 1 ? 'dia' : 'dias'}`;
@@ -116,6 +115,7 @@ export function Inicio() {
   const futuras = seed.topicos.map((t) => proximaRevisao(estadoDe(u, t.id), u.config)).filter((v): v is string => !!v && v > hoje);
   const proximas7 = futuras.filter((v) => v <= daqui7).length;
   const proximaData = futuras.length ? futuras.reduce((a, b) => (b < a ? b : a)) : null;
+  const atrasadas = devidas.filter((r) => r.atrasoDias > 0).length;
   const nomeDisc = (id: string) => seed.disciplinas.find((d) => d.id === id)?.nomeCurto ?? id;
 
   // Próximo estudo: posição atual do ciclo + regras de pré-requisito e prioridade
@@ -298,50 +298,60 @@ export function Inicio() {
         )}
       </section>
 
-      <div className="revisoes-col">
       <Painel
         className="revisoes-painel"
-        titulo={<>Revisões {devidas.length > 0 && <span className="contador contador-alerta">{devidas.length}</span>}</>}
-        info={`Cada conteúdo estudado volta para revisão depois de ${u.config.revisaoDias.join(', ')} dias (ajuste em Metas e planejamento). “Revisei” registra a revisão de hoje e agenda a próxima.`}
-        acoes={devidas.length > 0 ? <button className="btn fantasma pq" onClick={() => navegar('conteudos?extra=revisao')}>Ver todas <Icone nome="direita" tam={14} /></button> : undefined}
+        titulo="Revisões"
+        acoes={devidas.length > 0 ? <span className="rev-total"><b>{devidas.length}</b> {devidas.length === 1 ? 'pendente' : 'pendentes'}</span> : undefined}
+        info={`Cada conteúdo estudado volta para revisão depois de ${u.config.revisaoDias.join(', ')} dias (ajuste em Metas e planejamento). Marque o círculo quando revisar: a próxima revisão é agendada.`}
       >
         {devidas.length === 0 ? (
-          <Vazio icone="check">
-            Nenhuma revisão para hoje.
-            {proximaData && <> Próxima: {proximaData === somarDias(hoje, 1) ? 'amanhã' : fmtDia(proximaData, { day: 'numeric', month: 'long' })}.</>}
-          </Vazio>
+          <div className="rev-vazio">
+            <span className="rev-vazio-ic" aria-hidden="true"><Icone nome="check" tam={18} /></span>
+            <b>Em dia</b>
+            <span className="nota">
+              {proximaData
+                ? <>Próxima revisão {proximaData === somarDias(hoje, 1) ? 'amanhã' : `em ${fmtDia(proximaData, { day: 'numeric', month: 'long' })}`}{proximas7 > 1 ? ` · ${proximas7} nos próximos 7 dias` : ''}.</>
+                : 'Nenhuma revisão agendada.'}
+            </span>
+          </div>
         ) : (
-          <ul className="lista revisoes-hoje">
-            {devidas.slice(0, REVISOES_NA_TELA).map((r) => {
-              const e = estadoDe(u, r.topico.id);
-              return (
-                <li key={r.topico.id}>
-                  <div className="rev-corpo">
-                    <button className="link link-sutil rev-titulo" onClick={() => abrirTopico(r.topico.id)}>
-                      <span className="num-item">nº {r.topico.numero}</span>{r.topico.titulo}
+          <>
+            <ul className="rev-lista">
+              {devidas.slice(0, REVISOES_NA_TELA).map((r) => {
+                const e = estadoDe(u, r.topico.id);
+                return (
+                  <li key={r.topico.id}>
+                    <button
+                      className="rev-check"
+                      onClick={() => despachar({ t: 'revisao', topicoId: r.topico.id }, `Revisão de nº ${r.topico.numero} registrada.`)}
+                      aria-label={`Marcar nº ${r.topico.numero} como revisado`}
+                      title="Marcar como revisado"
+                    >
+                      <Icone nome="check" tam={13} />
                     </button>
-                    <span className="rev-meta" title={`${nomeDisc(r.topico.disciplinaId)} · ${e.revisoesFeitas + 1}ª revisão`}>
-                      <span className={r.atrasoDias > 0 ? 'rev-atraso' : ''}>{r.atrasoDias > 0 ? `atrasada ${dias(r.atrasoDias)}` : 'vence hoje'}</span>
-                      {' · '}{e.revisoesFeitas + 1}ª revisão · {nomeDisc(r.topico.disciplinaId)}
-                    </span>
-                  </div>
-                  <button className="btn pq" onClick={() => despachar({ t: 'revisao', topicoId: r.topico.id }, `Revisão de nº ${r.topico.numero} registrada.`)}>
-                    <Icone nome="check" tam={14} /> Revisei
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {(devidas.length > 0 || proximas7 > 0) && (
-          <p className="nota revisoes-rodape">
-            {devidas.length > REVISOES_NA_TELA && <span className="rev-mostrando-largo">Mostrando {REVISOES_NA_TELA} de {devidas.length} vencidas. </span>}
-            {devidas.length > REVISOES_TELA_ESTREITA && <span className="rev-mostrando-estreito">Mostrando as {REVISOES_TELA_ESTREITA} mais atrasadas de {devidas.length}. </span>}
-            {proximas7 > 0 ? `Próximos 7 dias: ${proximas7} ${proximas7 === 1 ? 'revisão' : 'revisões'}.` : 'Nenhuma revisão nos próximos 7 dias.'}
-          </p>
+                    <div className="rev-corpo">
+                      <button className="rev-titulo" onClick={() => abrirTopico(r.topico.id)} title={`${nomeDisc(r.topico.disciplinaId)} · ${e.revisoesFeitas + 1}ª revisão`}>
+                        {r.topico.titulo}
+                      </button>
+                      <span className={`rev-meta ${r.atrasoDias > 0 ? 'rev-atraso' : ''}`}>{r.atrasoDias > 0 ? `atrasada ${dias(r.atrasoDias)}` : 'vence hoje'}</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="rev-rodape">
+              <span className="nota">
+                {[atrasadas > 0 && `${atrasadas} ${atrasadas === 1 ? 'atrasada' : 'atrasadas'}`, devidas.length - atrasadas > 0 && `${devidas.length - atrasadas} de hoje`].filter(Boolean).join(' · ')}
+              </span>
+              {devidas.length > REVISOES_NA_TELA && (
+                <button className="btn fantasma pq" onClick={() => navegar('conteudos?extra=revisao')}>
+                  Ver todas <Icone nome="direita" tam={14} />
+                </button>
+              )}
+            </div>
+          </>
         )}
       </Painel>
-      </div>
       </div>
 
       <Painel
