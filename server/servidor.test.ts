@@ -159,7 +159,7 @@ describe('API e segurança', () => {
   const entrar = async (senha = 'senha-bem-forte-123', email = 'eu@exemplo.com') => req('/api/auth/entrar', { metodo: 'POST', corpo: { email, senha } });
 
   test('sem login, nenhum dado é acessível', async () => {
-    for (const c of ['/api/dados', '/api/edital', '/api/auth/eu', '/api/exportar', '/api/preferencias', '/edital.pdf']) expect((await req(c)).status, c).toBe(401);
+    for (const c of ['/api/dados', '/api/edital', '/api/auth/eu', '/api/exportar', '/api/preferencias', '/edital.pdf', '/editais/tce-go-2026.pdf', '/editais/ifg-2026.pdf']) expect((await req(c)).status, c).toBe(401);
     expect((await req('/api/acoes', { metodo: 'POST', corpo: { acao: { t: 'cicloPular' } } })).status).toBe(401);
     expect((await req('/api/saude')).status).toBe(200);
   });

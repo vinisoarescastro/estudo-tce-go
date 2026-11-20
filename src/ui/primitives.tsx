@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import type { NucleoId, Prioridade, Status } from '../domain/types';
 import { PRIORIDADES, STATUS, STATUS_LABEL } from '../domain/types';
 import { seed } from '../store/seed';
+import { concursoDe } from '../domain/concursos';
 
 // ---------------------------------------------------------------------------
 // Ícones em traço (24×24, estilo Lucide), desenhados inline: funcionam offline e herdam a cor do texto.
@@ -326,7 +327,7 @@ export function Vazio({ children, icone, titulo, acao }: { children?: ReactNode;
 
 export function LinkEdital({ pagina, children }: { pagina: number; children?: ReactNode }) {
   return (
-    <a className="link-edital" href={`edital.pdf#page=${pagina}`} target="_blank" rel="noreferrer" title={`Abrir o edital na página ${pagina}`}>
+    <a className="link-edital" href={`${concursoDe(seed).pdf}#page=${pagina}`} target="_blank" rel="noreferrer" title={`Abrir o edital na página ${pagina}`}>
       {children ?? `edital, p. ${pagina}`}
     </a>
   );

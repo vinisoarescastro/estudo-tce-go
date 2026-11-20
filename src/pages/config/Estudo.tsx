@@ -5,6 +5,7 @@ import { useApp, seed } from '../../store/AppStore';
 import { estadoDe, isConcluido } from '../../domain/progress';
 import { Cabecalho, Icone, NucleoTag, Painel, Vazio } from '../../ui/primitives';
 import { useUi } from '../../ui/UiContext';
+import { concursoDe } from '../../domain/concursos';
 
 // Preferências de estudo: quais disciplinas participam do ciclo, a prioridade de cada uma
 // e os pré-requisitos entre conteúdos.
@@ -48,7 +49,7 @@ export function ConfigEstudo() {
       <Painel
         titulo="Disciplinas"
         semPadding
-        info={`As ${seed.disciplinas.length} disciplinas do Anexo II para o cargo ${seed.cargo?.codigo ?? ''}. Tirar uma disciplina do ciclo desativa as sessões dela, sem apagar progresso nem histórico. A prioridade da disciplina é estratégica (não oficial) e entra na distribuição sugerida de tempo. A prioridade de cada conteúdo é ajustada na ficha do conteúdo.`}
+        info={`As ${seed.disciplinas.length} disciplinas do ${concursoDe(seed).anexoConteudo} para o cargo ${seed.cargo?.codigo ?? ''}. Tirar uma disciplina do ciclo desativa as sessões dela, sem apagar progresso nem histórico. A prioridade da disciplina é estratégica (não oficial) e entra na distribuição sugerida de tempo. A prioridade de cada conteúdo é ajustada na ficha do conteúdo.`}
       >
         <div className="tabela-wrap">
           <table className="tabela">

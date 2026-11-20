@@ -1,5 +1,5 @@
 import subprocess,re,json,sys
-pdf=sys.argv[2] if len(sys.argv)>2 else 'public/edital.pdf'
+pdf=sys.argv[2] if len(sys.argv)>2 else 'public/editais/tce-go-2026.pdf'
 lines=[]
 for p in range(19,23):
     t=subprocess.run(['pdftotext','-f',str(p),'-l',str(p),pdf,'-'],capture_output=True,text=True).stdout

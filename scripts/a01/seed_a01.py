@@ -1,9 +1,9 @@
 """Gera src/data/seed-a01.json: edital verticalizado do cargo A01 (Técnico Administrativo).
 
-Uso: python scripts/a01/seed_a01.py public/edital.pdf fontes/tce-go-2026/a01/analise-fcc.json src/data/seed-a01.json
+Uso: python scripts/a01/seed_a01.py public/editais/tce-go-2026.pdf fontes/tce-go-2026/a01/analise-fcc.json src/data/seed-a01.json
 
 Entradas
-  - edital.pdf: Edital 01/2026 (texto oficial do Anexo II, páginas 19 e 20)
+  - tce-go-2026.pdf: Edital 01/2026 (texto oficial do Anexo II, páginas 19 e 20)
   - analise-fcc.json: contagem de questões por tópico (scripts/a01/analise_fcc.py)
 Saídas
   - o seed no mesmo formato do seed.json do B02, com o bloco "cargo" (padrões do cargo)
@@ -212,7 +212,7 @@ CICLO = [
     ('a01da', 90), ('a01afo', 90), ('a01lp', 90), ('a01lic', 60), ('a01ce', 60), ('a01cont', 60), ('a01leginst', 60), ('a01mat', 60), ('a01dc', 60),
 ]
 cargo = {
-    'id': 'A01', 'codigo': 'A01',
+    'id': 'A01', 'concursoId': 'tce-go-2026', 'codigo': 'A01',
     'nome': 'Técnico de Controle Externo – Especialidade: Técnico Administrativo',
     'nomeCurto': 'Cargo A01 · Técnico Administrativo',
     'escolaridade': 'Ensino médio ou curso profissionalizante',

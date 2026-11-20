@@ -1,5 +1,6 @@
 import type { AppData, Seed, Status, TopicoEstado, UserData } from './types';
 import { FUSO_PADRAO, isoDia } from './util';
+import { concursoDe } from './concursos';
 
 // Ordem inicial do ciclo: 22 sessões (29h30 por volta), baseada no plano entregue antes,
 // com o tempo de cada sessão em minutos. Tudo é editável na página Ciclo.
@@ -46,7 +47,7 @@ export function criarDados(seed: Seed, hoje = isoDia(), agora = Date.now()): App
         ts: new Date(agora).toISOString(),
         tipo: 'importacao',
         descricao: cargo
-          ? `Plano criado a partir do edital nº 01/2026 (${cargo.nomeCurto}).`
+          ? `Plano criado a partir do ${concursoDe(seed).edital.replace('Edital', 'edital')} (${concursoDe(seed).sigla}, ${cargo.nomeCurto}).`
           : 'Plano criado a partir do edital nº 01/2026 e da planilha Edital Verticalizado v2.0.',
       },
     ],

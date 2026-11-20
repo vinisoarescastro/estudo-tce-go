@@ -2,6 +2,7 @@
  "seedVersion": 1,
  "cargo": {
   "id": "A01",
+  "concursoId": "tce-go-2026",
   "codigo": "A01",
   "nome": "Técnico de Controle Externo – Especialidade: Técnico Administrativo",
   "nomeCurto": "Cargo A01 · Técnico Administrativo",

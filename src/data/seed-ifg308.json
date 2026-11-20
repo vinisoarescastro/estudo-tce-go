@@ -1,0 +1,3312 @@
+{
+ "seedVersion": 1,
+ "cargo": {
+  "id": "IFG308",
+  "codigo": "308",
+  "concursoId": "ifg-2026",
+  "nome": "Técnico de Laboratório/Área Química",
+  "nomeCurto": "Cargo 308 · Técnico de Laboratório/Química",
+  "escolaridade": "Médio profissionalizante ou médio completo mais curso técnico na área",
+  "dataProva": "2027-02-14",
+  "metaDiariaMin": 240,
+  "metaSemanalMin": 1440,
+  "duracaoPadraoMin": 90,
+  "cicloInicial": [
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifglp",
+    90
+   ],
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifgleg",
+    60
+   ],
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifgrlm",
+    60
+   ],
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifglp",
+    90
+   ],
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifginf",
+    60
+   ],
+   [
+    "ifgqui",
+    90
+   ],
+   [
+    "ifgleg",
+    60
+   ]
+  ]
+ },
+ "fonte": {
+  "edital": "Edital de Abertura nº 001/2026 – Concurso Público IFG (Instituto AOCP)",
+  "planilha": "Edital verticalizado IFG 2026 – Técnico de Laboratório/Química (código 308), com prioridades das provas IFPB 2025 e IFCE 2026"
+ },
+ "nucleos": [
+  {
+   "id": "CG",
+   "nome": "Conhecimentos Gerais",
+   "apelido": "Núcleo comum",
+   "descricao": "Conhecimentos comuns a todos os cargos de nível médio e superior (Anexo III): Língua Portuguesa (10 questões, peso 2), Legislação (10, peso 1), Raciocínio Lógico e Matemática (5, peso 1) e Informática (5, peso 1). Tabela 11.1.",
+   "pagina": 31
+  },
+  {
+   "id": "CE",
+   "nome": "Conhecimentos Específicos",
+   "apelido": "Núcleo específico",
+   "descricao": "Conhecimentos específicos do cargo Técnico de Laboratório/Área Química (Anexo III): 20 questões, peso 3, mínimo de 39 pontos. Tabela 11.1.",
+   "pagina": 33
+  }
+ ],
+ "disciplinas": [
+  {
+   "id": "ifglp",
+   "nome": "Língua Portuguesa",
+   "nomeCurto": "Língua Portuguesa",
+   "nucleo": "CG",
+   "ordemEdital": 1,
+   "paginas": [
+    31
+   ],
+   "textoOficial": "Língua Portuguesa: 1. Compreensão e interpretação de texto. 2. Tipologia e gêneros textuais. 3. Figuras de linguagem. 4. Significação de palavras e expressões. 5. Relações de sinonímia e de antonímia. 6. Ortografia. 7. Acentuação gráfica. 8. Uso da crase. 9. Morfologia: classes de palavras variáveis e invariáveis e seus empregos no texto. 10. Locuções verbais (perífrases verbais). 11. Funções do “que” e do “se”. 12. Formação de palavras. 13. Elementos de comunicação. 14. Sintaxe: relações sintático-semânticas estabelecidas entre orações, períodos ou parágrafos (período simples e período composto por coordenação e subordinação). 15. Concordância verbal e nominal. 16. Regência verbal e nominal. 17. Colocação pronominal. 18. Emprego dos sinais de pontuação e sua função no texto. 19. Elementos de coesão. 20. Função textual dos vocábulos. 21. Variação linguística."
+  },
+  {
+   "id": "ifgleg",
+   "nome": "Legislação",
+   "nomeCurto": "Legislação",
+   "nucleo": "CG",
+   "ordemEdital": 2,
+   "paginas": [
+    31
+   ],
+   "textoOficial": "Legislação: 1. Constituição da República Federativa do Brasil 1988: Título III - Da Organização do Estado: Capítulo VII ‒ Da Administração Pública; Título VIII – Da Ordem Social: Capítulo III ‒ Da Educação, da Cultura e do Desporto / Capítulo IV ‒ Da Ciência e Tecnologia. 2. Lei Federal nº 8.112/1990. 3. Decreto Federal nº 1.171/1994. 4. Lei Federal nº 9.394/1996. 5. Lei Federal nº 11.892/2008. 6. Lei Federal nº 11.091/2005. 7. Lei Federal nº 12.527/2011. Lei Federal 13.709/2018. Lei Federal nº 14.133/2021. Lei Federal nº 9.784/1999. Lei Federal nº 8.429/1992."
+  },
+  {
+   "id": "ifgrlm",
+   "nome": "Raciocínio Lógico e Matemática",
+   "nomeCurto": "Raciocínio Lógico e Matemática",
+   "nucleo": "CG",
+   "ordemEdital": 3,
+   "paginas": [
+    31
+   ],
+   "textoOficial": "Raciocínio Lógico e Matemática: 1. Raciocínio dedutivo a partir da Lógica Aristotélica Clássica: proposições e conectivos lógicos, quantificadores, regras de dedução, falácias; 2. Análise combinatória e probabilidades: técnicas de contagem, princípio multiplicativo, permutações, arranjos e combinações, probabilidades em espaços amostrais finitos; 3. Aritmética: problemas envolvendo operações elementares, razões e proporções, regra de três simples e composta; 4. Teoria dos conjuntos: reuniões, interseções, complementos, cardinalidade; 5. Geometria: problemas básicos envolvendo os conceitos de perímetro, área e volume."
+  },
+  {
+   "id": "ifginf",
+   "nome": "Informática",
+   "nomeCurto": "Informática",
+   "nucleo": "CG",
+   "ordemEdital": 4,
+   "paginas": [
+    31
+   ],
+   "textoOficial": "Informática: 1. Conceitos básicos de Hardware: Placa mãe, memórias, processadores (CPU) e Periféricos de computadores. 2. Conhecimento e utilização dos principais softwares utilitários (compactadores de arquivos, chat, clientes de e-mails, reprodutores de vídeo, visualizadores de imagem, antivírus). 3. Ambientes operacionais: utilização básica dos sistemas operacionais Windows 10 e 11 (em português). 4. Utilização de ferramentas de texto, planilha e apresentação do pacote Microsoft Office (Word, Excel e PowerPoint) – versão 365 (em português). 5. Utilização de ferramentas de texto, planilha e apresentação do pacote LibreOffice (Writer, Calc e Impress) – versão 7(em português). 6. Conceitos de tecnologias relacionadas à Internet, busca e pesquisa na Web. 7. Navegadores de internet: Microsoft Edge, Mozilla Firefox, Google Chrome; 8. Conceitos básicos de segurança na Internet e malwares."
+  },
+  {
+   "id": "ifgqui",
+   "nome": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+   "nomeCurto": "Química",
+   "nucleo": "CE",
+   "ordemEdital": 5,
+   "paginas": [
+    33
+   ],
+   "textoOficial": "1. Propriedades da matéria e da energia, estados físicos da matéria, transformações físicas e químicas. 2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação. 3. Misturas e substâncias puras, métodos de separação, funções inorgânicas, nomenclatura e propriedades dos compostos inorgânicos (óxidos, ácidos, bases e sais). 4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas. 5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções. 6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular. 7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio. 8. Eletroquímica: reações de oxidação e redução, células galvânicas, eletrólise e corrosão. 9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos. 10. Química ambiental: atmosfera, hidrosfera e litosfera, ciclos biogeoquímicos e principais problemas ambientais contemporâneos (poluição, aquecimento global, camada de ozônio). 11. Química verde: princípios, tecnologias limpas, ecologia industrial e análise do ciclo de vida. 12. Aparelhagem e materiais de laboratório químico: identificação, funcionalidade, uso, limpeza, conservação e calibração de equipamentos e vidrarias; purificadores de água e manutenção de equipamentos de medição. 13. Operações fundamentais de laboratório: aquecimento, medição de volumes, pesagem, uso de balança analítica, cristalização, recristalização e montagem de aparelhagens. 14. Técnicas de separação e identificação: filtração, decantação, extração, destilação simples, fracionada e a vácuo e cromatografia. 15. Métodos clássicos de análise química: gravimetria e titulometria (ácido-base, precipitação, complexação e oxidação-redução). 16. Fundamentos de análise instrumental: potenciometria, determinação potenciométrica de pH, condutivimetria, espectroscopia de absorção molecular (UV-Vis) e noções de espectroscopia de absorção atômica. 17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais. 18. Fundamentos de microbiologia aplicada ao laboratório químico: técnicas assépticas, controle microbiano, indicadores biológicos e noções de biodegradação de compostos químicos. 19. Gestão e controle da qualidade em laboratório: procedimentos operacionais padrão (POPs), elaboração de roteiros experimentais, controle de qualidade, sistemas de gestão ambiental e noções das normas da série ISO 14000. 20. Tratamento e análise de dados experimentais: algarismos significativos, média, desvio padrão, incertezas, curvas de calibração, organização, codificação, tabulação e análise estatística de resultados. 21. Organização, funcionamento, limpeza, conservação e controle de estoque de materiais, reagentes, equipamentos e insumos de laboratório. 22. Elaboração de registros, relatórios técnicos e laudos laboratoriais. 23. Noções de aquisições, contratações e gestão de bens e serviços na administração pública: princípios, fases da contratação, planejamento da contratação, termos de referência, fiscalização de contratos e aspectos básicos da Lei nº 14.133/2021 (Lei de Licitações e Contratos Administrativos)."
+  }
+ ],
+ "topicos": [
+  {
+   "id": "i001",
+   "numero": 1,
+   "disciplinaId": "ifglp",
+   "titulo": "Compreensão e interpretação de texto (inclui texto não verbal e comparação de textos)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "1. Compreensão e interpretação de texto.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q1; IFCE Q5, Q7, Q8 (infográfico e dois textos)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i002",
+   "numero": 2,
+   "disciplinaId": "ifglp",
+   "titulo": "Tipologia e gêneros textuais",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "2. Tipologia e gêneros textuais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q2",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i003",
+   "numero": 3,
+   "disciplinaId": "ifglp",
+   "titulo": "Figuras de linguagem",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "3. Figuras de linguagem.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado nas duas provas; item novo frente ao IFPB",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i004",
+   "numero": 4,
+   "disciplinaId": "ifglp",
+   "titulo": "Significação de palavras e expressões",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "4. Significação de palavras e expressões.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Aparece dentro de interpretação; IFPB Q3",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i005",
+   "numero": 5,
+   "disciplinaId": "ifglp",
+   "titulo": "Relações de sinonímia e antonímia",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "5. Relações de sinonímia e de antonímia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q3 (sinonímia, hiperonímia, polissemia)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i006",
+   "numero": 6,
+   "disciplinaId": "ifglp",
+   "titulo": "Ortografia",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "6. Ortografia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q8 (junto com pontuação e acentuação)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i007",
+   "numero": 7,
+   "disciplinaId": "ifglp",
+   "titulo": "Acentuação gráfica",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "7. Acentuação gráfica.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q8",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i008",
+   "numero": 8,
+   "disciplinaId": "ifglp",
+   "titulo": "Uso da crase",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "8. Uso da crase.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "Nas duas provas: IFPB Q4; IFCE Q9",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i009",
+   "numero": 9,
+   "disciplinaId": "ifglp",
+   "titulo": "Morfologia: classes de palavras variáveis e invariáveis",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "9. Morfologia: classes de palavras variáveis e invariáveis e seus empregos no texto.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão isolada; cai dentro de sintaxe e coesão",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i010",
+   "numero": 10,
+   "disciplinaId": "ifglp",
+   "titulo": "Locuções verbais (perífrases verbais)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "10. Locuções verbais (perífrases verbais).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i011",
+   "numero": 11,
+   "disciplinaId": "ifglp",
+   "titulo": "Funções do \"que\" e do \"se\"",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "11. Funções do “que” e do “se”.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q6",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i012",
+   "numero": 12,
+   "disciplinaId": "ifglp",
+   "titulo": "Formação de palavras",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "12. Formação de palavras.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q7",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i013",
+   "numero": 13,
+   "disciplinaId": "ifglp",
+   "titulo": "Elementos de comunicação",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "13. Elementos de comunicação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i014",
+   "numero": 14,
+   "disciplinaId": "ifglp",
+   "titulo": "Sintaxe: relações entre orações, períodos e parágrafos (coordenação e subordinação)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "14. Sintaxe: relações sintático-semânticas estabelecidas entre orações, períodos ou parágrafos (período simples e período composto por coordenação e subordinação).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q9; IFCE Q6",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i015",
+   "numero": 15,
+   "disciplinaId": "ifglp",
+   "titulo": "Concordância verbal e nominal",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "15. Concordância verbal e nominal.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "Nas duas provas: IFPB Q10; IFCE Q4, Q10",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i016",
+   "numero": 16,
+   "disciplinaId": "ifglp",
+   "titulo": "Regência verbal e nominal",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "16. Regência verbal e nominal.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q10; IFCE Q4 (reescrita de frases)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i017",
+   "numero": 17,
+   "disciplinaId": "ifglp",
+   "titulo": "Colocação pronominal",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "17. Colocação pronominal.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i018",
+   "numero": 18,
+   "disciplinaId": "ifglp",
+   "titulo": "Emprego dos sinais de pontuação e sua função no texto",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "18. Emprego dos sinais de pontuação e sua função no texto.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Nas duas provas: IFPB Q8; IFCE Q3",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i019",
+   "numero": 19,
+   "disciplinaId": "ifglp",
+   "titulo": "Elementos de coesão (conectivos e relações de sentido)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "19. Elementos de coesão.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q5; IFCE Q1, Q6",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i020",
+   "numero": 20,
+   "disciplinaId": "ifglp",
+   "titulo": "Função textual dos vocábulos",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "20. Função textual dos vocábulos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Relacionado a coesão; sem questão isolada",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i021",
+   "numero": 21,
+   "disciplinaId": "ifglp",
+   "titulo": "Variação linguística",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Língua Portuguesa",
+    "paginas": [
+     31
+    ],
+    "trecho": "21. Variação linguística.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i022",
+   "numero": 22,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 8.112/1990 (regime jurídico dos servidores): vacância, licenças, jornada e serviço extraordinário, responsabilidade, direitos e deveres",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "2. Lei Federal nº 8.112/1990.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFCE Q12–Q15 (4 de 15); IFPB não cobrou",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i023",
+   "numero": 23,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 11.091/2005 (carreira dos TAE): remuneração, Incentivo à Qualificação, conceitos de padrão de vencimento e nível de classificação",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "6. Lei Federal nº 11.091/2005.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q22; IFCE Q21–Q23",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i024",
+   "numero": 24,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 11.892/2008 (Institutos Federais): finalidades, reitoria, requisitos para reitor, bolsas",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "5. Lei Federal nº 11.892/2008.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q23; IFCE Q19, Q20",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i025",
+   "numero": 25,
+   "disciplinaId": "ifgleg",
+   "titulo": "CF/88, Título III, Cap. VII: Administração Pública (art. 37 em diante: concurso, funções de confiança, remuneração)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Constituição da República Federativa do Brasil 1988: Título III - Da Organização do Estado: Capítulo VII ‒ Da Administração Pública",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q11, Q24, Q25",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i026",
+   "numero": 26,
+   "disciplinaId": "ifgleg",
+   "titulo": "CF/88, Título VIII, Cap. III: Educação, Cultura e Desporto (com ênfase em educação, art. 208)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Título VIII – Da Ordem Social: Capítulo III ‒ Da Educação, da Cultura e do Desporto",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q25",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i027",
+   "numero": 27,
+   "disciplinaId": "ifgleg",
+   "titulo": "Decreto nº 1.171/1994 (Código de Ética do servidor)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "3. Decreto Federal nº 1.171/1994.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Nas duas provas: IFPB Q30; IFCE Q18",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i028",
+   "numero": 28,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 9.394/1996 (LDB), com foco em educação profissional técnica de nível médio",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "4. Lei Federal nº 9.394/1996.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q24, Q28, Q29; IFCE não incluiu no edital",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i029",
+   "numero": 29,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 9.784/1999 (processo administrativo federal): delegação, deveres do administrado",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Lei Federal nº 9.784/1999.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q16, Q17",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i030",
+   "numero": 30,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 12.527/2011 (Lei de Acesso à Informação)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Lei Federal nº 12.527/2011.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q21",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i031",
+   "numero": 31,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 13.709/2018 (LGPD): dado pessoal e sensível, consentimento, setor público",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Lei Federal 13.709/2018.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q27 (e Q19 em Informática)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i032",
+   "numero": 32,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 8.429/1992 (improbidade administrativa, com a Lei 14.230/2021)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Lei Federal nº 8.429/1992.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q26",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i033",
+   "numero": 33,
+   "disciplinaId": "ifgleg",
+   "titulo": "Lei nº 14.133/2021 (licitações e contratos)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Lei Federal nº 14.133/2021.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado em Legislação; aparece só como alternativa falsa na Q57 do IFCE",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i034",
+   "numero": 34,
+   "disciplinaId": "ifgleg",
+   "titulo": "CF/88, Título VIII, Cap. IV: Ciência e Tecnologia",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Legislação",
+    "paginas": [
+     31
+    ],
+    "trecho": "Capítulo IV ‒ Da Ciência e Tecnologia",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i035",
+   "numero": 35,
+   "disciplinaId": "ifgrlm",
+   "titulo": "Aritmética: operações, razões e proporções, regra de três simples e composta",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Raciocínio Lógico e Matemática",
+    "paginas": [
+     31
+    ],
+    "trecho": "3. Aritmética: problemas envolvendo operações elementares, razões e proporções, regra de três simples e composta;",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Sem prova anterior; ordem sugerida por julgamento (fácil ganhar os 2 acertos mínimos)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i036",
+   "numero": 36,
+   "disciplinaId": "ifgrlm",
+   "titulo": "Teoria dos conjuntos: reuniões, interseções, complementos, cardinalidade",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Raciocínio Lógico e Matemática",
+    "paginas": [
+     31
+    ],
+    "trecho": "4. Teoria dos conjuntos: reuniões, interseções, complementos, cardinalidade;",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Sem prova anterior; julgamento",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i037",
+   "numero": 37,
+   "disciplinaId": "ifgrlm",
+   "titulo": "Raciocínio dedutivo: proposições, conectivos lógicos, quantificadores, regras de dedução, falácias",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Raciocínio Lógico e Matemática",
+    "paginas": [
+     31
+    ],
+    "trecho": "1. Raciocínio dedutivo a partir da Lógica Aristotélica Clássica: proposições e conectivos lógicos, quantificadores, regras de dedução, falácias;",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Sem prova anterior; julgamento",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i038",
+   "numero": 38,
+   "disciplinaId": "ifgrlm",
+   "titulo": "Análise combinatória e probabilidades: princípio multiplicativo, permutações, arranjos, combinações",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Raciocínio Lógico e Matemática",
+    "paginas": [
+     31
+    ],
+    "trecho": "2. Análise combinatória e probabilidades: técnicas de contagem, princípio multiplicativo, permutações, arranjos e combinações, probabilidades em espaços amostrais finitos;",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem prova anterior",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i039",
+   "numero": 39,
+   "disciplinaId": "ifgrlm",
+   "titulo": "Geometria básica: perímetro, área e volume",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Raciocínio Lógico e Matemática",
+    "paginas": [
+     31
+    ],
+    "trecho": "5. Geometria: problemas básicos envolvendo os conceitos de perímetro, área e volume.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Sem prova anterior",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i040",
+   "numero": 40,
+   "disciplinaId": "ifginf",
+   "titulo": "Hardware: placa-mãe, memórias, processadores (CPU) e periféricos",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "1. Conceitos básicos de Hardware: Placa mãe, memórias, processadores (CPU) e Periféricos de computadores.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q11",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i041",
+   "numero": 41,
+   "disciplinaId": "ifginf",
+   "titulo": "Softwares utilitários: compactadores, chat, clientes de e-mail, reprodutores, visualizadores, antivírus",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "2. Conhecimento e utilização dos principais softwares utilitários (compactadores de arquivos, chat, clientes de e-mails, reprodutores de vídeo, visualizadores de imagem, antivírus).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q12",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i042",
+   "numero": 42,
+   "disciplinaId": "ifginf",
+   "titulo": "Windows 10 e 11: uso básico e atalhos de teclado",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "3. Ambientes operacionais: utilização básica dos sistemas operacionais Windows 10 e 11 (em português).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q13 (atalhos)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i043",
+   "numero": 43,
+   "disciplinaId": "ifginf",
+   "titulo": "Microsoft Office 365: Excel (fórmulas como SE e SOMASE)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "4. Utilização de ferramentas de texto, planilha e apresentação do pacote Microsoft Office (Word, Excel e PowerPoint) – versão 365 (em português).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q14, Q20",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i044",
+   "numero": 44,
+   "disciplinaId": "ifginf",
+   "titulo": "Microsoft Office 365: Word e PowerPoint",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "4. Utilização de ferramentas de texto, planilha e apresentação do pacote Microsoft Office (Word, Excel e PowerPoint) – versão 365 (em português).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado no IFPB",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i045",
+   "numero": 45,
+   "disciplinaId": "ifginf",
+   "titulo": "LibreOffice 7: Writer, Calc e Impress (extensões de arquivo nativas)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "5. Utilização de ferramentas de texto, planilha e apresentação do pacote LibreOffice (Writer, Calc e Impress) – versão 7(em português).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q15",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i046",
+   "numero": 46,
+   "disciplinaId": "ifginf",
+   "titulo": "Internet, busca e pesquisa na Web",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "6. Conceitos de tecnologias relacionadas à Internet, busca e pesquisa na Web.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q16 (aspas na busca)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i047",
+   "numero": 47,
+   "disciplinaId": "ifginf",
+   "titulo": "Navegadores: Edge, Firefox e Chrome (atalhos)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "7. Navegadores de internet: Microsoft Edge, Mozilla Firefox, Google Chrome;",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q17 (Ctrl+D)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i048",
+   "numero": 48,
+   "disciplinaId": "ifginf",
+   "titulo": "Segurança na internet e malwares (phishing, vírus, backup)",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos comuns a todos os cargos de nível médio e nível superior",
+    "disciplina": "Informática",
+    "paginas": [
+     31
+    ],
+    "trecho": "8. Conceitos básicos de segurança na Internet e malwares.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q18 (phishing), Q19 (LGPD)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i049",
+   "numero": 49,
+   "disciplinaId": "ifgqui",
+   "titulo": "Propriedades da matéria e da energia; estados físicos; transformações físicas e químicas",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "1. Propriedades da matéria e da energia, estados físicos da matéria, transformações físicas e químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q31; IFCE Q28",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i050",
+   "numero": 50,
+   "disciplinaId": "ifgqui",
+   "titulo": "Modelos atômicos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q54",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i051",
+   "numero": 51,
+   "disciplinaId": "ifgqui",
+   "titulo": "Estrutura eletrônica: distribuição, números quânticos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q60",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i052",
+   "numero": 52,
+   "disciplinaId": "ifgqui",
+   "titulo": "Tabela periódica e propriedades periódicas",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q38 (família do elemento)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i053",
+   "numero": 53,
+   "disciplinaId": "ifgqui",
+   "titulo": "Ligações químicas (iônica, covalente, metálica), fórmulas de compostos iônicos, condutividade",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q33, Q34; IFCE Q28",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i054",
+   "numero": 54,
+   "disciplinaId": "ifgqui",
+   "titulo": "Geometria molecular (VSEPR) e polaridade",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFCE Q26, Q36",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i055",
+   "numero": 55,
+   "disciplinaId": "ifgqui",
+   "titulo": "Interações intermoleculares e propriedades físicas (PF, PE, solubilidade)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFCE Q32, Q36",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i056",
+   "numero": 56,
+   "disciplinaId": "ifgqui",
+   "titulo": "Compostos de coordenação: NOX e nomenclatura",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "2. Estrutura da matéria: modelos atômicos, estrutura eletrônica dos átomos e moléculas, tabela periódica, propriedades periódicas, ligações químicas, geometria molecular, interações intermoleculares e compostos de coordenação.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q53",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i057",
+   "numero": 57,
+   "disciplinaId": "ifgqui",
+   "titulo": "Misturas e substâncias puras",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "3. Misturas e substâncias puras, métodos de separação, funções inorgânicas, nomenclatura e propriedades dos compostos inorgânicos (óxidos, ácidos, bases e sais).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão isolada",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i058",
+   "numero": 58,
+   "disciplinaId": "ifgqui",
+   "titulo": "Funções inorgânicas: óxidos, ácidos, bases e sais (classificação e propriedades)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "3. Misturas e substâncias puras, métodos de separação, funções inorgânicas, nomenclatura e propriedades dos compostos inorgânicos (óxidos, ácidos, bases e sais).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q31; IFCE Q28, Q38",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i059",
+   "numero": 59,
+   "disciplinaId": "ifgqui",
+   "titulo": "Nomenclatura e fórmulas dos compostos inorgânicos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "3. Misturas e substâncias puras, métodos de separação, funções inorgânicas, nomenclatura e propriedades dos compostos inorgânicos (óxidos, ácidos, bases e sais).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q33; IFCE Q38, Q53",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i060",
+   "numero": 60,
+   "disciplinaId": "ifgqui",
+   "titulo": "Reações inorgânicas: precipitação, neutralização, dupla troca, síntese e decomposição",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "3. Misturas e substâncias puras, métodos de separação, funções inorgânicas, nomenclatura e propriedades dos compostos inorgânicos (óxidos, ácidos, bases e sais).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q32; IFCE Q38",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i061",
+   "numero": 61,
+   "disciplinaId": "ifgqui",
+   "titulo": "Leis ponderais e volumétricas",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão isolada",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i062",
+   "numero": 62,
+   "disciplinaId": "ifgqui",
+   "titulo": "Mol, massa molar e volume molar na CNTP (22,4 L/mol, não fornecido na prova)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q35; IFCE Q50",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i063",
+   "numero": 63,
+   "disciplinaId": "ifgqui",
+   "titulo": "Fórmulas químicas (percentual, mínima, molecular)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q40 (fórmula molecular)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i064",
+   "numero": 64,
+   "disciplinaId": "ifgqui",
+   "titulo": "Balanceamento de equações, inclusive redox",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q30",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i065",
+   "numero": 65,
+   "disciplinaId": "ifgqui",
+   "titulo": "Cálculo estequiométrico: reagente limitante, rendimento, excesso, pureza",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "4. Leis ponderais e volumétricas, estequiometria, fórmulas e equações químicas.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q33, Q42",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i066",
+   "numero": 66,
+   "disciplinaId": "ifgqui",
+   "titulo": "Classificação de soluções e solubilidade",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão isolada",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i067",
+   "numero": 67,
+   "disciplinaId": "ifgqui",
+   "titulo": "Unidades de concentração (mol/L, g/L, %, molalidade)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q36; IFCE Q46, Q48",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i068",
+   "numero": 68,
+   "disciplinaId": "ifgqui",
+   "titulo": "Diluição e mistura de soluções",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q36; IFCE Q48",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i069",
+   "numero": 69,
+   "disciplinaId": "ifgqui",
+   "titulo": "Preparo, padronização, armazenamento e uso de soluções",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q36, Q48; IFCE Q42",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i070",
+   "numero": 70,
+   "disciplinaId": "ifgqui",
+   "titulo": "Propriedades coligativas",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q37; IFCE Q51",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i071",
+   "numero": 71,
+   "disciplinaId": "ifgqui",
+   "titulo": "Coloides",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "5. Soluções: classificação, unidades de concentração, processos de dissolução, diluição e mistura, propriedades coligativas, coloides, preparo, padronização, armazenamento e uso de soluções.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i072",
+   "numero": 72,
+   "disciplinaId": "ifgqui",
+   "titulo": "Gases: leis e equação de estado",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "IFPB Q38 (1 em 55)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i073",
+   "numero": 73,
+   "disciplinaId": "ifgqui",
+   "titulo": "Termodinâmica: 1ª e 2ª leis, entropia, energia livre",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Só aparece de passagem (IFPB Q40)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i074",
+   "numero": 74,
+   "disciplinaId": "ifgqui",
+   "titulo": "Termoquímica: entalpia de formação e Lei de Hess",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q41; IFCE Q47",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i075",
+   "numero": 75,
+   "disciplinaId": "ifgqui",
+   "titulo": "Cinética química: lei de velocidade, ordem de reação, fatores",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q42; IFCE Q45",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i076",
+   "numero": 76,
+   "disciplinaId": "ifgqui",
+   "titulo": "Equilíbrio químico molecular: Kc e Le Chatelier",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "6. Gases, termodinâmica e termoquímica, cinética química e equilíbrio químico molecular.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q39, Q43; IFCE não cobrou",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i077",
+   "numero": 77,
+   "disciplinaId": "ifgqui",
+   "titulo": "Ácidos e bases: teorias, força, Ka e Kb",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q44; IFCE Q46",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i078",
+   "numero": 78,
+   "disciplinaId": "ifgqui",
+   "titulo": "pH e pOH",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q44; IFCE Q46",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i079",
+   "numero": 79,
+   "disciplinaId": "ifgqui",
+   "titulo": "Soluções-tampão (Henderson-Hasselbalch)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "Nas duas provas: IFPB Q45; IFCE Q58",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i080",
+   "numero": 80,
+   "disciplinaId": "ifgqui",
+   "titulo": "Hidrólise de sais",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i081",
+   "numero": 81,
+   "disciplinaId": "ifgqui",
+   "titulo": "Indicadores ácido-base",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q49",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i082",
+   "numero": 82,
+   "disciplinaId": "ifgqui",
+   "titulo": "Curvas de titulação",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Ligado a titulometria; sem questão isolada",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i083",
+   "numero": 83,
+   "disciplinaId": "ifgqui",
+   "titulo": "Equilíbrio de solubilidade (Kps)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i084",
+   "numero": 84,
+   "disciplinaId": "ifgqui",
+   "titulo": "Fatores que afetam o equilíbrio",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "7. Equilíbrio químico iônico: ácidos e bases, pH e pOH, hidrólise, soluções tampão, indicadores e curvas de titulação, equilíbrio de solubilidade e fatores que afetam o equilíbrio.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q39",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i085",
+   "numero": 85,
+   "disciplinaId": "ifgqui",
+   "titulo": "Oxirredução: NOX, agentes oxidante e redutor",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "8. Eletroquímica: reações de oxidação e redução, células galvânicas, eletrólise e corrosão.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q40; IFCE Q30",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i086",
+   "numero": 86,
+   "disciplinaId": "ifgqui",
+   "titulo": "Células galvânicas: pilhas e potenciais-padrão",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "8. Eletroquímica: reações de oxidação e redução, células galvânicas, eletrólise e corrosão.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q40; IFCE Q52",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i087",
+   "numero": 87,
+   "disciplinaId": "ifgqui",
+   "titulo": "Eletrólise e leis de Faraday",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "8. Eletroquímica: reações de oxidação e redução, células galvânicas, eletrólise e corrosão.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q50",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i088",
+   "numero": 88,
+   "disciplinaId": "ifgqui",
+   "titulo": "Corrosão",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "8. Eletroquímica: reações de oxidação e redução, células galvânicas, eletrólise e corrosão.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i089",
+   "numero": 89,
+   "disciplinaId": "ifgqui",
+   "titulo": "Funções orgânicas: reconhecimento em fórmulas de traços",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q46; IFCE Q40, Q59",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i090",
+   "numero": 90,
+   "disciplinaId": "ifgqui",
+   "titulo": "Nomenclatura IUPAC dos compostos orgânicos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFPB Q46; IFCE Q40",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i091",
+   "numero": 91,
+   "disciplinaId": "ifgqui",
+   "titulo": "Hibridização, ligações sigma e pi",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q34",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i092",
+   "numero": 92,
+   "disciplinaId": "ifgqui",
+   "titulo": "Propriedades dos compostos orgânicos: polaridade, acidez e basicidade (aminas, ácidos)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "IFCE Q35, Q36",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i093",
+   "numero": 93,
+   "disciplinaId": "ifgqui",
+   "titulo": "Origem e aplicações dos compostos orgânicos; biomoléculas como cenário",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "9. Química orgânica: funções orgânicas, origem, propriedades, aplicações e nomenclatura dos compostos orgânicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFPB Q50; IFCE Q31 (fora da letra do edital)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i094",
+   "numero": 94,
+   "disciplinaId": "ifgqui",
+   "titulo": "Atmosfera, hidrosfera e litosfera",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "10. Química ambiental: atmosfera, hidrosfera e litosfera, ciclos biogeoquímicos e principais problemas ambientais contemporâneos (poluição, aquecimento global, camada de ozônio).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado diretamente",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i095",
+   "numero": 95,
+   "disciplinaId": "ifgqui",
+   "titulo": "Ciclos biogeoquímicos (N, S, P)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "10. Química ambiental: atmosfera, hidrosfera e litosfera, ciclos biogeoquímicos e principais problemas ambientais contemporâneos (poluição, aquecimento global, camada de ozônio).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "IFCE Q56 (1 em 55)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i096",
+   "numero": 96,
+   "disciplinaId": "ifgqui",
+   "titulo": "Problemas ambientais: poluição, aquecimento global, camada de ozônio (CFC)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "10. Química ambiental: atmosfera, hidrosfera e litosfera, ciclos biogeoquímicos e principais problemas ambientais contemporâneos (poluição, aquecimento global, camada de ozônio).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "IFCE Q56",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i097",
+   "numero": 97,
+   "disciplinaId": "ifgqui",
+   "titulo": "Química verde: princípios, tecnologias limpas, ecologia industrial, análise do ciclo de vida",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "11. Química verde: princípios, tecnologias limpas, ecologia industrial e análise do ciclo de vida.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Nenhuma questão em 55",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i098",
+   "numero": 98,
+   "disciplinaId": "ifgqui",
+   "titulo": "Identificação, função e uso de vidrarias e equipamentos; limpeza e conservação",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "12. Aparelhagem e materiais de laboratório químico: identificação, funcionalidade, uso, limpeza, conservação e calibração de equipamentos e vidrarias; purificadores de água e manutenção de equipamentos de medição.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q44 (aparato de destilação)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i099",
+   "numero": 99,
+   "disciplinaId": "ifgqui",
+   "titulo": "Calibração de equipamentos e vidrarias (aparelhos volumétricos)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "12. Aparelhagem e materiais de laboratório químico: identificação, funcionalidade, uso, limpeza, conservação e calibração de equipamentos e vidrarias; purificadores de água e manutenção de equipamentos de medição.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i100",
+   "numero": 100,
+   "disciplinaId": "ifgqui",
+   "titulo": "Purificadores de água e manutenção de equipamentos de medição",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "12. Aparelhagem e materiais de laboratório químico: identificação, funcionalidade, uso, limpeza, conservação e calibração de equipamentos e vidrarias; purificadores de água e manutenção de equipamentos de medição.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Nenhuma questão em 55",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i101",
+   "numero": 101,
+   "disciplinaId": "ifgqui",
+   "titulo": "Aquecimento e medição de volumes",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "13. Operações fundamentais de laboratório: aquecimento, medição de volumes, pesagem, uso de balança analítica, cristalização, recristalização e montagem de aparelhagens.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i102",
+   "numero": 102,
+   "disciplinaId": "ifgqui",
+   "titulo": "Pesagem e uso da balança analítica",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "13. Operações fundamentais de laboratório: aquecimento, medição de volumes, pesagem, uso de balança analítica, cristalização, recristalização e montagem de aparelhagens.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i103",
+   "numero": 103,
+   "disciplinaId": "ifgqui",
+   "titulo": "Cristalização e recristalização",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "13. Operações fundamentais de laboratório: aquecimento, medição de volumes, pesagem, uso de balança analítica, cristalização, recristalização e montagem de aparelhagens.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFPB Q47",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i104",
+   "numero": 104,
+   "disciplinaId": "ifgqui",
+   "titulo": "Montagem de aparelhagens",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "13. Operações fundamentais de laboratório: aquecimento, medição de volumes, pesagem, uso de balança analítica, cristalização, recristalização e montagem de aparelhagens.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q44",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i105",
+   "numero": 105,
+   "disciplinaId": "ifgqui",
+   "titulo": "Filtração e decantação",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "14. Técnicas de separação e identificação: filtração, decantação, extração, destilação simples, fracionada e a vácuo e cromatografia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q27",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i106",
+   "numero": 106,
+   "disciplinaId": "ifgqui",
+   "titulo": "Destilação simples, fracionada e a vácuo",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "14. Técnicas de separação e identificação: filtração, decantação, extração, destilação simples, fracionada e a vácuo e cromatografia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q27, Q44",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i107",
+   "numero": 107,
+   "disciplinaId": "ifgqui",
+   "titulo": "Extração",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "14. Técnicas de separação e identificação: filtração, decantação, extração, destilação simples, fracionada e a vácuo e cromatografia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i108",
+   "numero": 108,
+   "disciplinaId": "ifgqui",
+   "titulo": "Cromatografia (princípios)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "14. Técnicas de separação e identificação: filtração, decantação, extração, destilação simples, fracionada e a vácuo e cromatografia.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q37",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i109",
+   "numero": 109,
+   "disciplinaId": "ifgqui",
+   "titulo": "Titulometria ácido-base: cálculo de concentração e pureza",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "15. Métodos clássicos de análise química: gravimetria e titulometria (ácido-base, precipitação, complexação e oxidação-redução).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Urgente",
+   "incidencia": "Nas duas provas: IFPB Q48; IFCE Q42",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i110",
+   "numero": 110,
+   "disciplinaId": "ifgqui",
+   "titulo": "Titulometria de precipitação, complexação e oxirredução",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "15. Métodos clássicos de análise química: gravimetria e titulometria (ácido-base, precipitação, complexação e oxidação-redução).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i111",
+   "numero": 111,
+   "disciplinaId": "ifgqui",
+   "titulo": "Gravimetria",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "15. Métodos clássicos de análise química: gravimetria e titulometria (ácido-base, precipitação, complexação e oxidação-redução).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i112",
+   "numero": 112,
+   "disciplinaId": "ifgqui",
+   "titulo": "Espectroscopia de absorção molecular (UV-Vis): Lei de Beer e curva de calibração",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "16. Fundamentos de análise instrumental: potenciometria, determinação potenciométrica de pH, condutivimetria, espectroscopia de absorção molecular (UV-Vis) e noções de espectroscopia de absorção atômica.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q37, Q43",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i113",
+   "numero": 113,
+   "disciplinaId": "ifgqui",
+   "titulo": "Potenciometria e determinação potenciométrica de pH",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "16. Fundamentos de análise instrumental: potenciometria, determinação potenciométrica de pH, condutivimetria, espectroscopia de absorção molecular (UV-Vis) e noções de espectroscopia de absorção atômica.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q37",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i114",
+   "numero": 114,
+   "disciplinaId": "ifgqui",
+   "titulo": "Condutivimetria",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "16. Fundamentos de análise instrumental: potenciometria, determinação potenciométrica de pH, condutivimetria, espectroscopia de absorção molecular (UV-Vis) e noções de espectroscopia de absorção atômica.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta (condutividade aparece em IFPB Q34)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i115",
+   "numero": 115,
+   "disciplinaId": "ifgqui",
+   "titulo": "Noções de espectroscopia de absorção atômica",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "16. Fundamentos de análise instrumental: potenciometria, determinação potenciométrica de pH, condutivimetria, espectroscopia de absorção molecular (UV-Vis) e noções de espectroscopia de absorção atômica.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q37",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i116",
+   "numero": 116,
+   "disciplinaId": "ifgqui",
+   "titulo": "Boas práticas de laboratório; EPIs e EPCs",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q39 (e cenário da Q30)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i117",
+   "numero": 117,
+   "disciplinaId": "ifgqui",
+   "titulo": "Rotulagem e simbologia de risco; FISPQ",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q39",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i118",
+   "numero": 118,
+   "disciplinaId": "ifgqui",
+   "titulo": "Incompatibilidade entre substâncias e prevenção de acidentes",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q30 (cenário)",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i119",
+   "numero": 119,
+   "disciplinaId": "ifgqui",
+   "titulo": "Primeiros socorros em laboratório",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Sem questão direta; item novo frente ao IFPB",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i120",
+   "numero": 120,
+   "disciplinaId": "ifgqui",
+   "titulo": "Manuseio, armazenamento e descarte de reagentes e resíduos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i121",
+   "numero": 121,
+   "disciplinaId": "ifgqui",
+   "titulo": "Plano de gerenciamento de resíduos laboratoriais",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "17. Biossegurança, higiene e segurança em laboratório químico: boas práticas de laboratório, EPIs e EPCs, incompatibilidade entre substâncias, prevenção de acidentes, primeiros socorros, manuseio, armazenamento e descarte de reagentes e resíduos químicos, plano de gerenciamento de resíduos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i122",
+   "numero": 122,
+   "disciplinaId": "ifgqui",
+   "titulo": "Técnicas assépticas e controle microbiano (esterilização, pasteurização, desinfecção)",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "18. Fundamentos de microbiologia aplicada ao laboratório químico: técnicas assépticas, controle microbiano, indicadores biológicos e noções de biodegradação de compostos químicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q49, Q57",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i123",
+   "numero": 123,
+   "disciplinaId": "ifgqui",
+   "titulo": "Cabines de segurança biológica e níveis de biossegurança",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "18. Fundamentos de microbiologia aplicada ao laboratório químico: técnicas assépticas, controle microbiano, indicadores biológicos e noções de biodegradação de compostos químicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Alta",
+   "incidencia": "IFCE Q55",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i124",
+   "numero": 124,
+   "disciplinaId": "ifgqui",
+   "titulo": "Indicadores biológicos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "18. Fundamentos de microbiologia aplicada ao laboratório químico: técnicas assépticas, controle microbiano, indicadores biológicos e noções de biodegradação de compostos químicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i125",
+   "numero": 125,
+   "disciplinaId": "ifgqui",
+   "titulo": "Biodegradação de compostos químicos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "18. Fundamentos de microbiologia aplicada ao laboratório químico: técnicas assépticas, controle microbiano, indicadores biológicos e noções de biodegradação de compostos químicos.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Não cobrado",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i126",
+   "numero": 126,
+   "disciplinaId": "ifgqui",
+   "titulo": "Procedimentos operacionais padrão (POPs) e roteiros experimentais",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "19. Gestão e controle da qualidade em laboratório: procedimentos operacionais padrão (POPs), elaboração de roteiros experimentais, controle de qualidade, sistemas de gestão ambiental e noções das normas da série ISO 14000.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "Sem questão direta",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i127",
+   "numero": 127,
+   "disciplinaId": "ifgqui",
+   "titulo": "Controle de qualidade; sistemas de gestão ambiental e ISO 14000",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "19. Gestão e controle da qualidade em laboratório: procedimentos operacionais padrão (POPs), elaboração de roteiros experimentais, controle de qualidade, sistemas de gestão ambiental e noções das normas da série ISO 14000.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q57",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i128",
+   "numero": 128,
+   "disciplinaId": "ifgqui",
+   "titulo": "Algarismos significativos",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "20. Tratamento e análise de dados experimentais: algarismos significativos, média, desvio padrão, incertezas, curvas de calibração, organização, codificação, tabulação e análise estatística de resultados.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q29",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i129",
+   "numero": 129,
+   "disciplinaId": "ifgqui",
+   "titulo": "Média, desvio-padrão, incertezas; exatidão e precisão",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "20. Tratamento e análise de dados experimentais: algarismos significativos, média, desvio padrão, incertezas, curvas de calibração, organização, codificação, tabulação e análise estatística de resultados.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q41, Q57",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i130",
+   "numero": 130,
+   "disciplinaId": "ifgqui",
+   "titulo": "Curvas de calibração; tabulação e análise estatística de resultados",
+   "desdobramentoPlanilha": true,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "20. Tratamento e análise de dados experimentais: algarismos significativos, média, desvio padrão, incertezas, curvas de calibração, organização, codificação, tabulação e análise estatística de resultados.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Média",
+   "incidencia": "IFCE Q43",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i131",
+   "numero": 131,
+   "disciplinaId": "ifgqui",
+   "titulo": "Organização, limpeza, conservação e controle de estoque de materiais e reagentes",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "21. Organização, funcionamento, limpeza, conservação e controle de estoque de materiais, reagentes, equipamentos e insumos de laboratório.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Nenhuma questão em 55",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i132",
+   "numero": 132,
+   "disciplinaId": "ifgqui",
+   "titulo": "Elaboração de registros, relatórios técnicos e laudos",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "22. Elaboração de registros, relatórios técnicos e laudos laboratoriais.",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Nenhuma questão em 55",
+   "statusPlanilha": "Não estudado"
+  },
+  {
+   "id": "i133",
+   "numero": 133,
+   "disciplinaId": "ifgqui",
+   "titulo": "Aquisições e contratações públicas: planejamento, termo de referência, fiscalização; Lei 14.133/2021",
+   "desdobramentoPlanilha": false,
+   "ref": {
+    "documento": "Edital de Abertura nº 001/2026 – Concurso Público IFG",
+    "anexo": "Anexo III – Conteúdo Programático",
+    "secao": "Conhecimentos específicos – Técnico de Laboratório/Área Química",
+    "disciplina": "Conhecimentos Específicos – Técnico de Laboratório/Área Química",
+    "paginas": [
+     33
+    ],
+    "trecho": "23. Noções de aquisições, contratações e gestão de bens e serviços na administração pública: princípios, fases da contratação, planejamento da contratação, termos de referência, fiscalização de contratos e aspectos básicos da Lei nº 14.133/2021 (Lei de Licitações e Contratos Administrativos).",
+    "confianca": "alta"
+   },
+   "prioridadePlanilha": "Baixa",
+   "incidencia": "Só como alternativa falsa (IFCE Q57)",
+   "statusPlanilha": "Não estudado"
+  }
+ ],
+ "dependenciasSugeridas": [
+  {
+   "id": "di-050-051",
+   "de": "i050",
+   "para": "i051",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-051-052",
+   "de": "i051",
+   "para": "i052",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-052-053",
+   "de": "i052",
+   "para": "i053",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-053-054",
+   "de": "i053",
+   "para": "i054",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-054-055",
+   "de": "i054",
+   "para": "i055",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-053-056",
+   "de": "i053",
+   "para": "i056",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-058-059",
+   "de": "i058",
+   "para": "i059",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-058-060",
+   "de": "i058",
+   "para": "i060",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-062-063",
+   "de": "i062",
+   "para": "i063",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-064-065",
+   "de": "i064",
+   "para": "i065",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-062-065",
+   "de": "i062",
+   "para": "i065",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-062-067",
+   "de": "i062",
+   "para": "i067",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-067-068",
+   "de": "i067",
+   "para": "i068",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-067-069",
+   "de": "i067",
+   "para": "i069",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-067-070",
+   "de": "i067",
+   "para": "i070",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-076-077",
+   "de": "i076",
+   "para": "i077",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-077-078",
+   "de": "i077",
+   "para": "i078",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-078-079",
+   "de": "i078",
+   "para": "i079",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-078-080",
+   "de": "i078",
+   "para": "i080",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-078-081",
+   "de": "i078",
+   "para": "i081",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-081-082",
+   "de": "i081",
+   "para": "i082",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-076-083",
+   "de": "i076",
+   "para": "i083",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-076-084",
+   "de": "i076",
+   "para": "i084",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-085-086",
+   "de": "i085",
+   "para": "i086",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-086-087",
+   "de": "i086",
+   "para": "i087",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-086-088",
+   "de": "i086",
+   "para": "i088",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-089-090",
+   "de": "i089",
+   "para": "i090",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-091-092",
+   "de": "i091",
+   "para": "i092",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-089-092",
+   "de": "i089",
+   "para": "i092",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-065-109",
+   "de": "i065",
+   "para": "i109",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-069-109",
+   "de": "i069",
+   "para": "i109",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-109-110",
+   "de": "i109",
+   "para": "i110",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-085-110",
+   "de": "i085",
+   "para": "i110",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-065-111",
+   "de": "i065",
+   "para": "i111",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-130-112",
+   "de": "i130",
+   "para": "i112",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-078-113",
+   "de": "i078",
+   "para": "i113",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-105-106",
+   "de": "i105",
+   "para": "i106",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-128-129",
+   "de": "i128",
+   "para": "i129",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-116-118",
+   "de": "i116",
+   "para": "i118",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-120-121",
+   "de": "i120",
+   "para": "i121",
+   "tipo": "obrigatorio",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-009-011",
+   "de": "i009",
+   "para": "i011",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-014-015",
+   "de": "i014",
+   "para": "i015",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-014-016",
+   "de": "i014",
+   "para": "i016",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-016-008",
+   "de": "i016",
+   "para": "i008",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  },
+  {
+   "id": "di-014-018",
+   "de": "i014",
+   "para": "i018",
+   "tipo": "recomendado",
+   "origem": "sugestao"
+  }
+ ],
+ "fatos": [
+  {
+   "id": "ifg-data",
+   "rotulo": "Data prevista da prova objetiva",
+   "valor": "14/02/2027. Duração de 4 horas, incluído o preenchimento da folha de respostas.",
+   "ref": "Anexo I – Cronograma Previsto; item 12.20",
+   "pagina": 22
+  },
+  {
+   "id": "ifg-vagas",
+   "rotulo": "Vaga do cargo 308",
+   "valor": "1 vaga de ampla concorrência em Anápolis/GO, 40 horas semanais. Remuneração de R$ 3.181,39.",
+   "ref": "Item 2 (quadro de vagas do nível médio/técnico)",
+   "pagina": 3
+  },
+  {
+   "id": "ifg-requisito",
+   "rotulo": "Escolaridade exigida",
+   "valor": "Médio profissionalizante ou médio completo mais curso técnico na área.",
+   "ref": "Item 2 (quadro de vagas do nível médio/técnico)",
+   "pagina": 3
+  },
+  {
+   "id": "ifg-prova",
+   "rotulo": "Prova objetiva",
+   "valor": "50 questões de 5 alternativas. Língua Portuguesa: 10 questões, peso 2. Legislação: 10, peso 1. Raciocínio Lógico e Matemática: 5, peso 1. Informática: 5, peso 1. Conhecimentos Específicos: 20, peso 3. Total de 100 pontos.",
+   "ref": "Tabela 11.1 e item 11.3",
+   "pagina": 14
+  },
+  {
+   "id": "ifg-minimos",
+   "rotulo": "Pontuação mínima por disciplina",
+   "valor": "Língua Portuguesa 12; Legislação 5; Raciocínio Lógico e Matemática 2; Informática 2; Conhecimentos Específicos 39 (13 acertos).",
+   "ref": "Tabela 11.1",
+   "pagina": 14
+  },
+  {
+   "id": "ifg-corte",
+   "rotulo": "Para não ser eliminado",
+   "valor": "60 pontos ou mais na prova objetiva e a pontuação mínima em cada disciplina.",
+   "ref": "Item 11.4",
+   "pagina": 15
+  },
+  {
+   "id": "ifg-desempate",
+   "rotulo": "Desempate",
+   "valor": "Depois da idade (60 anos ou mais), vence quem tiver mais pontos em Conhecimentos Específicos e, em seguida, em Língua Portuguesa.",
+   "ref": "Item 14.3",
+   "pagina": 16
+  },
+  {
+   "id": "ifg-aprovados",
+   "rotulo": "Máximo de aprovados",
+   "valor": "Com 1 vaga no cargo/câmpus, no máximo 5 aprovados por lista.",
+   "ref": "Item 14.6.2",
+   "pagina": 17
+  }
+ ]
+}

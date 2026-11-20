@@ -14,6 +14,7 @@ export default defineConfig({
     proxy: {
       '/api': { target: API, changeOrigin: false },
       '/edital.pdf': { target: API, changeOrigin: false },
+      '/editais': { target: API, changeOrigin: false },
     },
   },
   test: { globals: true, environment: 'node', include: ['src/**/*.test.ts', 'server/**/*.test.ts'] },

@@ -8,6 +8,7 @@ import { proximaRevisao } from '../domain/revisions';
 import { fmtDia, fmtMin, isoDia } from '../domain/util';
 import { Icone, Info, LinkEdital, Modal, NucleoTag, PrioridadeSeletor, PrioridadeTag, StatusPill, StatusSeletor } from './primitives';
 import { useUi } from './UiContext';
+import { concursoDe } from '../domain/concursos';
 
 // Ficha do conteúdo, aberta como painel lateral: referência, situação, prioridade,
 // pré-requisitos, sessões e observações.
@@ -80,8 +81,17 @@ export function TopicoDetalhe({ id, onFechar }: { id: string | null; onFechar: (
           <h3>
             Referência no edital
             <Info>
-              O Anexo II não numera itens nem subitens: o nº {t.numero} é a numeração da sua planilha Edital Verticalizado.
-              {t.desdobramentoPlanilha ? ' Este item é um desdobramento feito pela planilha a partir do texto do edital, marcado como [Interpretação].' : ''}
+              {concursoDe(seed).itensNumerados ? (
+                <>
+                  O nº {t.numero} é a ordem do conteúdo na sua planilha Edital Verticalizado; o número do item no edital está no início do trecho citado.
+                  {t.desdobramentoPlanilha ? ' Este conteúdo é uma parte do item do edital, separada pela planilha.' : ''}
+                </>
+              ) : (
+                <>
+                  O {concursoDe(seed).anexoConteudo} não numera itens nem subitens: o nº {t.numero} é a numeração da sua planilha Edital Verticalizado.
+                  {t.desdobramentoPlanilha ? ' Este item é um desdobramento feito pela planilha a partir do texto do edital, marcado como [Interpretação].' : ''}
+                </>
+              )}
             </Info>
           </h3>
           {t.ref.trecho ? <blockquote className="citacao">“{t.ref.trecho}”</blockquote> : <p className="aviso"><Icone nome="alerta" tam={16} /> O trecho correspondente não foi localizado automaticamente. Confira o texto da disciplina na página indicada.</p>}
@@ -176,7 +186,7 @@ export function TopicoDetalhe({ id, onFechar }: { id: string | null; onFechar: (
         </section>
 
         <details className="textos">
-          <summary><Icone nome="direita" tam={16} /> Texto integral de {d.nomeCurto} no Anexo II</summary>
+          <summary><Icone nome="direita" tam={16} /> Texto integral de {d.nomeCurto} no {concursoDe(seed).anexoConteudo}</summary>
           <p className="texto-oficial">{d.textoOficial}</p>
         </details>
       </div>

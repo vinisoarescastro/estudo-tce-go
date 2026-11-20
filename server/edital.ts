@@ -1,6 +1,7 @@
 import type { CargoInfo, Seed } from '../src/domain/types';
 import type { BD } from './sqlite';
 import { transacao } from './db';
+import { CONCURSO_PADRAO, CONCURSOS } from '../src/domain/concursos';
 
 // Estrutura do edital no banco: núcleos, disciplinas, conteúdos, referências, dependências
 // sugeridas e dados oficiais. Cada cargo tem o seu edital (seed). Ela é gravada a partir do
@@ -15,12 +16,14 @@ export function sincronizarEdital(db: BD, seed: Seed): boolean {
   if (!cargo) throw new Error('O seed do edital precisa informar o cargo (bloco "cargo").');
 
   // Dados do cargo: gravados sempre (são baratos e não mexem nos dados de estudo).
-  db.prepare(`INSERT INTO cargos (id, codigo, nome, nome_curto, escolaridade, data_prova, meta_diaria_min, meta_semanal_min, duracao_padrao_min, ciclo_inicial, fonte)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ON CONFLICT(id) DO UPDATE SET codigo = excluded.codigo, nome = excluded.nome, nome_curto = excluded.nome_curto, escolaridade = excluded.escolaridade,
+  const concursoId = cargo.concursoId ?? CONCURSO_PADRAO;
+  if (!CONCURSOS[concursoId]) throw new Error(`Concurso desconhecido no cargo ${cargo.id}: ${concursoId}.`);
+  db.prepare(`INSERT INTO cargos (id, codigo, concurso_id, nome, nome_curto, escolaridade, data_prova, meta_diaria_min, meta_semanal_min, duracao_padrao_min, ciclo_inicial, fonte)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET codigo = excluded.codigo, concurso_id = excluded.concurso_id, nome = excluded.nome, nome_curto = excluded.nome_curto, escolaridade = excluded.escolaridade,
       data_prova = excluded.data_prova, meta_diaria_min = excluded.meta_diaria_min, meta_semanal_min = excluded.meta_semanal_min,
       duracao_padrao_min = excluded.duracao_padrao_min, ciclo_inicial = excluded.ciclo_inicial, fonte = excluded.fonte`)
-    .run(cargo.id, cargo.codigo, cargo.nome, cargo.nomeCurto, cargo.escolaridade, cargo.dataProva, cargo.metaDiariaMin, cargo.metaSemanalMin, cargo.duracaoPadraoMin,
+    .run(cargo.id, cargo.codigo, concursoId, cargo.nome, cargo.nomeCurto, cargo.escolaridade, cargo.dataProva, cargo.metaDiariaMin, cargo.metaSemanalMin, cargo.duracaoPadraoMin,
       JSON.stringify(cargo.cicloInicial), JSON.stringify(seed.fonte));
 
   const atual = db.prepare('SELECT seed_versao FROM cargos WHERE id = ?').get(cargo.id) as { seed_versao: number };
@@ -66,12 +69,13 @@ export function sincronizarEdital(db: BD, seed: Seed): boolean {
   return true;
 }
 
-export interface CargoResumo { id: string; codigo: string; nome: string; nomeCurto: string }
+export interface CargoResumo { id: string; codigo: string; nome: string; nomeCurto: string; concurso: string }
 
 // Cargos que já têm o edital gravado (podem receber contas).
 export function listarCargos(db: BD): CargoResumo[] {
-  return (db.prepare('SELECT id, codigo, nome, nome_curto FROM cargos WHERE seed_versao > 0 ORDER BY id').all() as Linha[]).map((r) => ({
+  return (db.prepare('SELECT id, codigo, nome, nome_curto, concurso_id FROM cargos WHERE seed_versao > 0 ORDER BY id').all() as Linha[]).map((r) => ({
     id: r.id as string, codigo: r.codigo as string, nome: r.nome as string, nomeCurto: r.nome_curto as string,
+    concurso: CONCURSOS[r.concurso_id as string]?.sigla ?? (r.concurso_id as string),
   }));
 }
 
@@ -86,6 +90,7 @@ export function lerEdital(db: BD, cargoId = 'B02'): Seed {
   const todas = (sql: string) => db.prepare(sql).all(cargoId) as Linha[];
   const cargo: CargoInfo = {
     id: c.id as string,
+    concursoId: c.concurso_id as string,
     codigo: c.codigo as string,
     nome: c.nome as string,
     nomeCurto: c.nome_curto as string,

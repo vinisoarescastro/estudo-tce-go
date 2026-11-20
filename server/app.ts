@@ -7,6 +7,7 @@ import { limparCfg, POMODORO_PADRAO } from '../src/domain/pomodoro';
 import type { BD } from './sqlite';
 import { prep } from './db';
 import { listarCargos } from './edital';
+import { CONCURSO_PADRAO, CONCURSOS, PDF_LEGADO, PDFS_EDITAIS } from '../src/domain/concursos';
 import type { Config } from './config';
 import * as auth from './auth';
 import { ServicoDados } from './servico';
@@ -44,7 +45,9 @@ const TIPOS: Record<string, string> = {
 const LIBERADAS_COM_SENHA_PROVISORIA = new Set(['/api/auth/eu', '/api/auth/senha', '/api/auth/sair']);
 
 // Arquivos estáticos que só usuários autenticados podem baixar.
-const ESTATICOS_PRIVADOS = new Set(['/edital.pdf']);
+// Os PDFs dos editais; /edital.pdf é o endereço antigo do edital do TCE-GO e continua respondendo.
+const ESTATICOS_PRIVADOS = new Set(['/' + PDF_LEGADO, ...PDFS_EDITAIS.map((p) => '/' + p)]);
+const APELIDOS: Record<string, string> = { ['/' + PDF_LEGADO]: '/' + CONCURSOS[CONCURSO_PADRAO].pdf };
 
 interface Req {
   req: IncomingMessage;
@@ -152,7 +155,7 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
       metodo: 'GET', caminho: '/api/exportar', privada: true,
       h: (r) => {
         const { dados } = servico.obter(r.usuario!.id);
-        r.res.setHeader('Content-Disposition', `attachment; filename="estudo-tce-go-backup-${servico.hoje(r.usuario!.id)}.json"`);
+        r.res.setHeader('Content-Disposition', `attachment; filename="estudo-backup-${servico.hoje(r.usuario!.id)}.json"`);
         return dados;
       },
     },
@@ -455,6 +458,7 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
         return;
       }
     }
+    caminho = APELIDOS[caminho] ?? caminho;
     if (caminho.endsWith('/')) caminho += 'index.html';
     let arquivo = normalize(join(raizWeb, caminho));
     if (arquivo !== raizWeb && !arquivo.startsWith(raizWeb + sep)) throw new ErroHttp(404, 'Não encontrado.');

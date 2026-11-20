@@ -1,10 +1,11 @@
 import { createServer, type Server } from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
 import seedJson from '../src/data/seed.json';
 import seedA01Json from '../src/data/seed-a01.json';
+import seedIfgJson from '../src/data/seed-ifg308.json';
 import type { Seed } from '../src/domain/types';
 import { criarDados } from '../src/domain/defaults';
 import type { Acao } from '../src/domain/actions';
@@ -19,6 +20,7 @@ import { DatabaseSync, type BD } from './sqlite';
 
 const seed = seedJson as unknown as Seed;
 const seedA01 = seedA01Json as unknown as Seed;
+const seedIfg = seedIfgJson as unknown as Seed;
 configurarLog('erro', true);
 
 describe('vários usuários e cargos (API)', () => {
@@ -62,7 +64,8 @@ describe('vários usuários e cargos (API)', () => {
     const adm = await adminCk();
     const lista = await req('/api/admin/usuarios', { cookie: adm });
     expect(lista.status).toBe(200);
-    expect(lista.json.cargos.map((c: { id: string }) => c.id)).toEqual(['A01', 'B02']);
+    expect(lista.json.cargos.map((c: { id: string }) => c.id)).toEqual(['A01', 'B02', 'IFG308']);
+    expect(lista.json.cargos.map((c: { concurso: string }) => c.concurso)).toEqual(['TCE-GO', 'TCE-GO', 'IFG']);
     const comum = await auth.criarUsuario(db, { email: 'pessoa@exemplo.com', nome: 'Comum', senha: 'senha-comum-123456', cargoId: 'B02' });
     expect(comum.papel).toBe('usuario');
     const ck = (await entrar('senha-comum-123456', 'pessoa@exemplo.com')).cookie!;
@@ -138,6 +141,37 @@ describe('vários usuários e cargos (API)', () => {
     expect((await req('/api/dados', { cookie: maria })).json.dados.user.sessoes).toHaveLength(1);
     // Nem o inverso.
     expect((await acoes(adm, { t: 'importar', dados: criarDados(seedA01) })).status).toBe(422);
+  });
+
+  test('conta do IFG: vê só o edital do IFG 308, com o concurso, e os PDFs dos editais exigem login', async () => {
+    const adm = await adminCk();
+    expect((await criarConta(adm, { email: 'quimica@exemplo.com', nome: 'Química', senha: 'senha-provisoria-9', cargoId: 'IFG308' })).status).toBe(200);
+    let ck = (await entrar('senha-provisoria-9', 'quimica@exemplo.com')).cookie!;
+    expect((await req('/api/auth/senha', { metodo: 'POST', cookie: ck, corpo: { atual: 'senha-provisoria-9', nova: 'frase-do-laboratorio-42' } })).status).toBe(200);
+    ck = (await entrar('frase-do-laboratorio-42', 'quimica@exemplo.com')).cookie!;
+    const ed = (await req('/api/edital', { cookie: ck })).json;
+    expect(ed.cargo).toMatchObject({ id: 'IFG308', concursoId: 'ifg-2026' });
+    expect(ed.topicos).toHaveLength(seedIfg.topicos.length);
+    const dd = (await req('/api/dados', { cookie: ck })).json;
+    expect(dd.dados.user.config.dataProva).toBe('2027-02-14');
+    expect(dd.dados.user.ciclo.itens.every((i: { disciplinaId: string }) => i.disciplinaId.startsWith('ifg'))).toBe(true);
+    // Ids de outro cargo são recusados.
+    expect((await acoes(ck, { t: 'status', topicoId: 't001', status: 'estudado' })).status).toBe(422);
+    expect((await acoes(ck, { t: 'status', topicoId: 'i001', status: 'estudado' }, dd.versao)).status).toBe(200);
+
+    // PDFs: só com login; o endereço antigo continua servindo o edital do TCE-GO.
+    const web = join(pasta, 'web');
+    mkdirSync(join(web, 'editais'), { recursive: true });
+    writeFileSync(join(web, 'editais', 'tce-go-2026.pdf'), '%PDF-tce');
+    writeFileSync(join(web, 'editais', 'ifg-2026.pdf'), '%PDF-ifg');
+    const pdf = async (caminho: string, cookie?: string) => {
+      const r = await fetch(base + caminho, { headers: cookie ? { cookie } : {} });
+      return { status: r.status, corpo: await r.text(), tipo: r.headers.get('content-type') };
+    };
+    for (const c of ['/edital.pdf', '/editais/tce-go-2026.pdf', '/editais/ifg-2026.pdf']) expect((await pdf(c)).status, c).toBe(401);
+    expect(await pdf('/editais/ifg-2026.pdf', ck)).toMatchObject({ status: 200, corpo: '%PDF-ifg', tipo: 'application/pdf' });
+    expect(await pdf('/editais/tce-go-2026.pdf', adm)).toMatchObject({ status: 200, corpo: '%PDF-tce' });
+    expect(await pdf('/edital.pdf', adm)).toMatchObject({ status: 200, corpo: '%PDF-tce' });
   });
 
   test('desativar uma conta bloqueia o acesso e preserva os dados; reativar devolve tudo', async () => {
@@ -271,12 +305,12 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO sessoes_estudo (usuario_id, id, seq, data, disciplina_id, topico_id, planejado_min, realizado_min, origem, criado_em, atualizado_em)
         VALUES (1, 's1', 1, '2026-10-01', 'lp', 't001', 60, 50, 'manual', '${agora}', '${agora}');`);
 
-    expect(migrar(db)).toEqual([3, 4]);
+    expect(migrar(db)).toEqual([3, 4, 5]);
 
     expect(db.prepare('SELECT email, cargo_id, senha_provisoria, versao_dados FROM usuarios').get()).toMatchObject({ email: 'antigo@exemplo.com', cargo_id: 'B02', senha_provisoria: 0, versao_dados: 7 });
     expect(db.prepare('SELECT cargo_id FROM disciplinas').all()).toMatchObject([{ cargo_id: 'B02' }]);
     expect(db.prepare('SELECT cargo_id FROM fatos').all()).toMatchObject([{ cargo_id: 'B02' }]);
-    expect(db.prepare('SELECT id, seed_versao FROM cargos').all()).toMatchObject([{ id: 'B02', seed_versao: 1 }]);
+    expect(db.prepare('SELECT id, seed_versao, concurso_id FROM cargos').all()).toMatchObject([{ id: 'B02', seed_versao: 1, concurso_id: 'tce-go-2026' }]);
     expect(db.prepare('SELECT cargo_id, nucleo_id, descricao FROM cargo_nucleos').all()).toMatchObject([{ cargo_id: 'B02', nucleo_id: 'CG', descricao: 'desc CG' }]);
     expect(db.prepare('SELECT meta_diaria_min, meta_semanal_min FROM configuracoes').get()).toMatchObject({ meta_diaria_min: 111, meta_semanal_min: 222 });
     expect(db.prepare('SELECT id, realizado_min FROM sessoes_estudo').all()).toMatchObject([{ id: 's1', realizado_min: 50 }]);
@@ -297,9 +331,12 @@ describe('migração e seeds por cargo', () => {
     prepararEditais(db);
     expect(lerEdital(db, 'B02')).toEqual(seed);
     expect(lerEdital(db, 'A01')).toEqual(seedA01);
-    const idsB = new Set(seed.topicos.map((t) => t.id));
-    expect(seedA01.topicos.some((t) => idsB.has(t.id))).toBe(false);
-    expect(seedA01.disciplinas.some((d) => seed.disciplinas.some((x) => x.id === d.id))).toBe(false);
+    expect(lerEdital(db, 'IFG308')).toEqual(seedIfg);
+    // Nenhum id de conteúdo, disciplina, dependência ou fato se repete entre os cargos.
+    for (const campo of ['topicos', 'disciplinas', 'dependenciasSugeridas', 'fatos'] as const) {
+      const ids = [seed, seedA01, seedIfg].flatMap((s) => s[campo].map((x) => x.id));
+      expect(new Set(ids).size, campo).toBe(ids.length);
+    }
     expect(() => lerEdital(db, 'XYZ')).toThrow(/ainda não foi gravada/);
     db.close();
   });
@@ -318,5 +355,58 @@ describe('migração e seeds por cargo', () => {
     expect(d.user.ciclo.itens).toHaveLength(seedA01.cargo!.cicloInicial.length);
     expect(d.user.dependencias).toHaveLength(seedA01.dependenciasSugeridas.length);
     expect(d.user.config.dataProva).toBe('2027-01-17');
+  });
+  test('a migração 5 só acrescenta o concurso: cargos e dados existentes ficam como estavam', () => {
+    const db: BD = new DatabaseSync(':memory:');
+    db.exec('PRAGMA foreign_keys = ON');
+    db.exec('CREATE TABLE schema_migracoes (versao INTEGER PRIMARY KEY, nome TEXT NOT NULL, aplicada_em TEXT NOT NULL)');
+    for (const m of MIGRACOES.filter((x) => x.versao <= 4)) {
+      db.exec(m.sql);
+      db.prepare('INSERT INTO schema_migracoes VALUES (?, ?, ?)').run(m.versao, m.nome, 'antes');
+    }
+    // Banco como está em produção antes desta versão: cargo B02 já gravado, sem a coluna do concurso.
+    db.exec(`UPDATE cargos SET nome = 'TI', seed_versao = 1 WHERE id = 'B02';
+      INSERT INTO nucleos VALUES ('CG', 'Conhecimentos Gerais', 'Núcleo comum', 'desc CG', 19, 0);
+      INSERT INTO disciplinas (id, nome, nome_curto, nucleo_id, ordem_edital, paginas, texto_oficial, ordem) VALUES ('lp', 'Língua Portuguesa', 'LP', 'CG', 1, '[19]', 'texto', 0);
+      INSERT INTO topicos VALUES ('t001', 1, 'lp', 'Redação Oficial', 0, 'Média', 'x', 'Não estudado', 0);`);
+    expect(migrar(db)).toEqual([5]);
+    expect(db.prepare('SELECT id, nome, concurso_id, seed_versao FROM cargos').all()).toMatchObject([{ id: 'B02', nome: 'TI', concurso_id: 'tce-go-2026', seed_versao: 1 }]);
+    expect(db.prepare('SELECT id, titulo FROM topicos').all()).toMatchObject([{ id: 't001', titulo: 'Redação Oficial' }]);
+    // O edital do IFG entra sem tocar no B02.
+    expect(sincronizarEdital(db, seed)).toBe(false);
+    expect(sincronizarEdital(db, seedIfg)).toBe(true);
+    expect(db.prepare("SELECT concurso_id FROM cargos WHERE id = 'IFG308'").get()).toMatchObject({ concurso_id: 'ifg-2026' });
+    expect(db.prepare("SELECT COUNT(*) AS n FROM disciplinas WHERE cargo_id = 'B02'").get()).toMatchObject({ n: 1 });
+    expect(() => sincronizarEdital(db, { ...seedIfg, cargo: { ...seedIfg.cargo!, concursoId: 'nao-existe' } })).toThrow(/Concurso desconhecido/);
+    db.close();
+  });
+
+  test('o seed do IFG 308 é coerente: referências, dependências, ciclo, prioridades e dados oficiais', () => {
+    const disc = new Set(seedIfg.disciplinas.map((d) => d.id));
+    const top = new Set(seedIfg.topicos.map((t) => t.id));
+    expect(seedIfg.cargo).toMatchObject({ id: 'IFG308', codigo: '308', concursoId: 'ifg-2026', dataProva: '2027-02-14' });
+    expect(seedIfg.disciplinas.map((d) => d.nomeCurto)).toEqual(['Língua Portuguesa', 'Legislação', 'Raciocínio Lógico e Matemática', 'Informática', 'Química']);
+    expect(seedIfg.disciplinas.filter((d) => d.nucleo === 'CE').map((d) => d.id)).toEqual(['ifgqui']);
+    expect(seedIfg.topicos).toHaveLength(133);
+    expect(seedIfg.topicos.filter((t) => t.disciplinaId === 'ifgqui')).toHaveLength(85);
+    expect(seedIfg.topicos.every((t) => disc.has(t.disciplinaId) && /^i\d{3}$/.test(t.id))).toBe(true);
+    expect(seedIfg.topicos.map((t) => t.numero)).toEqual(seedIfg.topicos.map((_, i) => i + 1));
+    expect(seedIfg.topicos.every((t) => t.ref.trecho && t.ref.confianca === 'alta' && t.ref.paginas.length === 1)).toBe(true);
+    // Cada trecho citado está no texto oficial da disciplina.
+    expect(seedIfg.topicos.every((t) => seedIfg.disciplinas.find((d) => d.id === t.disciplinaId)!.textoOficial.includes(t.ref.trecho!))).toBe(true);
+    // Química: os 23 itens do edital aparecem como início de algum trecho.
+    const itensQui = new Set(seedIfg.topicos.filter((t) => t.disciplinaId === 'ifgqui').map((t) => Number(t.ref.trecho!.split('.')[0])));
+    expect([...itensQui].sort((a, b) => a - b)).toEqual(Array.from({ length: 23 }, (_, i) => i + 1));
+    expect(seedIfg.dependenciasSugeridas.every((d) => top.has(d.de) && top.has(d.para) && d.de !== d.para)).toBe(true);
+    expect(seedIfg.cargo!.cicloInicial.every(([d, m]) => disc.has(d) && m >= 5 && m <= 600)).toBe(true);
+    expect(new Set(seedIfg.cargo!.cicloInicial.map(([d]) => d))).toEqual(disc);
+    const minQui = seedIfg.cargo!.cicloInicial.filter(([d]) => d === 'ifgqui').reduce((a, [, m]) => a + m, 0);
+    const minTotal = seedIfg.cargo!.cicloInicial.reduce((a, [, m]) => a + m, 0);
+    expect(minQui / minTotal).toBeGreaterThan(0.5);
+    expect(seedIfg.topicos.every((t) => ['Urgente', 'Alta', 'Média', 'Baixa'].includes(t.prioridadePlanilha) && t.incidencia.length > 5)).toBe(true);
+    expect(seedIfg.fatos.find((f) => f.id === 'ifg-data')!.valor).toMatch(/14\/02\/2027/);
+    const d = criarDados(seedIfg);
+    expect(d.user.config).toMatchObject({ dataProva: '2027-02-14', metaDiariaMin: 240 });
+    expect(d.user.historico[0].descricao).toMatch(/edital nº 001\/2026 \(IFG/);
   });
 });

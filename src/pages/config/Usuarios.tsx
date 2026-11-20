@@ -17,7 +17,7 @@ interface Conta {
   criadoEm: string;
   ultimoAcesso: string | null;
 }
-interface CargoOpcao { id: string; codigo: string; nome: string; nomeCurto: string }
+interface CargoOpcao { id: string; codigo: string; nome: string; nomeCurto: string; concurso: string }
 
 type Filtro = 'todas' | 'paradas' | 'atrasadas' | 'nunca' | 'inativas';
 type Ordem = 'nome' | 'progresso' | 'recente' | 'parados';
@@ -57,7 +57,10 @@ export function ConfigUsuarios() {
   }, []);
   useEffect(carregar, [carregar]);
 
-  const nomeCargo = (id: string) => cargos.find((c) => c.id === id)?.codigo ?? id;
+  const nomeCargo = (id: string) => {
+    const c = cargos.find((x) => x.id === id);
+    return c ? `${c.concurso} ${c.codigo}` : id;
+  };
 
   const parada = (c: Conta) => { const r = resumos[c.id]; return !!r && r.diasSemEstudar !== null && r.diasSemEstudar >= DIAS_PARADO; };
   const nuncaEstudou = (c: Conta) => { const r = resumos[c.id]; return !r || r.ultimoEstudo === null; };
@@ -182,7 +185,7 @@ export function ConfigUsuarios() {
             <label className="sr-only" htmlFor="u-cargo-f">Filtrar por cargo</label>
             <select id="u-cargo-f" value={cargoFiltro} onChange={(e) => setCargoFiltro(e.target.value)}>
               <option value="">Todos os cargos</option>
-              {cargos.map((c) => <option key={c.id} value={c.id}>{c.codigo} · {c.nomeCurto}</option>)}
+              {cargos.map((c) => <option key={c.id} value={c.id}>{c.concurso} · {c.nomeCurto}</option>)}
             </select>
             <label className="sr-only" htmlFor="u-ordem">Ordenar por</label>
             <select id="u-ordem" value={ordem} onChange={(e) => setOrdem(e.target.value as Ordem)}>
@@ -301,7 +304,7 @@ export function ConfigUsuarios() {
             <label htmlFor="u-cargo">Cargo</label>
             <select id="u-cargo" required value={form.cargoId} onChange={(e) => setForm({ ...form, cargoId: e.target.value })}>
               <option value="">Escolha…</option>
-              {cargos.map((c) => <option key={c.id} value={c.id}>{c.codigo} · {c.nome}</option>)}
+              {cargos.map((c) => <option key={c.id} value={c.id}>{c.concurso} · {c.codigo} · {c.nome}</option>)}
             </select>
           </div>
           <div className="campo">

@@ -68,7 +68,8 @@ export interface Dependencia {
 
 // Dados do cargo ao qual o edital verticalizado pertence. Cada conta é ligada a um único cargo.
 export interface CargoInfo {
-  id: string; // 'B02', 'A01'
+  id: string; // 'B02', 'A01', 'IFG308'
+  concursoId?: string; // chave em CONCURSOS (src/domain/concursos.ts); sem ele, o do TCE-GO
   codigo: string;
   nome: string;
   nomeCurto: string; // aparece no menu lateral

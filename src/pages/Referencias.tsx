@@ -3,6 +3,7 @@ import type { Topico } from '../domain/types';
 import { seed } from '../store/AppStore';
 import { Abas, Cabecalho, Icone, LinkEdital, NucleoTag, Painel, Vazio } from '../ui/primitives';
 import { useUi } from '../ui/UiContext';
+import { concursoDe } from '../domain/concursos';
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const POR_PAGINA = 40;
@@ -15,6 +16,7 @@ const situacaoRef = (t: Topico) =>
 // De onde vem cada informação: a referência de cada conteúdo, o que é oficial e o que é estratégico.
 export function Referencias({ params }: { params: URLSearchParams }) {
   const { abrirTopico } = useUi();
+  const c = concursoDe(seed);
   const alvo = params.get('t') ? seed.topicos.find((t) => t.id === params.get('t')) : null;
   const [busca, setBusca] = useState(alvo ? String(alvo.numero) : '');
   const [disc, setDisc] = useState(alvo?.disciplinaId ?? '');
@@ -39,7 +41,9 @@ export function Referencias({ params }: { params: URLSearchParams }) {
       <Cabecalho
         titulo="Referências e fontes"
         subtitulo={`De onde vem cada informação, com a página do edital para conferir.${conf.length ? ` ${conf.length} referência(s) para conferir.` : ''}`}
-        info="O Anexo II não numera itens nem subitens: a referência de cada conteúdo é o trecho literal do edital, a disciplina e a página. O nº vem da planilha Edital Verticalizado."
+        info={c.itensNumerados
+          ? `A referência de cada conteúdo é o item numerado do ${c.anexoConteudo} que o contém, com a disciplina e a página. O nº vem da planilha Edital Verticalizado.`
+          : `O ${c.anexoConteudo} não numera itens nem subitens: a referência de cada conteúdo é o trecho literal do edital, a disciplina e a página. O nº vem da planilha Edital Verticalizado.`}
       />
 
       <Abas<Aba> rotulo="Referências" ativa={aba} onChange={setAba} abas={[{ id: 'conteudos', rotulo: 'Por conteúdo', contador: seed.topicos.length }, { id: 'fontes', rotulo: 'Fontes e limitações' }, { id: 'textos', rotulo: 'Texto integral' }]} />
@@ -108,9 +112,9 @@ export function Referencias({ params }: { params: URLSearchParams }) {
               <table className="tabela">
                 <thead><tr><th>Informação</th><th>Fonte</th><th>Natureza</th></tr></thead>
                 <tbody>
-                  <tr><td>Núcleos, disciplinas e texto dos conteúdos</td><td className="fraco">Anexo II do edital (pp. 19 a 22)</td><td><span className="chip chip-ok">Oficial</span></td></tr>
-                  <tr><td>Número de questões, pesos, notas mínimas e data</td><td className="fraco">Itens 7.1, 9.5, 11.4 a 11.9, 12.2 e Anexo III</td><td><span className="chip chip-ok">Oficial</span></td></tr>
-                  <tr><td>Divisão do conteúdo nos 253 itens numerados</td><td className="fraco">Sua planilha Edital Verticalizado v2.0</td><td><span className="chip">Planilha</span></td></tr>
+                  <tr><td>Núcleos, disciplinas e texto dos conteúdos</td><td className="fraco">{c.anexoConteudo} do edital ({c.paginasConteudo})</td><td><span className="chip chip-ok">Oficial</span></td></tr>
+                  <tr><td>Número de questões, pesos, notas mínimas e data</td><td className="fraco">{c.refProva}</td><td><span className="chip chip-ok">Oficial</span></td></tr>
+                  <tr><td>Divisão do conteúdo nos {seed.topicos.length} itens numerados</td><td className="fraco">{seed.fonte.planilha}</td><td><span className="chip">Planilha</span></td></tr>
                   <tr><td>Prioridade (Urgente, Alta, Média, Baixa) e incidência histórica</td><td className="fraco">Sua planilha</td><td><span className="chip chip-aviso">Estratégico</span></td></tr>
                   <tr><td>Pré-requisitos sugeridos</td><td className="fraco">Sugestão pedagógica desta plataforma</td><td><span className="chip chip-aviso">Estratégico</span></td></tr>
                   <tr><td>Ordem e tempos do ciclo, metas, intervalos de revisão</td><td className="fraco">Plano de estudos e suas configurações</td><td><span className="chip chip-aviso">Estratégico</span></td></tr>
@@ -120,10 +124,12 @@ export function Referencias({ params }: { params: URLSearchParams }) {
           </Painel>
           <Painel titulo="Limitações conhecidas">
             <ul className="lista-limitacoes">
-              <li>O Anexo II não numera itens nem subitens. A referência de cada conteúdo é a disciplina, a página e o trecho literal do edital; o nº vem da sua planilha.</li>
-              <li>O edital não informa quantas questões cada disciplina terá, só o total por bloco (25 Gerais e 45 Específicos).</li>
+              {c.itensNumerados
+                ? <li>Cada conteúdo cita o item inteiro do edital que o contém. Quando a planilha dividiu um item em vários conteúdos, todos citam o mesmo item.</li>
+                : <li>O {c.anexoConteudo} não numera itens nem subitens. A referência de cada conteúdo é a disciplina, a página e o trecho literal do edital; o nº vem da sua planilha.</li>}
+              {c.limitacoes.map((l) => <li key={l}>{l}</li>)}
               <li>O trecho de cada conteúdo foi localizado automaticamente no texto do edital. {conf.length === 0 ? 'Todos tiveram correspondência alta.' : `${conf.length} item(ns) tiveram correspondência parcial e estão marcados para conferir: ${conf.map((t) => `nº ${t.numero}`).join(', ')}.`}</li>
-              <li>Itens que a planilha marcou como [Interpretação] são desdobramentos da planilha, não títulos do edital.</li>
+              {!c.itensNumerados && <li>Itens que a planilha marcou como [Interpretação] são desdobramentos da planilha, não títulos do edital.</li>}
               <li>Não há integração com banco de questões. Os dados ficam no banco da sua instalação; o backup está em Configurações → Dados e backup.</li>
             </ul>
           </Painel>

@@ -10,5 +10,5 @@
 ## Organização
 
 - `docs/`: textos de referência, com uma pasta por concurso (`tce-go-2026/`, `ifg-2026/`).
-- `fontes/`: arquivos de entrada dos scripts que geram os editais (PDFs, planilhas, contagens), também com uma pasta por concurso. A pasta não entra na imagem Docker.
-- `public/edital.pdf`: PDF do edital do TCE-GO servido pela plataforma. Passa a ser um PDF por concurso na fase 1 do plano.
+- `fontes/`: arquivos de entrada dos scripts que geram os editais (planilhas e contagens), também com uma pasta por concurso. A pasta não entra na imagem Docker.
+- `public/editais/`: PDF de cada edital, servido pela plataforma só para quem entrou (`tce-go-2026.pdf`, `ifg-2026.pdf`). Os scripts de `scripts/` também leem o texto oficial daqui.

@@ -45,16 +45,19 @@ Veja o passo a passo em **[docs/IMPLANTACAO.md](docs/IMPLANTACAO.md)**: Docker C
 
 ### Vários usuários e cargos
 
-A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (conteúdos, progresso, horas, ciclo, metas, histórico, pomodoro e preferências). O edital tem dois cargos:
+A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (conteúdos, progresso, horas, ciclo, metas, histórico, pomodoro e preferências). Ela atende dois concursos e três cargos:
 
-| Cargo | Edital verticalizado |
-|---|---|
-| **B02** · Técnico de Controle Externo, Tecnologia da Informação | 14 disciplinas, 253 conteúdos |
-| **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/tce-go-2026/ANALISE-A01.md)) |
+| Concurso | Cargo | Edital verticalizado |
+|---|---|---|
+| TCE-GO 2026 (FCC) | **B02** · Técnico de Controle Externo, Tecnologia da Informação | 14 disciplinas, 253 conteúdos |
+| TCE-GO 2026 (FCC) | **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/tce-go-2026/ANALISE-A01.md)) |
+| IFG 2026 (Instituto AOCP) | **IFG308** · Técnico de Laboratório/Área Química (cargo 308) | 5 disciplinas, 133 conteúdos ([análise da banca](docs/ifg-2026/ANALISE-BANCA-AOCP.md)) |
+
+A marca, o PDF do edital e os textos que mudam de um edital para outro vêm do concurso do cargo da conta (`src/domain/concursos.ts`). A tela de login é neutra, porque aparece antes de se saber o concurso.
 
 - **O cargo é fixo e definido na criação da conta.** Cada conta só enxerga o edital e os dados do seu cargo; o servidor recusa ids de outro cargo e não existe forma de trocar o cargo depois.
 - **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador também acompanha o progresso de cada conta (números agregados: % do edital, horas, último estudo, ritmo, disciplinas e pendências prioritárias), sem acesso a notas nem ao texto das sessões.
-- Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` e `node build/cli.mjs cargos`.
+- Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` (ou `B02`, `IFG308`) e `node build/cli.mjs cargos`.
 
 ### Trazer os dados da versão anterior
 
@@ -230,7 +233,7 @@ server/
   cli.ts              administração pelo terminal (contas, backup, importação)
 scripts/              build do servidor, modo dev e geradores do seed
 deploy/               Caddyfile e serviço systemd
-public/               edital.pdf (servido só para quem entrou) e marca/ (logo do TCE-GO: completa, emblema e favicon)
+public/               editais/ (PDF de cada edital, servido só para quem entrou) e marca/ (emblema e favicon do TCE-GO, favicon neutro)
 dist/                 versão anterior (arquivo único com dados no navegador), mantida para exportar os dados
 ```
 
@@ -240,11 +243,21 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 80 testes:
+`npm test` roda 85 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
-- **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; a migração 3 mantém intactos contas, edital e dados de estudo existentes;
+- **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; as migrações 3 e 5 mantêm intactos contas, edital e dados de estudo existentes; o edital do IFG é coerente com o PDF; os PDFs dos editais exigem login;
 - **API e segurança**: nada é acessível sem login; cabeçalhos de segurança; CSRF e origem; senha errada não revela se o e-mail existe; ações persistidas e versionadas; dados intactos após reiniciar; importação validada com backup; preferências; troca de senha encerra as outras sessões; bloqueio após tentativas; expiração de sessão; senhas e tokens só com hash.
+
+### Edital do cargo IFG308 (IFG 2026, Química)
+
+Gerado por `scripts/ifg/seed_ifg.py` a partir da planilha `fontes/ifg-2026/edital_verticalizado_308_quimica.xlsx` e do texto oficial do Anexo III em `public/editais/ifg-2026.pdf`:
+
+```bash
+python3 scripts/ifg/seed_ifg.py public/editais/ifg-2026.pdf fontes/ifg-2026/edital_verticalizado_308_quimica.xlsx src/data/seed-ifg308.json
+```
+
+Os ids dos conteúdos (`i001` a `i133`) seguem a ordem das linhas da planilha. Para mudar o conteúdo depois, acrescente linhas no fim de cada disciplina e aumente `SEED_VERSION` no script.
 
 ### Edital do cargo A01
 
@@ -256,7 +269,7 @@ Se sair uma retificação do edital ou uma nova versão da planilha:
 
 ```bash
 # requer Python 3, openpyxl e pdftotext (poppler-utils)
-python3 scripts/anexo.py anexo.json public/edital.pdf
+python3 scripts/anexo.py anexo.json public/editais/tce-go-2026.pdf
 python3 scripts/seed.py anexo.json fontes/tce-go-2026/edital_verticalizado_b02_v2.xlsx src/data/seed.json
 npm test && npm run build   # na inicialização, o servidor grava a nova versão do edital no banco
 ```

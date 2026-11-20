@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AppProvider, useApp, seed } from './store/AppStore';
 import { Ui, type PresetSessao, type UiCtx } from './ui/UiContext';
 import { Icone, useConfirmacao, type NomeIcone } from './ui/primitives';
+import { concursoDe } from './domain/concursos';
 import { TopicoDetalhe } from './ui/TopicoDetalhe';
 import { SessaoForm } from './ui/SessaoForm';
 import { Cronometro } from './ui/Cronometro';
@@ -77,7 +78,26 @@ function lerFechados(): Set<string> {
   return new Set(['config']);
 }
 
-const Logo = () => <img className="marca-emblema" src="marca/emblema-tce-go.webp" alt="" width={42} height={26} />;
+// Marca do concurso do cargo da conta; sem imagem própria, um ícone neutro.
+const Logo = () => {
+  const c = concursoDe(seed);
+  return c.emblema
+    ? <img className="marca-emblema" src={c.emblema} alt="" width={42} height={26} />
+    : <span className="marca-emblema marca-neutra" aria-hidden="true"><Icone nome="livro" tam={20} /></span>;
+};
+
+// Título da aba e ícone do navegador seguem o concurso do cargo da conta.
+function useMarcaDocumento() {
+  useEffect(() => {
+    const c = concursoDe(seed);
+    document.title = `Estudo ${c.sigla}`;
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (link) {
+      link.type = c.favicon?.endsWith('.png') ? 'image/png' : 'image/svg+xml';
+      link.href = c.favicon ?? 'marca/favicon-neutro.svg';
+    }
+  }, []);
+}
 
 function Shell() {
   const { dados, despachar, toasts, fecharToast, salvo, usuario, sair, prefs, definirPrefs } = useApp();
@@ -88,6 +108,8 @@ function Shell() {
   const [topico, setTopico] = useState<string | null>(null);
   const [sessao, setSessao] = useState<{ aberto: boolean; preset?: PresetSessao }>({ aberto: false });
   const botaoMenu = useRef<HTMLButtonElement>(null);
+  useMarcaDocumento();
+  const sigla = concursoDe(seed).sigla;
   const recolhido = prefs.menuRecolhido;
 
   useEffect(() => {
@@ -220,15 +242,15 @@ function Shell() {
       <div className={`app ${menu ? 'menu-aberto' : ''} ${recolhido ? 'recolhido' : ''}`}>
         <header className="topo-mobile">
           <button ref={botaoMenu} className="btn-icone" aria-label="Abrir menu" aria-expanded={menu} aria-controls="navegacao" onClick={() => setMenu((m) => !m)}><Icone nome="menu" tam={20} /></button>
-          <span className="marca"><Logo /><span className="marca-txt"><b>Estudo TCE-GO</b></span></span>
+          <span className="marca"><Logo /><span className="marca-txt"><b>Estudo {sigla}</b></span></span>
           <span className={`salvo-${salvo}`} style={{ marginLeft: 'auto' }}><span className="ponto" role="img" aria-label={textoSalvo} /></span>
         </header>
 
         <nav className="lateral" id="navegacao" aria-label="Navegação principal">
           <div className="lat-topo">
-            <a href="#/inicio" className="marca" aria-label="Estudo TCE-GO, início">
+            <a href="#/inicio" className="marca" aria-label={`Estudo ${sigla}, início`}>
               <Logo />
-              <span className="marca-txt"><b>Estudo TCE-GO</b><span>{seed.cargo?.nomeCurto ?? ''}</span></span>
+              <span className="marca-txt"><b>Estudo {sigla}</b><span>{seed.cargo?.nomeCurto ?? ''}</span></span>
             </a>
           </div>
 

@@ -35,7 +35,7 @@ export function ConfigDados() {
       const t = s.topicoId ? seed.topicos.find((x) => x.id === s.topicoId) : null;
       linhas.push([s.data, csv(d?.nomeCurto), d?.nucleo, t?.numero ?? '', csv(t?.titulo), s.realizadoMin, s.planejadoMin, s.origem, csv(s.notas)].join(';'));
     }
-    baixar(`estudo-tce-go-sessoes-${isoDia()}.csv`, '﻿' + linhas.join('\r\n'), 'text/csv;charset=utf-8');
+    baixar(`estudo-sessoes-${isoDia()}.csv`, '﻿' + linhas.join('\r\n'), 'text/csv;charset=utf-8');
   };
 
   const importar = async (file: File) => {

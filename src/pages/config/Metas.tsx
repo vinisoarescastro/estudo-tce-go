@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useApp } from '../../store/AppStore';
-import { diffDias, fmtMin, FUSO_PADRAO, isoDia } from '../../domain/util';
+import { useApp, seed } from '../../store/AppStore';
+import { diffDias, fmtDia, fmtMin, FUSO_PADRAO, isoDia } from '../../domain/util';
+import { concursoDe } from '../../domain/concursos';
 import { Cabecalho, Icone, Painel } from '../../ui/primitives';
 
 const FUSOS: [string, string][] = [
@@ -48,7 +49,7 @@ export function ConfigMetas() {
             <div className="config-secao">
               <div className="config-desc">
                 <h2>Data da prova</h2>
-                <p>Fonte única da contagem regressiva. Oficial: 17/01/2027 (Anexo III, item 12).</p>
+                <p>Fonte única da contagem regressiva.{seed.cargo?.dataProva ? ` Oficial: ${fmtDia(seed.cargo.dataProva)} (${concursoDe(seed).dataProvaRef}).` : ''}</p>
               </div>
               <div className="config-campos">
                 <div className="form-linha">

@@ -5,7 +5,7 @@ Os PDFs não ficam no repositório (direitos reservados da FCC). Para refazer a 
 
 ```bash
 python scripts/a01/analise_fcc.py fontes/provas-fcc fontes/tce-go-2026/a01/analise-fcc.json
-python scripts/a01/seed_a01.py public/edital.pdf fontes/tce-go-2026/a01/analise-fcc.json src/data/seed-a01.json
+python scripts/a01/seed_a01.py public/editais/tce-go-2026.pdf fontes/tce-go-2026/a01/analise-fcc.json src/data/seed-a01.json
 ```
 
 Requer Python 3 e `pdftotext` (poppler-utils; use a variável `PDFTOTEXT` para indicar o caminho do executável).

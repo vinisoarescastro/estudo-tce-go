@@ -249,6 +249,12 @@ export const MIGRACOES: { versao: number; nome: string; sql: string }[] = [
       ALTER TABLE estados_topico ADD COLUMN pulado_volta INTEGER;
     `,
   },
+  {
+    versao: 5,
+    nome: 'concurso de cada cargo',
+    // Só acrescenta uma coluna. Os cargos que já existem (B02 e A01) são do concurso do TCE-GO, o valor padrão.
+    sql: `ALTER TABLE cargos ADD COLUMN concurso_id TEXT NOT NULL DEFAULT 'tce-go-2026';`,
+  },
 ];
 
 export function abrirBanco(caminho: string): BD {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, type UsuarioPublico } from '../api';
 import { Icone } from '../ui/primitives';
 import type { Toast } from '../store/AppStore';
@@ -9,6 +9,16 @@ export function Login({ onEntrar, toasts, fecharToast }: { onEntrar: (u: Usuario
   const [ver, setVer] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+
+  // Antes de entrar não se sabe o concurso da conta: título e ícone neutros (também ao sair).
+  useEffect(() => {
+    document.title = 'Estudo para concursos';
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (link) {
+      link.type = 'image/svg+xml';
+      link.href = 'marca/favicon-neutro.svg';
+    }
+  }, []);
 
   const entrar = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +38,10 @@ export function Login({ onEntrar, toasts, fecharToast }: { onEntrar: (u: Usuario
     <div className="login">
       <div className="login-card">
       <aside className="login-info" aria-labelledby="login-sobre">
-        <img className="login-logo" src="marca/logo-tce-go.webp" alt="Tribunal de Contas do Estado de Goiás" width={160} height={133} />
+        <span className="login-emblema" aria-hidden="true"><Icone nome="livro" tam={34} /></span>
         <div className="login-txt">
-          <p className="login-sobre-rot">TCE-GO · Edital nº 01/2026</p>
-          <h2 id="login-sobre">Sua preparação para o concurso do TCE-GO</h2>
+          <p className="login-sobre-rot">Estudo para concursos</p>
+          <h2 id="login-sobre">Sua preparação para o concurso, do edital à prova</h2>
           <p>Organize seu ciclo de estudos, acompanhe o edital do seu cargo e registre suas horas, tudo em um só lugar.</p>
         </div>
       </aside>

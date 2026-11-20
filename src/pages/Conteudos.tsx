@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { Prioridade, Status, Topico } from '../domain/types';
 import { PRIORIDADES, STATUS, STATUS_LABEL } from '../domain/types';
 import { useApp, seed } from '../store/AppStore';
+import { concursoDe } from '../domain/concursos';
 import { contar, estadoDe } from '../domain/progress';
 import { prioridadeTopico } from '../domain/cycle';
 import { pendentes, prereqsDe } from '../domain/deps';
@@ -70,11 +71,20 @@ export function Conteudos({ params }: { params: URLSearchParams }) {
     <div className="pagina">
       <Cabecalho
         titulo="Conteúdos do edital"
-        subtitulo="Os 253 itens do edital, por núcleo e disciplina. Clique em um conteúdo para abrir a ficha."
+        subtitulo={`Os ${seed.topicos.length} itens do edital, por núcleo e disciplina. Clique em um conteúdo para abrir a ficha.`}
         info={
           <>
-            <p>Cada item é uma linha da sua planilha Edital Verticalizado, ligada ao trecho literal do Anexo II do edital.</p>
-            <p>O edital não tem nível de subtópicos, então a lista não inventa um. Quando a planilha desdobrou um trecho em vários itens, o item é marcado como “desdobramento”.</p>
+            {concursoDe(seed).itensNumerados ? (
+              <>
+                <p>Cada item é uma linha da sua planilha Edital Verticalizado, ligada ao item numerado do {concursoDe(seed).anexoConteudo} do edital.</p>
+                <p>Quando a planilha dividiu um item do edital em vários conteúdos, cada parte é marcada como “desdobramento”.</p>
+              </>
+            ) : (
+              <>
+                <p>Cada item é uma linha da sua planilha Edital Verticalizado, ligada ao trecho literal do {concursoDe(seed).anexoConteudo} do edital.</p>
+                <p>O edital não tem nível de subtópicos, então a lista não inventa um. Quando a planilha desdobrou um trecho em vários itens, o item é marcado como “desdobramento”.</p>
+              </>
+            )}
           </>
         }
       />
@@ -145,7 +155,7 @@ export function Conteudos({ params }: { params: URLSearchParams }) {
               </button>
               {aberta && (
                 <>
-                  <div className="disc-fonte">Anexo II · <LinkEdital pagina={d.paginas[0]}>p. {d.paginas.join(' e ')}</LinkEdital></div>
+                  <div className="disc-fonte">{concursoDe(seed).anexoConteudo} · <LinkEdital pagina={d.paginas[0]}>p. {d.paginas.join(' e ')}</LinkEdital></div>
                   <ul className="topicos">
                     {vis.map((t) => (
                       <LinhaTopico key={t.id} t={t} min={minPorTopico[t.id] ?? 0} n={nSessoes[t.id] ?? 0} onAbrir={() => abrirTopico(t.id)} onStatus={(s) => despachar({ t: 'status', topicoId: t.id, status: s })} />
@@ -162,7 +172,7 @@ export function Conteudos({ params }: { params: URLSearchParams }) {
           <section key={n.id} className="nucleo-bloco">
             <div className="nucleo-cab">
               <h2>{n.nome}</h2>
-              <span className="nota">{n.apelido} · <LinkEdital pagina={n.pagina}>Anexo II, p. {n.pagina}</LinkEdital></span>
+              <span className="nota">{n.apelido} · <LinkEdital pagina={n.pagina}>{concursoDe(seed).anexoConteudo}, p. {n.pagina}</LinkEdital></span>
             </div>
             {blocos}
           </section>

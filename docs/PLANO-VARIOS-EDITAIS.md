@@ -1,6 +1,6 @@
 # Plano: vários editais na mesma plataforma
 
-Situação em 20/11/2026: plano aprovado, implementação ainda não iniciada.
+Situação em 20/11/2026: fase 1 implementada; fases 2 e 3 por fazer.
 
 Hoje a plataforma atende um concurso (TCE-GO 2026, cargos B02 e A01). Este plano acrescenta o concurso do **IFG 2026, cargo 308 – Técnico de Laboratório/Área Química**, e permite que **uma mesma conta estude para mais de um edital**. A plataforma está em produção: nenhuma etapa pode mudar o que as contas atuais veem ou perder dados.
 
@@ -16,7 +16,7 @@ Hoje a plataforma atende um concurso (TCE-GO 2026, cargos B02 e A01). Este plano
 
 ## Dados do IFG
 
-- Edital de Abertura nº 001/2026, **versão definitiva**, em [fontes/ifg-2026/edital-ifg-001-2026.pdf](../fontes/ifg-2026/edital-ifg-001-2026.pdf). Banca: Instituto AOCP.
+- Edital de Abertura nº 001/2026, **versão definitiva**, em [public/editais/ifg-2026.pdf](../public/editais/ifg-2026.pdf). Banca: Instituto AOCP.
 - **Prova objetiva: 14/02/2027** (Anexo I – Cronograma Previsto).
 - Prova: 50 questões. Português 10 (peso 2), Legislação 10 (peso 1), Raciocínio Lógico e Matemática 5 (peso 1), Informática 5 (peso 1), Conhecimentos Específicos de Química 20 (peso 3).
 - Conteúdo de Química: 23 itens, idêntico ao do IFCE 2026.
@@ -71,9 +71,15 @@ Continua único por conta, preso ao edital em que foi iniciado. Ao trocar de edi
 
 Cada fase vai para produção sozinha e só depois a próxima começa.
 
-### Fase 1: IFG como novo cargo
+### Fase 1: IFG como novo cargo (implementada)
 
-Nada muda para as contas atuais. Contas novas podem ser criadas no IFG-308, com um edital só.
+Nada muda para as contas atuais. Contas novas podem ser criadas no cargo `IFG308`, com um edital só.
+
+Como ficou:
+- O concurso de cada cargo é a coluna `cargos.concurso_id` (migração 5, só acrescenta; B02 e A01 ficam em `tce-go-2026`). Os dados de cada concurso (sigla, órgão, banca, PDF, anexo do conteúdo, marca, limitações) ficam em `src/domain/concursos.ts`.
+- Ids do IFG: disciplinas `ifglp`, `ifgleg`, `ifgrlm`, `ifginf`, `ifgqui`; conteúdos `i001` a `i133`.
+- Padrões do cargo: meta diária de 4 h, semanal de 24 h, ciclo de 16 h por volta com 9 h de Química. A pessoa ajusta em Metas e no Ciclo.
+- O IFG ainda não tem emblema próprio: o menu mostra um ícone neutro. Para usar uma imagem, ponha o arquivo em `public/marca/` e informe `emblema` e `favicon` no concurso.
 
 1. **Edital do IFG.** Novo `scripts/ifg/seed_ifg.py`, no molde de `scripts/a01/seed_a01.py`: lê a planilha e o PDF, localiza página e trecho oficial de cada conteúdo e gera `src/data/seed-ifg308.json`.
    - Ids com prefixo próprio (`ifg...`), sem colidir com B02 e A01.
@@ -91,7 +97,7 @@ Nada muda para as contas atuais. Contas novas podem ser criadas no IFG-308, com 
 
 ### Fase 2: várias inscrições por conta
 
-1. **Migração 5**, só com acréscimos:
+1. **Migração 6**, só com acréscimos:
    - Tabela `inscricoes` (conta, cargo, principal, ativa, criada em), preenchida a partir de `usuarios.cargo_id`.
    - `cargo_id` em `configuracoes`, `ciclos`, `ciclo_itens` e `cronometros`, com o cargo atual de cada conta como valor.
    - `configuracoes`, `ciclos` e `cronometros` têm a conta como chave primária e precisam ser recriadas com chave (conta, cargo). As linhas são copiadas dentro de uma transação. É o passo mais delicado de todo o plano.
