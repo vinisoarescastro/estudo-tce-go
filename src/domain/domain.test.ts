@@ -349,3 +349,25 @@ describe('reinício e ids determinísticos', () => {
     expect(() => reduzir(d, { t: 'config', valor: { fusoHorario: 'Lua/Base' } }, { seed, agora: 0 })).toThrow(ErroAcao);
   });
 });
+
+describe('página de revisões', () => {
+  test('agenda as próximas revisões por data e lista as feitas a partir do histórico', async () => {
+    const { agendaRevisoes, revisoesFeitas } = await import('./revisions');
+    const { reduzir } = await import('./actions');
+    const { criarDados } = await import('./defaults');
+    const seedJson = (await import('../data/seed.json')).default as unknown as import('./types').Seed;
+    const t = seedJson.topicos;
+    let d = criarDados(seedJson, '2026-11-01', Date.parse('2026-11-01T12:00:00Z'));
+    d.user.config.revisaoDias = [1, 7, 30];
+    const em = (dia: string) => Date.parse(`${dia}T15:00:00Z`);
+    d = reduzir(d, { t: 'status', topicoId: t[0].id, status: 'estudado' }, { seed: seedJson, agora: em('2026-11-10') }); // 1ª em 11/11
+    d = reduzir(d, { t: 'status', topicoId: t[1].id, status: 'estudado' }, { seed: seedJson, agora: em('2026-11-12') }); // 1ª em 13/11
+    d = reduzir(d, { t: 'revisao', topicoId: t[1].id }, { seed: seedJson, agora: em('2026-11-13') }); // 2ª em 20/11
+    const agenda = agendaRevisoes(t, d.user, '2026-11-12', '2026-11-30');
+    expect(agenda.map((a) => [a.topico.id, a.data, a.numero])).toEqual([[t[1].id, '2026-11-20', 2]]);
+    expect(agendaRevisoes(t, d.user, '2026-11-10', '2026-11-30').map((a) => a.data)).toEqual(['2026-11-11', '2026-11-20']);
+    const feitas = revisoesFeitas(t, d.user, '2026-11-01', (ts) => ts.slice(0, 10));
+    expect(feitas).toMatchObject([{ topico: { id: t[1].id }, dia: '2026-11-13', numero: 1 }]);
+    expect(revisoesFeitas(t, d.user, '2026-11-14', (ts) => ts.slice(0, 10))).toEqual([]);
+  });
+});

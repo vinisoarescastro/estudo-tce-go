@@ -127,7 +127,7 @@ export function Dashboard() {
                       <span className={`chip ${r.atrasoDias > 0 ? 'chip-aviso' : ''}`}>{r.atrasoDias > 0 ? `${r.atrasoDias}d` : 'hoje'}</span>
                     </li>
                   ))}
-                  {devidas.length > 8 && <li><button className="link" onClick={() => navegar('conteudos')}>e mais {devidas.length - 8} em Conteúdos</button></li>}
+                  {devidas.length > 8 && <li><button className="link" onClick={() => navegar('revisoes')}>e mais {devidas.length - 8} em Revisões</button></li>}
                 </ul>
               )}
             </Painel>

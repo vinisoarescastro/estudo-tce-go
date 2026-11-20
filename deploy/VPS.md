@@ -15,6 +15,9 @@ Não contém senhas.
 | Dados | volume Docker `estudo-tce-go_dados` (banco `estudo.db`, `backups/`, `fotos/`) |
 | HTTPS | Caddy do Mandatus (`mandatus-caddy`), certificado automático |
 | Limites | 512 MB de memória e 1 CPU |
+| Editais | TCE-GO 2026 (B02 e A01) e IFG 2026 (IFG308); uma conta pode estudar mais de um |
+| Backups extras | `/root/backups-estudo-tce-go/` (fora do volume Docker) |
+| Última atualização | 20/11/2026, commit `bce91dd` (banco na migração 7) |
 
 ## Como o tráfego chega
 
@@ -34,7 +37,11 @@ navegador ──HTTPS──> mandatus-caddy (portas 80/443)
 
 - `decida-voto` (`/opt/emquemvotar`): usa a porta local 3000 e um túnel Cloudflare.
 - `mandatus` (`/opt/mandatus`): Caddy nas portas 80/443, API, banco e worker.
+- `locacoes` (contêineres `locacoes-locacoes-web-1`, `-api-1` e `-db-1`): não publica portas no host.
 - Porta 3100 é do estudo-tce-go. Antes de usar outra porta local, confira com `ss -tlnp`.
+- Comandos que afetam todos os projetos ficam proibidos aqui: `docker system prune`, `docker image prune -a`,
+  `docker compose down` fora desta pasta, reiniciar o Docker ou o servidor.
+- Para conferir que nada além do app foi afetado: `docker ps --format "{{.Names}}	{{.Status}}"` antes e depois.
 
 ## Operação do dia a dia
 
@@ -48,19 +55,32 @@ curl -s http://127.0.0.1:3100/api/saude            # {"ok":true}
 
 # Atualizar o app (a pasta é um clone git; o repositório é público, sem senha)
 # 1) no seu computador: commit e `git push origin main`
-# 2) na VPS:
-git pull && docker compose -f deploy/docker-compose.vps.yml up -d --build
-# Os dados ficam no volume; as migrações do banco rodam sozinhas. O Mandatus não é afetado.
-# Depois confira: curl -s http://127.0.0.1:3100/api/saude e dê Ctrl+F5 no navegador.
+# 2) na VPS, nesta ordem:
+docker exec estudo-tce-go-app node build/cli.mjs backup              # cópia do banco antes de tudo
+git pull --ff-only                                                    # só avança; recusa se a VPS divergir
+docker compose -f deploy/docker-compose.vps.yml build                 # build com o app antigo ainda no ar
+docker compose -f deploy/docker-compose.vps.yml up -d                 # troca só este contêiner (uns 2 s fora do ar)
+# Os dados ficam no volume; as migrações do banco rodam sozinhas na inicialização. O Mandatus não é afetado.
+# Depois confira:
+curl -s http://127.0.0.1:3100/api/saude                               # {"ok":true}
+docker logs --since 2m estudo-tce-go-app                              # migrações e editais gravados, sem "erro"
+docker ps --filter name=estudo                                        # (healthy) depois de uns 30 s
+# e dê Ctrl+F5 no navegador.
+# Atualização com migração de banco: antes de publicar, teste as migrações numa cópia do backup
+# (`DATA_DIR=pasta-da-copia node build/cli.mjs usuario:listar` no seu computador roda as migrações na cópia).
 # Se o git reclamar de "dubious ownership":
 #   git config --global --add safe.directory /opt/estudo-tce-go
 # Não edite arquivos direto na VPS: o próximo `git pull` pode conflitar. Altere no repositório.
 
-# Contas
-docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email E --nome "Nome" --cargo B02   # ou A01 (o cargo é fixo)
+# Contas (o cargo da criação é o edital principal: B02, A01 ou IFG308)
+docker exec -it estudo-tce-go-app node build/cli.mjs usuario:criar --email E --nome "Nome" --cargo B02
+docker exec    estudo-tce-go-app node build/cli.mjs usuario:edital --email E --cargo IFG308   # acrescenta um edital à conta
+docker exec    estudo-tce-go-app node build/cli.mjs usuario:edital --email E --cargo IFG308 --principal  # e o torna o principal
+docker exec    estudo-tce-go-app node build/cli.mjs usuario:edital --email E --cargo IFG308 --retirar    # retira (os dados ficam guardados)
 docker exec -it estudo-tce-go-app node build/cli.mjs usuario:senha --email E     # redefinir senha
 docker exec    estudo-tce-go-app node build/cli.mjs usuario:nome  --email E --nome "Nome"
-docker exec    estudo-tce-go-app node build/cli.mjs usuario:listar
+docker exec    estudo-tce-go-app node build/cli.mjs usuario:listar                # inclui os editais de cada conta
+# Na plataforma, o administrador faz o mesmo em Configurações → Usuários → Gerenciar.
 
 # Foto de perfil (.webp, .png ou .jpg, até 2 MB): copie para dentro do contêiner e aplique
 docker cp foto.webp estudo-tce-go-app:/tmp/foto.webp
@@ -71,6 +91,10 @@ docker exec estudo-tce-go-app node build/cli.mjs usuario:foto --email E --arquiv
 
 - O app cria uma cópia do banco na inicialização e a cada 24 h, mantendo as 14 mais recentes
   (`/app/data/backups` no contêiner).
+- Antes de cada atualização, faça uma cópia manual (`node build/cli.mjs backup`, ver acima). Antes da atualização
+  que trouxe o IFG e os vários editais por conta (migrações 5 a 7), uma cópia completa foi guardada fora do volume, em
+  `/root/backups-estudo-tce-go/antes-fases-ifg-20261120-195309/`. Voltar a uma versão anterior a essa exige
+  restaurar essa cópia, porque as versões antigas não conhecem a nova estrutura do banco.
 - Elas ficam **na mesma VPS**. Copie para outro lugar de tempos em tempos:
   ```bash
   docker cp estudo-tce-go-app:/app/data/backups ./backups-estudo
@@ -97,5 +121,6 @@ docker exec estudo-tce-go-app node build/cli.mjs usuario:foto --email E --arquiv
 - Login só por HTTPS (cookie seguro em produção). Sessões e senhas ficam como hash no banco.
 - A foto só é entregue ao dono, depois do login (`/api/perfil/foto`).
 - A VPS aceita SSH com senha para o root e não tem `fail2ban`: prefira chave SSH e instale o `fail2ban`.
+  A senha do root foi compartilhada numa conversa em 20/11/2026: troque-a.
 - O firewall `ufw` só libera a porta 22, mas o Docker publica portas por conta própria. Por isso o app escuta
   apenas em `127.0.0.1`.

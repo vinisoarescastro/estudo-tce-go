@@ -14,6 +14,9 @@ import { Dashboard } from './pages/Dashboard';
 import { Historico } from './pages/Historico';
 import { Ciclo } from './pages/Ciclo';
 import { Conteudos } from './pages/Conteudos';
+import { Revisoes } from './pages/Revisoes';
+import { revisoesDevidas } from './domain/revisions';
+import { isoDia } from './domain/util';
 import { EditalOficial } from './pages/EditalOficial';
 import { Referencias } from './pages/Referencias';
 import { ConfigMetas } from './pages/config/Metas';
@@ -33,6 +36,7 @@ const INICIO: ItemMenu = { id: 'inicio', rotulo: 'Início', icone: 'inicio' };
 const GRUPOS: GrupoMenu[] = [
   { id: 'estudos', rotulo: 'Estudos', itens: [
     { id: 'conteudos', rotulo: 'Conteúdos', icone: 'conteudos' },
+    { id: 'revisoes', rotulo: 'Revisões', icone: 'revisao' },
     { id: 'ciclo', rotulo: 'Ciclo de estudos', icone: 'ciclo' },
   ] },
   { id: 'acompanhamento', rotulo: 'Acompanhamento', itens: [
@@ -175,6 +179,7 @@ function Shell() {
   let pagina;
   switch (loc.rota) {
     case 'conteudos': pagina = <Conteudos key={loc.params.toString()} params={loc.params} />; break;
+    case 'revisoes': pagina = <Revisoes />; break;
     case 'ciclo': pagina = <Ciclo />; break;
     case 'dashboard': pagina = <Dashboard />; break;
     case 'historico': pagina = <Historico />; break;
@@ -206,11 +211,14 @@ function Shell() {
     });
 
   const ativoNoMenu = (id: string) => loc.rota === id || (id === 'config/usuarios' && loc.rota === ROTA_ACOMPANHAR);
+  // Revisões vencidas: contador no item do menu.
+  const nVencidas = revisoesDevidas(seed.topicos, dados.user, isoDia()).length;
   const item = (i: ItemMenu) => (
     <li key={i.id}>
       <a href={`#/${i.id}`} className={`nav-item ${ativoNoMenu(i.id) ? 'ativo' : ''}`} aria-current={loc.rota === i.id ? 'page' : undefined} title={recolhido ? i.rotulo : undefined}>
         <Icone nome={i.icone} />
         <span className="nav-txt">{i.rotulo}</span>
+        {i.id === 'revisoes' && nVencidas > 0 && <span className="nav-contador" aria-label={`${nVencidas} vencidas`}>{nVencidas}</span>}
       </a>
     </li>
   );

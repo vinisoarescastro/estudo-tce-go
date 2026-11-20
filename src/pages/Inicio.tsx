@@ -302,7 +302,7 @@ export function Inicio() {
         className="revisoes-painel"
         titulo="Revisões"
         acoes={devidas.length > 0 ? <span className="rev-total"><b>{devidas.length}</b> {devidas.length === 1 ? 'pendente' : 'pendentes'}</span> : undefined}
-        info={`Cada conteúdo estudado volta para revisão depois de ${u.config.revisaoDias.join(', ')} dias (ajuste em Metas e planejamento). Marque o círculo quando revisar: a próxima revisão é agendada.`}
+        info={`Cada conteúdo estudado volta para revisão depois de ${u.config.revisaoDias.join(', ')} dias (ajuste em Metas e planejamento). Registre as revisões na página Revisões.`}
       >
         {devidas.length === 0 ? (
           <div className="rev-vazio">
@@ -321,14 +321,7 @@ export function Inicio() {
                 const e = estadoDe(u, r.topico.id);
                 return (
                   <li key={r.topico.id}>
-                    <button
-                      className="rev-check"
-                      onClick={() => despachar({ t: 'revisao', topicoId: r.topico.id }, `Revisão de nº ${r.topico.numero} registrada.`)}
-                      aria-label={`Marcar nº ${r.topico.numero} como revisado`}
-                      title="Marcar como revisado"
-                    >
-                      <Icone nome="check" tam={13} />
-                    </button>
+                    <span className={`rev-ponto ${r.atrasoDias > 0 ? 'atrasada' : ''}`} aria-hidden="true" />
                     <div className="rev-corpo">
                       <button className="rev-titulo" onClick={() => abrirTopico(r.topico.id)} title={`${nomeDisc(r.topico.disciplinaId)} · ${e.revisoesFeitas + 1}ª revisão`}>
                         {r.topico.titulo}
@@ -343,11 +336,9 @@ export function Inicio() {
               <span className="nota">
                 {[atrasadas > 0 && `${atrasadas} ${atrasadas === 1 ? 'atrasada' : 'atrasadas'}`, devidas.length - atrasadas > 0 && `${devidas.length - atrasadas} de hoje`].filter(Boolean).join(' · ')}
               </span>
-              {devidas.length > REVISOES_NA_TELA && (
-                <button className="btn fantasma pq" onClick={() => navegar('conteudos?extra=revisao')}>
-                  Ver todas <Icone nome="direita" tam={14} />
-                </button>
-              )}
+              <button className="btn fantasma pq" onClick={() => navegar('revisoes')}>
+                {devidas.length > REVISOES_NA_TELA ? 'Ver todas' : 'Abrir revisões'} <Icone nome="direita" tam={14} />
+              </button>
             </div>
           </>
         )}

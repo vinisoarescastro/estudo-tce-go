@@ -3,8 +3,9 @@ import type { Status } from '../domain/types';
 import { STATUS, STATUS_LABEL } from '../domain/types';
 import { useApp, seed } from '../store/AppStore';
 import { decorridoMs } from '../domain/timer';
-import { estadoDe } from '../domain/progress';
-import { fmtMin } from '../domain/util';
+import { estadoDe, isConcluido } from '../domain/progress';
+import { proximaRevisao } from '../domain/revisions';
+import { fmtMin, isoDia } from '../domain/util';
 import { Modal, useAgora } from './primitives';
 
 // Janela para salvar a sessão do cronômetro. Usada no cronômetro flutuante e na tela de foco.
@@ -15,16 +16,26 @@ export function FinalizarSessao({ aberto, onFechar }: { aberto: boolean; onFecha
   const agora = useAgora(1000, aberto && !!t);
   const [notas, setNotas] = useState('');
   const [status, setStatus] = useState<Status | ''>('');
+  // Revisão: oferecida quando o conteúdo já foi estudado; já vem marcada se a revisão está vencida.
+  const estado = t?.topicoId ? estadoDe(dados.user, t.topicoId) : null;
+  const vence = estado ? proximaRevisao(estado, dados.user.config) : null;
+  const [revisao, setRevisao] = useState<boolean | null>(null);
   if (!t) return null;
+  const podeRevisar = !!estado && isConcluido((status || estado.status) as Status);
+  const marcarRevisao = podeRevisar && (revisao ?? (!!vence && vence <= isoDia()));
   const ms = decorridoMs(t, agora);
   const disc = seed.disciplinas.find((d) => d.id === t.disciplinaId);
   const top = t.topicoId ? seed.topicos.find((x) => x.id === t.topicoId) : null;
 
   const finalizar = () => {
-    if (despachar({ t: 'timerFinalizar', notas, novoStatus: status || null }, `Sessão salva: ${fmtMin(Math.round(ms / 60000))} estudados.`)) {
+    const topicoId = t.topicoId;
+    const msg = `Sessão salva: ${fmtMin(Math.round(ms / 60000))} estudados${marcarRevisao ? ' e revisão registrada' : ''}.`;
+    if (despachar({ t: 'timerFinalizar', notas, novoStatus: status || null }, msg)) {
+      if (marcarRevisao && topicoId) despachar({ t: 'revisao', topicoId });
       onFechar();
       setNotas('');
       setStatus('');
+      setRevisao(null);
     }
   };
 
@@ -46,6 +57,15 @@ export function FinalizarSessao({ aberto, onFechar }: { aberto: boolean; onFecha
             </select>
             <span className="campo-ajuda">nº {top.numero} · {top.titulo}</span>
           </div>
+        )}
+        {top && podeRevisar && (
+          <label className="check-linha">
+            <input type="checkbox" checked={marcarRevisao} onChange={(e) => setRevisao(e.target.checked)} />
+            <span>
+              Registrar a revisão deste conteúdo ({estado!.revisoesFeitas + 1}ª)
+              {vence && <span className="nota"> · {vence < isoDia() ? 'estava atrasada' : vence === isoDia() ? 'vencia hoje' : `estava agendada para ${vence.split('-').reverse().slice(0, 2).join('/')}`}</span>}
+            </span>
+          </label>
         )}
         <div className="campo">
           <label htmlFor="cr-notas">Observações <span className="nota">(opcional)</span></label>
