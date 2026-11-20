@@ -14,6 +14,7 @@ configurarLog(cfg.logNivel);
 const db = abrirBanco(cfg.arquivoBanco);
 const editais = prepararEditais(db);
 if (editais.gravados.length) log('info', 'estrutura do edital gravada no banco', { cargos: editais.gravados });
+if (editais.equivalencias) log('info', 'equivalências entre editais gravadas no banco');
 
 if (cfg.producao && !cfg.cookieSeguro) log('aviso', 'COOKIE_SECURE está desligado em produção: o login só deve trafegar por HTTPS.');
 if (contarUsuarios(db) === 0) log('aviso', 'Nenhuma conta cadastrada. Crie a primeira com: npm run usuario:criar -- --email voce@exemplo.com --cargo B02');

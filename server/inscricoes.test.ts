@@ -47,7 +47,7 @@ describe('migração 6: inscrições e dados por edital', () => {
       INSERT INTO historico VALUES (1, 'ev-inicio', 1, '${agora}', 'importacao', 'Plano criado', NULL, NULL);
     `);
 
-    expect(migrar(db)).toEqual([6]);
+    expect(migrar(db)).toEqual([6, 7]);
 
     expect(db.prepare('SELECT usuario_id, cargo_id, ativa FROM inscricoes').all()).toMatchObject([{ usuario_id: 1, cargo_id: 'B02', ativa: 1 }]);
     expect(db.prepare('SELECT versao_dados FROM usuarios').get()).toMatchObject({ versao_dados: 9 });

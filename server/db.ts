@@ -351,6 +351,21 @@ export const MIGRACOES: { versao: number; nome: string; sql: string }[] = [
       CREATE INDEX ix_sessoes_estudo_cargo ON sessoes_estudo(usuario_id, cargo_id, data);
     `,
   },
+  {
+    versao: 7,
+    nome: 'equivalências entre conteúdos de editais diferentes',
+    // Só acrescenta uma tabela de referência (como o edital): ela é regravada na inicialização a partir de
+    // src/data/equivalencias.json e não guarda nada dos usuários.
+    sql: `
+      CREATE TABLE equivalencias (
+        topico_a TEXT NOT NULL REFERENCES topicos(id),
+        topico_b TEXT NOT NULL REFERENCES topicos(id),
+        PRIMARY KEY (topico_a, topico_b),
+        CHECK (topico_a < topico_b)
+      );
+      CREATE INDEX ix_equivalencias_b ON equivalencias(topico_b);
+    `,
+  },
 ];
 
 export function abrirBanco(caminho: string): BD {

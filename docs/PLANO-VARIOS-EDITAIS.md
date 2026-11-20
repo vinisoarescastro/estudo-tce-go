@@ -1,6 +1,6 @@
 # Plano: vários editais na mesma plataforma
 
-Situação em 20/11/2026: fases 1 e 2 implementadas; fase 3 por fazer.
+Situação em 20/11/2026: as três fases implementadas.
 
 Hoje a plataforma atende um concurso (TCE-GO 2026, cargos B02 e A01). Este plano acrescenta o concurso do **IFG 2026, cargo 308 – Técnico de Laboratório/Área Química**, e permite que **uma mesma conta estude para mais de um edital**. A plataforma está em produção: nenhuma etapa pode mudar o que as contas atuais veem ou perder dados.
 
@@ -108,14 +108,15 @@ Como ficou:
 - **Interface.** Seletor de edital no menu lateral (só para quem tem mais de um), guardado no navegador por conta; a troca recarrega a página. "Editais da conta" no Gerenciar da tela de Usuários, com a coluna Editais e o filtro por edital. O acompanhamento tem um seletor de edital, e a lista mostra o edital principal.
 - **Um edital novo** herda o fuso horário da conta. Metas, data da prova e ciclo vêm dos padrões do cargo.
 
-### Fase 3: equivalências
+### Fase 3: equivalências (implementada)
 
-1. **Script de sugestão.** Reaproveita a comparação de textos de `scripts/seed.py` e gera um arquivo de pares com a pontuação de semelhança e uma coluna de decisão (aceito, recusado, corrigido).
-   - Equivalência pode ser de um para vários (um item do TCE-GO para dois do IFG).
-   - Onde se espera sobreposição: Português, Matemática/Raciocínio Lógico e talvez Informática. Química não tem par nos editais do TCE-GO.
-2. **Revisão pelo administrador.** Só os pares aceitos são gravados na tabela `equivalencias`.
-3. **Cópia do progresso** entre equivalentes, conforme as regras acima.
-4. **Marca na tela:** "também no …".
+Como ficou:
+- **Sugestão de pares.** `scripts/equivalencias/sugerir.py` compara os títulos dos conteúdos de cada par de editais, só dentro das áreas em comum: Português, Matemática e Raciocínio Lógico, Legislação e Direito, Informática e Segurança. Usa a semelhança das palavras, um título curto contido no outro e o mesmo número de lei (contando "LGPD" como a Lei 13.709). Gera `fontes/equivalencias/pares-sugeridos.xlsx`, com a coluna Decisão: os pares de força alta já vêm como "aceito"; o resto fica em branco. Rodar de novo mantém as decisões já tomadas.
+- **Revisão (20/11/2026).** Dos 155 pares sugeridos, 76 foram aceitos: os 51 itens de Conhecimentos Gerais comuns ao B02 e ao A01, um item de Constituição presente em disciplinas diferentes dos dois, 10 assuntos de Português e Constituição entre o TCE-GO e o IFG (para B02 e A01) e três leis em comum entre A01 e IFG, além da LGPD entre B02 e IFG. Critério: como o progresso é copiado nos dois sentidos, só entram pares em que estudar um cobre o outro por inteiro. Pares com um lado bem mais amplo e leis diferentes sobre o mesmo tema foram recusados. O motivo de cada decisão está na coluna Observação da planilha.
+- **Revisão e aplicação.** `scripts/equivalencias/aplicar.py` grava em `src/data/equivalencias.json` só as linhas "aceito". O servidor regrava a tabela `equivalencias` (migração 7, só acrescenta) na inicialização e recusa pares com conteúdo desconhecido ou do mesmo edital.
+- **Cópia do progresso.** Ao alterar um conteúdo, o servidor leva situação, "dominado", datas, revisões e anotações aos equivalentes nos outros editais ativos da conta, na mesma transação. A prioridade, o "pular" e as horas de estudo ficam em cada edital. Importar e reiniciar não mexem nos outros editais. A cópia não é em cadeia: vale para os pares diretos.
+- **Edital novo.** O plano de um edital acrescentado depois já começa com o progresso dos equivalentes estudados nos outros editais (o mais avançado, se houver mais de um). Editais que já existiam antes de um par ser aprovado não são acertados retroativamente: passam a andar juntos a partir da próxima alteração.
+- **Na tela.** A lista de conteúdos mostra "também no IFG 308 · Alta" (a prioridade de lá), e a ficha do conteúdo tem a seção "Também em outro edital" (`GET /api/equivalentes`).
 
 ## Cuidados em todas as fases
 

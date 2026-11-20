@@ -1,4 +1,6 @@
-import type { AppData, Seed } from '../src/domain/types';
+import type { AppData, Prioridade, Seed, Status, TopicoEstado } from '../src/domain/types';
+import { ESTADO_PADRAO } from '../src/domain/progress';
+import { prioridadeTopico } from '../src/domain/cycle';
 import { reduzir, ErroAcao, type Acao } from '../src/domain/actions';
 import { criarDados } from '../src/domain/defaults';
 import { validarAppData } from '../src/domain/validate';
@@ -6,6 +8,7 @@ import { definirFuso, isoDia, uid } from '../src/domain/util';
 import type { BD } from './sqlite';
 import { prep, transacao } from './db';
 import { carregarDados, gravarDados } from './repositorio';
+import { lerEquivalencias, type MapaEquivalencias } from './equivalencias';
 
 // Camada de negócio do servidor: aplica as mesmas ações do domínio (src/domain/actions.ts)
 // que a interface usa e grava o resultado no banco, numa transação.
@@ -30,11 +33,37 @@ interface Cache { versao: number; dados: AppData }
 // Edital em que a conta está inscrita (ativa), com o nome para a interface.
 export interface EditalConta { cargoId: string; codigo: string; nomeCurto: string; concursoId: string; principal: boolean }
 
+// Conteúdo equivalente em outro edital da conta, como a tela mostra.
+export interface EquivalenteTela { cargoId: string; topicoId: string; titulo: string; prioridade: Prioridade; status: Status }
+
+// Campos de progresso que valem para os conteúdos equivalentes. Prioridade e "pular" são de cada edital.
+type Progresso = Pick<TopicoEstado, 'status' | 'dominado' | 'notas' | 'revisoesFeitas' | 'concluidoEm' | 'ultimoEstudo'>;
+function progressoDe(e: TopicoEstado | undefined): Progresso {
+  const x = e ?? ESTADO_PADRAO;
+  return { status: x.status, dominado: x.dominado, notas: x.notas, revisoesFeitas: x.revisoesFeitas, concluidoEm: x.concluidoEm, ultimoEstudo: x.ultimoEstudo };
+}
+const mesmoProgresso = (a: Progresso, b: Progresso) =>
+  a.status === b.status && a.dominado === b.dominado && a.notas === b.notas && a.revisoesFeitas === b.revisoesFeitas && a.concluidoEm === b.concluidoEm && a.ultimoEstudo === b.ultimoEstudo;
+// Aplica o progresso sobre o estado do conteúdo no outro edital, mantendo a prioridade e o "pular" de lá.
+function comProgresso(destino: TopicoEstado | undefined, p: Progresso): TopicoEstado {
+  const e: TopicoEstado = { ...(destino ?? ESTADO_PADRAO), status: p.status, dominado: p.dominado, notas: p.notas, revisoesFeitas: p.revisoesFeitas };
+  if (p.concluidoEm) e.concluidoEm = p.concluidoEm;
+  else delete e.concluidoEm;
+  if (p.ultimoEstudo) e.ultimoEstudo = p.ultimoEstudo;
+  else delete e.ultimoEstudo;
+  return e;
+}
+const RANK_STATUS: Record<Status, number> = { nao_iniciado: 0, em_andamento: 1, estudado: 2, em_revisao: 3 };
+
 export class ServicoDados {
   // Um documento por conta e edital: a chave do cache é "usuario:cargo".
   private cache = new Map<string, Cache>();
-  // `seeds`: o edital verticalizado de cada cargo, por id do cargo.
-  constructor(private db: BD, private seeds: Record<string, Seed>) {}
+  private equivalencias: MapaEquivalencias;
+  // `seeds`: o edital verticalizado de cada cargo, por id do cargo. As equivalências entre editais são
+  // lidas do banco (gravadas por prepararEditais).
+  constructor(private db: BD, private seeds: Record<string, Seed>) {
+    this.equivalencias = lerEquivalencias(db);
+  }
 
   // Edital principal da conta (o cargo com que ela foi criada, ou o escolhido depois pelo administrador).
   principal(usuarioId: number): string {
@@ -90,6 +119,7 @@ export class ServicoDados {
       const fuso = prep(this.db, 'SELECT fuso_horario FROM configuracoes WHERE usuario_id = ? ORDER BY cargo_id = (SELECT cargo_id FROM usuarios WHERE id = ?) DESC LIMIT 1')
         .get(usuarioId, usuarioId) as { fuso_horario: string } | undefined;
       if (fuso) dados = { ...dados, user: { ...dados.user, config: { ...dados.user.config, fusoHorario: fuso.fuso_horario } } };
+      dados = this.herdarProgresso(usuarioId, cargoId, dados);
       const d = dados;
       transacao(this.db, () => {
         gravarDados(this.db, usuarioId, cargoId, null, d);
@@ -163,13 +193,102 @@ export class ServicoDados {
 
     const substitui = ACOES_SUBSTITUTIVAS.has(acao.t);
     if (substitui) antesDeSubstituir?.();
+    // Importar e reiniciar substituem o edital inteiro e não mexem nos outros editais.
+    const copias = substitui ? [] : this.copiasDeProgresso(usuarioId, cargoId, atual.dados, novo);
     const versao = transacao(this.db, () => {
       gravarDados(this.db, usuarioId, cargoId, substitui ? null : atual.dados, novo);
+      for (const c of copias) gravarDados(this.db, usuarioId, c.cargoId, c.antes, c.depois);
       prep(this.db, 'UPDATE usuarios SET versao_dados = versao_dados + 1, atualizado_em = ? WHERE id = ?').run(new Date().toISOString(), usuarioId);
       return this.versao(usuarioId);
     });
     this.cache.set(`${usuarioId}:${cargoId}`, { versao, dados: novo });
+    for (const c of copias) this.cache.set(`${usuarioId}:${c.cargoId}`, { versao, dados: c.depois });
     return { versao, alterou: true, dados: divergiu || substitui ? novo : undefined };
+  }
+
+  // Conteúdos cujo progresso mudou nesta ação, levados aos equivalentes nos outros editais ativos da conta.
+  private copiasDeProgresso(usuarioId: number, cargoId: string, antes: AppData, depois: AppData): { cargoId: string; antes: AppData; depois: AppData }[] {
+    if (!this.equivalencias.size) return [];
+    const outros = new Set(this.editais(usuarioId).map((e) => e.cargoId).filter((c) => c !== cargoId));
+    if (!outros.size) return [];
+    const porCargo = new Map<string, Map<string, Progresso>>();
+    for (const id of new Set([...Object.keys(antes.user.topicos), ...Object.keys(depois.user.topicos)])) {
+      const p = progressoDe(depois.user.topicos[id]);
+      if (mesmoProgresso(progressoDe(antes.user.topicos[id]), p)) continue;
+      for (const eq of this.equivalencias.get(id) ?? []) {
+        if (!outros.has(eq.cargoId)) continue;
+        if (!porCargo.has(eq.cargoId)) porCargo.set(eq.cargoId, new Map());
+        porCargo.get(eq.cargoId)!.set(eq.topicoId, p);
+      }
+    }
+    const copias: { cargoId: string; antes: AppData; depois: AppData }[] = [];
+    for (const [cargo, mudancas] of porCargo) {
+      const doc = this.obter(usuarioId, cargo).dados;
+      const topicos = { ...doc.user.topicos };
+      let mudou = false;
+      for (const [tid, p] of mudancas) {
+        if (mesmoProgresso(progressoDe(topicos[tid]), p)) continue;
+        topicos[tid] = comProgresso(topicos[tid], p);
+        mudou = true;
+      }
+      if (mudou) copias.push({ cargoId: cargo, antes: doc, depois: { ...doc, user: { ...doc.user, topicos } } });
+    }
+    return copias;
+  }
+
+  // Plano novo de um edital: cada conteúdo com equivalente já estudado em outro edital ativo da conta
+  // começa com esse progresso (o mais avançado, se houver mais de um).
+  private herdarProgresso(usuarioId: number, cargoId: string, dados: AppData): AppData {
+    if (!this.equivalencias.size) return dados;
+    const outros = this.editais(usuarioId).map((e) => e.cargoId).filter((c) => c !== cargoId);
+    const docs = new Map<string, AppData>();
+    for (const c of outros) {
+      const d = carregarDados(this.db, usuarioId, c);
+      if (d) docs.set(c, d);
+    }
+    if (!docs.size) return dados;
+    const topicos = { ...dados.user.topicos };
+    let mudou = false;
+    for (const t of this.seedDe(usuarioId, cargoId).topicos) {
+      let melhor: Progresso | null = null;
+      for (const eq of this.equivalencias.get(t.id) ?? []) {
+        const e = docs.get(eq.cargoId)?.user.topicos[eq.topicoId];
+        if (!e) continue;
+        const p = progressoDe(e);
+        if (!melhor || RANK_STATUS[p.status] > RANK_STATUS[melhor.status] || (RANK_STATUS[p.status] === RANK_STATUS[melhor.status] && (p.ultimoEstudo ?? '') > (melhor.ultimoEstudo ?? ''))) melhor = p;
+      }
+      if (melhor && !mesmoProgresso(progressoDe(topicos[t.id]), melhor)) {
+        topicos[t.id] = comProgresso(topicos[t.id], melhor);
+        mudou = true;
+      }
+    }
+    return mudou ? { ...dados, user: { ...dados.user, topicos } } : dados;
+  }
+
+  // Para a tela: os equivalentes de cada conteúdo do edital nos outros editais ativos da conta, com a
+  // prioridade e a situação de lá. Não cria o plano de um edital que a pessoa ainda não abriu.
+  equivalentes(usuarioId: number, cargoId: string): Record<string, EquivalenteTela[]> {
+    const outros = new Set(this.editais(usuarioId).map((e) => e.cargoId).filter((c) => c !== cargoId));
+    const out: Record<string, EquivalenteTela[]> = {};
+    if (!outros.size || !this.equivalencias.size) return out;
+    const docs = new Map<string, AppData | null>();
+    for (const t of this.seedDe(usuarioId, cargoId).topicos) {
+      for (const eq of this.equivalencias.get(t.id) ?? []) {
+        if (!outros.has(eq.cargoId)) continue;
+        if (!docs.has(eq.cargoId)) docs.set(eq.cargoId, this.lerSemCriar(usuarioId, eq.cargoId));
+        const top = this.seeds[eq.cargoId]?.topicos.find((x) => x.id === eq.topicoId);
+        if (!top) continue;
+        const user = docs.get(eq.cargoId)?.user;
+        (out[t.id] ??= []).push({
+          cargoId: eq.cargoId,
+          topicoId: eq.topicoId,
+          titulo: top.titulo,
+          prioridade: user ? prioridadeTopico(top, user) : top.prioridadePlanilha,
+          status: (user?.topicos[eq.topicoId] ?? ESTADO_PADRAO).status,
+        });
+      }
+    }
+    return out;
   }
 
   hoje(usuarioId: number, cargoId = this.principal(usuarioId)): string {

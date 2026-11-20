@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { AppData, Seed } from '../domain/types';
 import { reduzir, ErroAcao, type Acao } from '../domain/actions';
 import { definirFuso, uid } from '../domain/util';
-import { api, definirAoEditalInvalido, definirAoExpirar, definirEditalAtivo, ErroApi, type CronometroOutro, type Preferencias, type UsuarioPublico } from '../api';
+import { api, definirAoEditalInvalido, definirAoExpirar, definirEditalAtivo, ErroApi, type CronometroOutro, type Equivalente, type Preferencias, type UsuarioPublico } from '../api';
 import { POMODORO_PADRAO } from '../domain/pomodoro';
 import { definirSeed, seed } from './seed';
 import { Login } from '../pages/Login';
@@ -28,6 +28,7 @@ interface Ctx {
   editalAtivo: string; // cargo do edital aberto nesta aba
   trocarEdital: (cargoId: string) => void;
   cronometroOutro: CronometroOutro | null; // cronômetro da conta em outro edital
+  equivalentes: Record<string, Equivalente[]>; // por conteúdo deste edital, os equivalentes nos outros editais da conta
 }
 
 // O edital escolhido fica guardado neste navegador, por conta (é só uma conveniência: sem ele, abre o principal).
@@ -90,6 +91,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [prefs, setPrefs] = useState<Preferencias>(PREFS_PADRAO);
   const [editalAtivo, setEditalAtivo] = useState<string>('');
   const [cronometroOutro, setCronometroOutro] = useState<CronometroOutro | null>(null);
+  const [equivalentes, setEquivalentes] = useState<Record<string, Equivalente[]>>({});
 
   const confirmado = useRef<{ dados: AppData; versao: number } | null>(null);
   const pendentes = useRef<Pendente[]>([]);
@@ -180,12 +182,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     definirEditalAtivo(ed);
     setEditalAtivo(ed);
     try {
-      const [s, d, p] = await Promise.all([
+      const [s, d, p, eq] = await Promise.all([
         api<Seed>('/api/edital'),
         api<{ versao: number; dados: AppData; cronometroOutro: CronometroOutro | null }>('/api/dados'),
         api<Preferencias>('/api/preferencias'),
+        (u.editais?.length ?? 0) > 1 ? api<Record<string, Equivalente[]>>('/api/equivalentes') : Promise.resolve({}),
       ]);
       definirSeed(s);
+      setEquivalentes(eq);
       setCronometroOutro(d.cronometroOutro ?? null);
       if (usuarioId.current !== u.id) pendentes.current = [];
       usuarioId.current = u.id;
@@ -335,8 +339,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro } : null),
-    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro],
+    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro, equivalentes } : null),
+    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro, equivalentes],
   );
 
   if (erroCarga)

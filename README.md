@@ -245,11 +245,22 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 91 testes:
+`npm test` roda 96 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
 - **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; as migrações 3 e 5 mantêm intactos contas, edital e dados de estudo existentes; o edital do IFG é coerente com o PDF; os PDFs dos editais exigem login;
 - **API e segurança**: nada é acessível sem login; cabeçalhos de segurança; CSRF e origem; senha errada não revela se o e-mail existe; ações persistidas e versionadas; dados intactos após reiniciar; importação validada com backup; preferências; troca de senha encerra as outras sessões; bloqueio após tentativas; expiração de sessão; senhas e tokens só com hash.
+
+### Conteúdos equivalentes entre editais
+
+Quando uma conta estuda dois editais, os conteúdos equivalentes (por exemplo, crase no TCE-GO e no IFG) compartilham o progresso: situação, "dominado", datas, revisões e anotações. A prioridade e as horas continuam sendo de cada edital. A lista de pares é revisada pelo administrador:
+
+```bash
+python3 scripts/equivalencias/sugerir.py fontes/equivalencias/pares-sugeridos.xlsx   # sugere os pares (mantém decisões já tomadas)
+# revise a coluna Decisão da planilha: "aceito" ou "recusado"
+python3 scripts/equivalencias/aplicar.py fontes/equivalencias/pares-sugeridos.xlsx src/data/equivalencias.json
+npm test && npm run build   # na inicialização, o servidor grava os pares no banco
+```
 
 ### Edital do cargo IFG308 (IFG 2026, Química)
 

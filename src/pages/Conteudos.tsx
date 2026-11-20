@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import type { Prioridade, Status, Topico } from '../domain/types';
 import { PRIORIDADES, STATUS, STATUS_LABEL } from '../domain/types';
 import { useApp, seed } from '../store/AppStore';
-import { concursoDe } from '../domain/concursos';
+import { concursoDe, rotuloEdital } from '../domain/concursos';
 import { contar, estadoDe } from '../domain/progress';
 import { prioridadeTopico } from '../domain/cycle';
 import { pendentes, prereqsDe } from '../domain/deps';
@@ -184,7 +184,8 @@ export function Conteudos({ params }: { params: URLSearchParams }) {
 }
 
 function LinhaTopico({ t, min, n, onAbrir, onStatus }: { t: Topico; min: number; n: number; onAbrir: () => void; onStatus: (s: Status) => void }) {
-  const { dados } = useApp();
+  const { dados, equivalentes, usuario } = useApp();
+  const eqs = equivalentes[t.id] ?? [];
   const u = dados.user;
   const e = estadoDe(u, t.id);
   const p = prioridadeTopico(t, u);
@@ -205,6 +206,14 @@ function LinhaTopico({ t, min, n, onAbrir, onStatus }: { t: Topico; min: number;
             {n > 0 && <span><Icone nome="sessoes" tam={12} /> {fmtMin(min)}</span>}
             {e.notas && <span title={e.notas}><Icone nome="nota" tam={12} /> nota</span>}
             {t.desdobramentoPlanilha && <span title="A planilha desdobrou um trecho do edital neste item">desdobramento</span>}
+            {[...new Set(eqs.map((x) => x.cargoId))].map((c) => {
+              const deste = eqs.filter((x) => x.cargoId === c);
+              return (
+                <span key={c} className="chip" title={`Também no edital ${rotuloEdital(usuario.editais, c)}: ${deste.map((x) => `“${x.titulo}” (prioridade ${x.prioridade} lá)`).join('; ')}. O progresso é compartilhado.`}>
+                  <Icone nome="link" tam={12} /> também no {rotuloEdital(usuario.editais, c)} · {deste[0].prioridade}
+                </span>
+              );
+            })}
             {t.ref.confianca !== 'alta' && <span className="chip chip-aviso" title="A correspondência com o trecho do edital é parcial">confira a referência</span>}
             {alerta && <span className="sr">Atenção: conteúdo de prioridade alta depende de conteúdo não estudado.</span>}
           </span>

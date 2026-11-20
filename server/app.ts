@@ -155,6 +155,7 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
         return { versao: c.versao, dados: c.dados, cronometroOutro };
       },
     },
+    { metodo: 'GET', caminho: '/api/equivalentes', privada: true, h: (r) => servico.equivalentes(r.usuario!.id, editalAtivo(r)) },
     {
       metodo: 'POST', caminho: '/api/acoes', privada: true, limite: 25 * 1024 * 1024,
       h: (r, corpo) => servico.aplicar(r.usuario!.id, editalAtivo(r), corpo ?? {}, backupAntesDeSubstituir),

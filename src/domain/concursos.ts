@@ -68,6 +68,12 @@ export function concursoDe(seed: Pick<Seed, 'cargo'> | null | undefined): Concur
   return CONCURSOS[seed?.cargo?.concursoId ?? CONCURSO_PADRAO] ?? CONCURSOS[CONCURSO_PADRAO];
 }
 
+// Rótulo curto de um edital da conta, como "IFG 308" ou "TCE-GO B02".
+export function rotuloEdital(editais: { cargoId: string; codigo: string; concursoId: string }[], cargoId: string): string {
+  const e = editais.find((x) => x.cargoId === cargoId);
+  return e ? `${CONCURSOS[e.concursoId]?.sigla ?? e.concursoId} ${e.codigo}` : cargoId;
+}
+
 // PDFs servidos só para quem entrou. "edital.pdf" é o endereço antigo do edital do TCE-GO.
 export const PDF_LEGADO = 'edital.pdf';
 export const PDFS_EDITAIS = Object.values(CONCURSOS).map((c) => c.pdf);

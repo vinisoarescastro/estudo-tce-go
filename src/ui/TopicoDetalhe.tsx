@@ -8,12 +8,12 @@ import { proximaRevisao } from '../domain/revisions';
 import { fmtDia, fmtMin, isoDia } from '../domain/util';
 import { Icone, Info, LinkEdital, Modal, NucleoTag, PrioridadeSeletor, PrioridadeTag, StatusPill, StatusSeletor } from './primitives';
 import { useUi } from './UiContext';
-import { concursoDe } from '../domain/concursos';
+import { concursoDe, rotuloEdital } from '../domain/concursos';
 
 // Ficha do conteúdo, aberta como painel lateral: referência, situação, prioridade,
 // pré-requisitos, sessões e observações.
 export function TopicoDetalhe({ id, onFechar }: { id: string | null; onFechar: () => void }) {
-  const { dados, despachar } = useApp();
+  const { dados, despachar, equivalentes, usuario } = useApp();
   const { abrirSessao, iniciarEstudo, abrirTopico, confirmar, navegar } = useUi();
   const u = dados.user;
   const t = id ? seed.topicos.find((x) => x.id === id) : null;
@@ -109,6 +109,23 @@ export function TopicoDetalhe({ id, onFechar }: { id: string | null; onFechar: (
           </h3>
           <PrioridadeSeletor valor={e.prioridade} padrao={t.prioridadePlanilha} onChange={(p) => despachar({ t: 'prioridade', topicoId: t.id, valor: p })} id="det-prio" />
         </section>
+
+        {(equivalentes[t.id] ?? []).length > 0 && (
+          <section className="ficha-secao">
+            <h3>
+              Também em outro edital
+              <Info>Conteúdos equivalentes nos outros editais da sua conta. Situação, “dominado”, datas, revisões e anotações valem para os dois: o que você marca aqui aparece lá. A prioridade e as horas de estudo são de cada edital.</Info>
+            </h3>
+            <ul className="lista-equivalentes">
+              {equivalentes[t.id].map((x) => (
+                <li key={`${x.cargoId}:${x.topicoId}`}>
+                  <span className="chip">{rotuloEdital(usuario.editais, x.cargoId)}</span> {x.titulo}
+                  <span className="nota"> · prioridade lá: <PrioridadeTag p={x.prioridade} /></span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="ficha-secao">
           <h3>Pré-requisitos</h3>

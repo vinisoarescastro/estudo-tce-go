@@ -75,6 +75,9 @@ export interface EditalConta {
   principal: boolean;
 }
 
+// Conteúdo equivalente em outro edital da conta: o progresso é compartilhado; a prioridade é a de lá.
+export interface Equivalente { cargoId: string; topicoId: string; titulo: string; prioridade: 'Urgente' | 'Alta' | 'Média' | 'Baixa'; status: 'nao_iniciado' | 'em_andamento' | 'estudado' | 'em_revisao' }
+
 // Cronômetro da conta em outro edital (a conta tem um só cronômetro).
 export interface CronometroOutro { cargoId: string; nomeCurto: string; rodando: boolean }
 

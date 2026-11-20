@@ -1160,6 +1160,7 @@ main { min-width: 0; padding-bottom: 96px; outline: none; }
 /* Gerenciamento de contas e aviso de senha provisória */
 .aviso-senha { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; padding: 10px 14px; border-radius: var(--r); background: var(--alerta-suave); color: var(--alerta); font-size: 13.5px; font-weight: 500; }
 .aviso-senha a { color: inherit; text-decoration: underline; }
+.lista-equivalentes { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
 .lista-editais { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 1px solid var(--linha); border-radius: var(--r); }
 .lista-editais li { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 12px; }
 .lista-editais li + li { border-top: 1px solid var(--linha); }

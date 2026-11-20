@@ -305,7 +305,7 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO sessoes_estudo (usuario_id, id, seq, data, disciplina_id, topico_id, planejado_min, realizado_min, origem, criado_em, atualizado_em)
         VALUES (1, 's1', 1, '2026-10-01', 'lp', 't001', 60, 50, 'manual', '${agora}', '${agora}');`);
 
-    expect(migrar(db)).toEqual([3, 4, 5, 6]);
+    expect(migrar(db)).toEqual([3, 4, 5, 6, 7]);
 
     expect(db.prepare('SELECT email, cargo_id, senha_provisoria, versao_dados FROM usuarios').get()).toMatchObject({ email: 'antigo@exemplo.com', cargo_id: 'B02', senha_provisoria: 0, versao_dados: 7 });
     expect(db.prepare('SELECT cargo_id FROM disciplinas').all()).toMatchObject([{ cargo_id: 'B02' }]);
@@ -370,7 +370,7 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO nucleos VALUES ('CG', 'Conhecimentos Gerais', 'Núcleo comum', 'desc CG', 19, 0);
       INSERT INTO disciplinas (id, nome, nome_curto, nucleo_id, ordem_edital, paginas, texto_oficial, ordem) VALUES ('lp', 'Língua Portuguesa', 'LP', 'CG', 1, '[19]', 'texto', 0);
       INSERT INTO topicos VALUES ('t001', 1, 'lp', 'Redação Oficial', 0, 'Média', 'x', 'Não estudado', 0);`);
-    expect(migrar(db)).toEqual([5, 6]);
+    expect(migrar(db)).toEqual([5, 6, 7]);
     expect(db.prepare('SELECT id, nome, concurso_id, seed_versao FROM cargos').all()).toMatchObject([{ id: 'B02', nome: 'TI', concurso_id: 'tce-go-2026', seed_versao: 1 }]);
     expect(db.prepare('SELECT id, titulo FROM topicos').all()).toMatchObject([{ id: 't001', titulo: 'Redação Oficial' }]);
     // O edital do IFG entra sem tocar no B02.
