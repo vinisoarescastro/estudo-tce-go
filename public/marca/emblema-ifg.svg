@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 308 416" role="img" aria-label="IFG">
+  <circle cx="45" cy="45" r="45" fill="#cd191e"/>
+  <g fill="#2f9e41">
+    <rect x="109" y="0" width="90" height="90" rx="8"/><rect x="218" y="0" width="90" height="90" rx="8"/>
+    <rect x="0" y="109" width="90" height="90" rx="8"/><rect x="109" y="109" width="90" height="90" rx="8"/>
+    <rect x="0" y="218" width="90" height="90" rx="8"/><rect x="109" y="218" width="90" height="90" rx="8"/><rect x="218" y="218" width="90" height="90" rx="8"/>
+    <rect x="0" y="327" width="90" height="90" rx="8"/><rect x="109" y="327" width="90" height="90" rx="8"/>
+  </g>
+</svg>

@@ -54,6 +54,8 @@ export const CONCURSOS: Record<string, Concurso> = {
     paginasConteudo: 'pp. 31 e 33',
     refProva: 'Tabela 11.1, itens 11.3, 11.4, 12.20 e 14.3 e Anexo I',
     dataProvaRef: 'Anexo I, cronograma previsto',
+    emblema: 'marca/emblema-ifg.svg',
+    favicon: 'marca/favicon-ifg.svg',
     itensNumerados: true,
     limitacoes: [
       'Em Legislação, a planilha numera as normas na própria ordem: o edital agrupa a Constituição no item 1 e deixa as últimas leis sem número.',
