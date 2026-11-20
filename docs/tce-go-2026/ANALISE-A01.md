@@ -5,8 +5,8 @@ Cargo **A01 · Técnico de Controle Externo, especialidade Técnico Administrati
 ## O que foi feito
 
 1. **Conteúdo programático**: o texto de cada disciplina foi extraído do Anexo II (páginas 19 e 20 do edital) e dividido em conteúdos de estudo. Cada título traz os subtópicos oficiais após os dois-pontos (por exemplo, *Direitos e garantias fundamentais: direitos e deveres individuais e coletivos*). Cada conteúdo guarda o **trecho literal** do edital que o fundamenta e a página.
-2. **Provas FCC**: foram lidas **9 provas** (545 questões distintas), listadas em [scripts/a01/PROVAS.md](../scripts/a01/PROVAS.md). A mais próxima é a do **TCE-GO 2009 para o mesmo cargo** (Técnico de Controle Externo, Técnica Administrativa); as outras são do TCE-GO 2014 (analistas das áreas Administrativa, Orçamento e Finanças, Contabilidade, Gestão de Pessoas e Planejamento), TCE-CE 2015 (técnico), TCE-SP 2012 e TCE-PR 2011.
-3. **Contagem**: o texto de cada questão foi comparado com expressões de palavras-chave de cada conteúdo (`scripts/a01/taxonomia.py`). O resultado por conteúdo (questões e provas em que apareceu) está em `fontes/a01/analise-fcc.json` e aparece no campo *Incidência* de cada conteúdo na plataforma.
+2. **Provas FCC**: foram lidas **9 provas** (545 questões distintas), listadas em [scripts/a01/PROVAS.md](../../scripts/a01/PROVAS.md). A mais próxima é a do **TCE-GO 2009 para o mesmo cargo** (Técnico de Controle Externo, Técnica Administrativa); as outras são do TCE-GO 2014 (analistas das áreas Administrativa, Orçamento e Finanças, Contabilidade, Gestão de Pessoas e Planejamento), TCE-CE 2015 (técnico), TCE-SP 2012 e TCE-PR 2011.
+3. **Contagem**: o texto de cada questão foi comparado com expressões de palavras-chave de cada conteúdo (`scripts/a01/taxonomia.py`). O resultado por conteúdo (questões e provas em que apareceu) está em `fontes/tce-go-2026/a01/analise-fcc.json` e aparece no campo *Incidência* de cada conteúdo na plataforma.
 4. **Prioridade**: regra única, aplicada igualmente a todos os conteúdos.
 
 | Prioridade | Regra |
@@ -53,4 +53,4 @@ Itens que **estreiam no edital 2026** ou mudaram de norma (Lei 14.133/2021, NBAS
 
 ## Como atualizar
 
-Se uma retificação do edital ou novas provas mudarem o quadro, refaça a análise pelos comandos de [scripts/a01/PROVAS.md](../scripts/a01/PROVAS.md) e aumente `seedVersion` em `scripts/a01/seed_a01.py`. O progresso dos usuários guarda só ids de conteúdo (`a001` a `a191`); manter a ordem dos itens em `taxonomia.py` preserva o progresso.
+Se uma retificação do edital ou novas provas mudarem o quadro, refaça a análise pelos comandos de [scripts/a01/PROVAS.md](../../scripts/a01/PROVAS.md) e aumente `seedVersion` em `scripts/a01/seed_a01.py`. O progresso dos usuários guarda só ids de conteúdo (`a001` a `a191`); manter a ordem dos itens em `taxonomia.py` preserva o progresso.

@@ -50,7 +50,7 @@ A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (co
 | Cargo | Edital verticalizado |
 |---|---|
 | **B02** · Técnico de Controle Externo, Tecnologia da Informação | 14 disciplinas, 253 conteúdos |
-| **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/ANALISE-A01.md)) |
+| **A01** · Técnico de Controle Externo, Técnico Administrativo | 14 disciplinas, 191 conteúdos ([metodologia e fontes](docs/tce-go-2026/ANALISE-A01.md)) |
 
 - **O cargo é fixo e definido na criação da conta.** Cada conta só enxerga o edital e os dados do seu cargo; o servidor recusa ids de outro cargo e não existe forma de trocar o cargo depois.
 - **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador também acompanha o progresso de cada conta (números agregados: % do edital, horas, último estudo, ritmo, disciplinas e pendências prioritárias), sem acesso a notas nem ao texto das sessões.
@@ -248,7 +248,7 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Edital do cargo A01
 
-O edital verticalizado do A01 é gerado por `scripts/a01/` (taxonomia, contagem de questões das provas FCC e geração do seed). Método, fontes e limites estão em [docs/ANALISE-A01.md](docs/ANALISE-A01.md).
+O edital verticalizado do A01 é gerado por `scripts/a01/` (taxonomia, contagem de questões das provas FCC e geração do seed). Método, fontes e limites estão em [docs/tce-go-2026/ANALISE-A01.md](docs/tce-go-2026/ANALISE-A01.md).
 
 ### Atualizar o edital ou a planilha (B02)
 
@@ -257,7 +257,7 @@ Se sair uma retificação do edital ou uma nova versão da planilha:
 ```bash
 # requer Python 3, openpyxl e pdftotext (poppler-utils)
 python3 scripts/anexo.py anexo.json public/edital.pdf
-python3 scripts/seed.py anexo.json fontes/edital_verticalizado_b02_v2.xlsx src/data/seed.json
+python3 scripts/seed.py anexo.json fontes/tce-go-2026/edital_verticalizado_b02_v2.xlsx src/data/seed.json
 npm test && npm run build   # na inicialização, o servidor grava a nova versão do edital no banco
 ```
 

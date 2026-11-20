@@ -1,6 +1,6 @@
 """Gera src/data/seed-a01.json: edital verticalizado do cargo A01 (Técnico Administrativo).
 
-Uso: python scripts/a01/seed_a01.py public/edital.pdf fontes/a01/analise-fcc.json src/data/seed-a01.json
+Uso: python scripts/a01/seed_a01.py public/edital.pdf fontes/tce-go-2026/a01/analise-fcc.json src/data/seed-a01.json
 
 Entradas
   - edital.pdf: Edital 01/2026 (texto oficial do Anexo II, páginas 19 e 20)
