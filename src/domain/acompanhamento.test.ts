@@ -41,6 +41,7 @@ describe('acompanhamento do administrador', () => {
     const u = base();
     const prio = seed.topicos.slice(0, 8);
     for (const t of prio) u.topicos[t.id] = { status: 'estudado', dominado: false, notas: 'privada', revisoesFeitas: 0, concluidoEm: '2026-11-05', ultimoEstudo: '2026-11-05' };
+    u.sessoes = [sessao('2026-09-01', 60)]; // estuda há mais de 4 semanas: a janela do ritmo é de 28 dias
     const r = resumir(seed, u, HOJE);
     expect(r.concluidos).toBe(8);
     expect(r.ritmoSemanal).toBe(2); // 8 conteúdos em 4 semanas

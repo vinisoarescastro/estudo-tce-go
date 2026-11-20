@@ -6,8 +6,10 @@ import { ativos, prioridadeTopico, proximoItem } from '../domain/cycle';
 import { candidatos, proximoTopico } from '../domain/recommend';
 import { prereqsDe } from '../domain/deps';
 import { somaMin } from '../domain/stats';
-import { diffDias, fmtDia, fmtMin, fmtPct, inicioSemana, isoDia, parseDia } from '../domain/util';
-import { Barra, Icone, useAgora, LinkEdital, NucleoTag, Painel, PrioridadeTag, StatusPill, Vazio } from '../ui/primitives';
+import { calcularRitmo, RETA_FINAL_DIAS, type Ritmo } from '../domain/ritmo';
+import { proximaRevisao, revisoesDevidas } from '../domain/revisions';
+import { diffDias, fmtDia, fmtMin, fmtPct, inicioSemana, isoDia, parseDia, somarDias } from '../domain/util';
+import { Barra, Icone, Info, useAgora, LinkEdital, NucleoTag, Painel, PrioridadeTag, StatusPill, Vazio } from '../ui/primitives';
 import { useUi } from '../ui/UiContext';
 import { Avatar } from '../ui/Avatar';
 
@@ -30,6 +32,65 @@ function sortearFrase(): number {
 
 const INICIAL = 4;
 const PASSO = 5;
+// Revisões listadas na Início: em tela larga a lista rola dentro do painel; em tela estreita, só as primeiras.
+const REVISOES_NA_TELA = 20;
+const REVISOES_TELA_ESTREITA = 5; // o CSS esconde as demais abaixo de 1240 px
+
+const num = (x: number) => x.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+const dias = (n: number) => `${n} ${n === 1 ? 'dia' : 'dias'}`;
+
+// Ritmo para terminar o edital até a data-alvo (alguns dias antes da prova). Ver domain/ritmo.ts.
+// Uma meta do dia, a conta que leva a ela e, a partir do 7º dia, a previsão no ritmo atual.
+function PainelRitmo({ r }: { r: Ritmo }) {
+  const curta = (d: string) => fmtDia(d, { day: 'numeric', month: 'short' }).replace('.', '');
+  let titulo: React.ReactNode;
+  let conta: React.ReactNode = null;
+  let previsao: React.ReactNode = null;
+  if (r.situacao === 'sem-prova') {
+    titulo = 'Sem data da prova';
+    conta = <>Cadastre a data em <a href="#/config/metas">Metas e planejamento</a> para ver quantos conteúdos estudar por dia.</>;
+  } else if (r.situacao === 'concluido') {
+    titulo = 'Edital concluído';
+    conta = <>Todos os {r.total} conteúdos estudados. Até a prova, o foco é revisar.</>;
+  } else if (r.situacao === 'prazo-encerrado') {
+    titulo = 'Reta final';
+    conta = <>Faltam {r.restantes} conteúdos. Priorize as revisões e o que for Urgente.</>;
+  } else {
+    const feita = r.concluidosHoje >= r.metaHoje!;
+    titulo = feita ? <>Meta de hoje cumprida: {r.concluidosHoje} de {r.metaHoje} conteúdos</> : <>Meta de hoje: <b>{r.metaHoje} {r.metaHoje === 1 ? 'conteúdo' : 'conteúdos'}</b></>;
+    conta = <>{r.restantes + r.concluidosHoje} conteúdos ÷ {dias(r.diasDisponiveis!)} até {curta(r.dataAlvo!)} = {num(r.necessarioDia!)} por dia</>;
+    // Atrasado: até onde chega na data-alvo, que diz mais do que uma data de término distante.
+    const chegaA = Math.min(1, (r.concluidos + r.atualDia * Math.max(0, r.diasDisponiveis! - 1)) / r.total);
+    previsao = r.projecaoData
+      ? r.folgaDias! >= 0
+        ? <span className="ritmo-ok">No seu ritmo ({num(r.atualDia)}/dia), você termina em {curta(r.projecaoData)}, {dias(r.folgaDias!)} antes do previsto.</span>
+        : <span className="ritmo-atras">No seu ritmo ({num(r.atualDia)}/dia), você chega a {fmtPct(chegaA)} do edital até {curta(r.dataAlvo!)}.</span>
+      : r.historicoDias < 7 ? <>A previsão de término aparece no 7º dia de estudo.</> : <>Sem conteúdos concluídos nas últimas semanas para prever o término.</>;
+  }
+  const meta = r.metaHoje !== null && (r.situacao === 'ok' || r.situacao === 'atras' || r.situacao === 'sem-ritmo');
+  return (
+    <section className="ritmo" aria-label="Ritmo para o edital">
+      <span className="ritmo-ic" aria-hidden="true"><Icone nome="alvo" tam={20} /></span>
+      <div className="ritmo-txt">
+        <p className="ritmo-titulo">
+          {titulo}
+          <Info>
+            Quanto falta, dividido pelos dias até {RETA_FINAL_DIAS} dias antes da prova (a reta final fica para revisar). Conteúdos
+            concluídos hoje não mudam a conta do dia. A previsão usa a média de conteúdos concluídos por dia nas últimas 4 semanas.
+          </Info>
+        </p>
+        <p className="ritmo-conta">{conta}</p>
+        {previsao && <p className="ritmo-previsao">{previsao}</p>}
+      </div>
+      {meta && (
+        <div className="ritmo-hoje" aria-label={`Concluídos hoje: ${r.concluidosHoje} de ${r.metaHoje}`}>
+          <span><b>{r.concluidosHoje}</b> de {r.metaHoje} hoje</span>
+          <Barra valor={r.concluidosHoje / r.metaHoje!} rotulo="Conteúdos concluídos hoje" tom={r.concluidosHoje >= r.metaHoje! ? 'ok' : undefined} />
+        </div>
+      )}
+    </section>
+  );
+}
 
 // Página inicial: os quatro indicadores essenciais, o próximo estudo do ciclo e o que vem depois.
 export function Inicio() {
@@ -47,6 +108,15 @@ export function Inicio() {
   const semanaMin = somaMin(u.sessoes.filter((s) => s.data >= inicioSemana(hoje) && s.data <= hoje));
   const prova = u.config.dataProva;
   const faltam = prova ? diffDias(hoje, prova) : null;
+  const ritmo = calcularRitmo(seed.topicos, u, hoje);
+
+  // Revisões: as vencidas (mais atrasadas primeiro) e quantas vencem nos próximos 7 dias.
+  const devidas = revisoesDevidas(seed.topicos, u, hoje);
+  const daqui7 = somarDias(hoje, 7);
+  const futuras = seed.topicos.map((t) => proximaRevisao(estadoDe(u, t.id), u.config)).filter((v): v is string => !!v && v > hoje);
+  const proximas7 = futuras.filter((v) => v <= daqui7).length;
+  const proximaData = futuras.length ? futuras.reduce((a, b) => (b < a ? b : a)) : null;
+  const nomeDisc = (id: string) => seed.disciplinas.find((d) => d.id === id)?.nomeCurto ?? id;
 
   // Próximo estudo: posição atual do ciclo + regras de pré-requisito e prioridade
   const at = ativos(u.ciclo);
@@ -123,6 +193,9 @@ export function Inicio() {
         </div>
       </section>
 
+      <PainelRitmo r={ritmo} />
+
+      <div className="inicio-duo">
       <section className="prox" aria-labelledby="pe-t">
         <header className="prox-cab">
           <h2 id="pe-t" className="prox-rotulo">Próximo estudo</h2>
@@ -156,30 +229,32 @@ export function Inicio() {
                   <p className="nota">Todos os conteúdos desta disciplina estão concluídos. Use a sessão para revisar ou resolver questões.</p>
                 )}
               </div>
-              <div className="prox-acoes">
+            </div>
+            <div className="prox-barra">
+              <div className="prox-barra-principal">
                 {u.timer ? (
-                  <>
-                    <p className="em-andamento"><span className="ponto" aria-hidden="true" /> Sessão em andamento no cronômetro.</p>
-                    <button className="btn primario grande" onClick={() => navegar('foco')}>
-                      <Icone nome="alvo" tam={15} /> Voltar ao foco
-                    </button>
-                  </>
+                  <button className="btn primario grande" onClick={() => navegar('foco')}>
+                    <Icone nome="alvo" tam={15} /> Voltar ao foco
+                  </button>
                 ) : (
                   <button className="btn primario grande" onClick={() => iniciarEstudo({ disciplinaId: prox.disciplinaId, topicoId: rec?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos })}>
                     <Icone nome="play" tam={14} /> Estudar agora
                   </button>
                 )}
-                <button className="btn" onClick={() => abrirSessao({ disciplinaId: prox.disciplinaId, topicoId: rec?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos, realizadoMin: prox.minutos })}>
+                <button className="btn grande" onClick={() => abrirSessao({ disciplinaId: prox.disciplinaId, topicoId: rec?.topico.id ?? null, cicloItemId: prox.id, planejadoMin: prox.minutos, realizadoMin: prox.minutos })}>
                   Registrar sessão
                 </button>
-                {rec && podePular && (
-                  <button className="btn fantasma" title="Continua pendente e volta na próxima vez que esta disciplina cair" onClick={() => despachar({ t: 'topicoPular', topicoId: rec.topico.id }, `nº ${rec.topico.numero} pulado: volta na próxima vez que a disciplina cair.`)}>
-                    <Icone nome="pular" tam={15} /> Pular este conteúdo
+                {u.timer && <span className="em-andamento"><span className="ponto" aria-hidden="true" /> Cronômetro em andamento</span>}
+              </div>
+              <div className="prox-barra-sec">
+                {rec && !isConcluido(estadoDe(u, rec.topico.id).status) && (
+                  <button className="btn fantasma pq prox-feito" onClick={() => despachar({ t: 'status', topicoId: rec.topico.id, status: 'estudado' }, `nº ${rec.topico.numero} marcado como estudado.`)}>
+                    <Icone nome="check" tam={14} /> Marcar como estudado
                   </button>
                 )}
-                {rec && !isConcluido(estadoDe(u, rec.topico.id).status) && (
-                  <button className="btn fantasma" onClick={() => despachar({ t: 'status', topicoId: rec.topico.id, status: 'estudado' }, `nº ${rec.topico.numero} marcado como estudado.`)}>
-                    <Icone nome="check" tam={15} /> Marcar como estudado
+                {rec && podePular && (
+                  <button className="btn fantasma pq" title="Continua pendente e volta na próxima vez que esta disciplina cair" onClick={() => despachar({ t: 'topicoPular', topicoId: rec.topico.id }, `nº ${rec.topico.numero} pulado: volta na próxima vez que a disciplina cair.`)}>
+                    <Icone nome="pular" tam={14} /> Pular
                   </button>
                 )}
               </div>
@@ -222,6 +297,52 @@ export function Inicio() {
           </>
         )}
       </section>
+
+      <div className="revisoes-col">
+      <Painel
+        className="revisoes-painel"
+        titulo={<>Revisões {devidas.length > 0 && <span className="contador contador-alerta">{devidas.length}</span>}</>}
+        info={`Cada conteúdo estudado volta para revisão depois de ${u.config.revisaoDias.join(', ')} dias (ajuste em Metas e planejamento). “Revisei” registra a revisão de hoje e agenda a próxima.`}
+        acoes={devidas.length > 0 ? <button className="btn fantasma pq" onClick={() => navegar('conteudos?extra=revisao')}>Ver todas <Icone nome="direita" tam={14} /></button> : undefined}
+      >
+        {devidas.length === 0 ? (
+          <Vazio icone="check">
+            Nenhuma revisão para hoje.
+            {proximaData && <> Próxima: {proximaData === somarDias(hoje, 1) ? 'amanhã' : fmtDia(proximaData, { day: 'numeric', month: 'long' })}.</>}
+          </Vazio>
+        ) : (
+          <ul className="lista revisoes-hoje">
+            {devidas.slice(0, REVISOES_NA_TELA).map((r) => {
+              const e = estadoDe(u, r.topico.id);
+              return (
+                <li key={r.topico.id}>
+                  <div className="rev-corpo">
+                    <button className="link link-sutil rev-titulo" onClick={() => abrirTopico(r.topico.id)}>
+                      <span className="num-item">nº {r.topico.numero}</span>{r.topico.titulo}
+                    </button>
+                    <span className="rev-meta" title={`${nomeDisc(r.topico.disciplinaId)} · ${e.revisoesFeitas + 1}ª revisão`}>
+                      <span className={r.atrasoDias > 0 ? 'rev-atraso' : ''}>{r.atrasoDias > 0 ? `atrasada ${dias(r.atrasoDias)}` : 'vence hoje'}</span>
+                      {' · '}{e.revisoesFeitas + 1}ª revisão · {nomeDisc(r.topico.disciplinaId)}
+                    </span>
+                  </div>
+                  <button className="btn pq" onClick={() => despachar({ t: 'revisao', topicoId: r.topico.id }, `Revisão de nº ${r.topico.numero} registrada.`)}>
+                    <Icone nome="check" tam={14} /> Revisei
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {(devidas.length > 0 || proximas7 > 0) && (
+          <p className="nota revisoes-rodape">
+            {devidas.length > REVISOES_NA_TELA && <span className="rev-mostrando-largo">Mostrando {REVISOES_NA_TELA} de {devidas.length} vencidas. </span>}
+            {devidas.length > REVISOES_TELA_ESTREITA && <span className="rev-mostrando-estreito">Mostrando as {REVISOES_TELA_ESTREITA} mais atrasadas de {devidas.length}. </span>}
+            {proximas7 > 0 ? `Próximos 7 dias: ${proximas7} ${proximas7 === 1 ? 'revisão' : 'revisões'}.` : 'Nenhuma revisão nos próximos 7 dias.'}
+          </p>
+        )}
+      </Painel>
+      </div>
+      </div>
 
       <Painel
         titulo="Na sequência do ciclo"

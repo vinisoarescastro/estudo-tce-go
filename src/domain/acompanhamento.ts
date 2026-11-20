@@ -4,6 +4,7 @@ import { prioridadeTopico } from './cycle';
 import { revisoesDevidas } from './revisions';
 import { filtrarSessoes, somaMin } from './stats';
 import { diffDias, inicioSemana, somarDias } from './util';
+import { calcularRitmo } from './ritmo';
 
 // Acompanhamento do administrador: números agregados do progresso de uma conta. Nunca inclui notas dos
 // conteúdos nem o texto das sessões; só contagens, datas e minutos.
@@ -26,11 +27,11 @@ export interface ResumoAcompanhamento {
   revisoesAtrasadas: number;
   dataProva: string;
   diasAteProva: number | null;
-  /** Conteúdos concluídos por semana, na média das últimas 4 semanas. */
+  /** Conteúdos concluídos por semana, na média das últimas 4 semanas (ou desde o primeiro estudo, se for recente). */
   ritmoSemanal: number;
   /** Dias para concluir o que falta no ritmo atual (null se o ritmo é zero). */
   projecaoDias: number | null;
-  /** 'ok' se a projeção cabe nos dias que faltam; 'atras' se não cabe; null sem dados. */
+  /** 'ok' se a projeção cabe até a data-alvo (a prova menos a reta final); 'atras' se não cabe; null sem dados. Ver ritmo.ts. */
   situacao: 'ok' | 'atras' | 'sem-ritmo' | 'sem-prova' | null;
 }
 
@@ -76,21 +77,12 @@ export function resumir(seed: Seed, user: UserData, hoje: string): ResumoAcompan
   const diasEstudados = new Set(sessoes.filter((s) => s.data >= sete && s.realizadoMin > 0).map((s) => s.data)).size;
   const ultimo = sessoes.reduce<string | null>((a, s) => (s.realizadoMin > 0 && (!a || s.data > a) ? s.data : a), null);
 
-  const quatroSem = somarDias(hoje, -27);
-  const concluidosRecentes = seed.topicos.filter((t) => {
-    const e = estadoDe(user, t.id);
-    return isConcluido(e.status) && e.concluidoEm && e.concluidoEm >= quatroSem && e.concluidoEm <= hoje;
-  }).length;
-  const ritmo = concluidosRecentes / 4;
-  const restantes = c.total - c.concluidos;
+  // Mesmo cálculo de ritmo da página inicial da pessoa.
+  const r = calcularRitmo(seed.topicos, user, hoje);
   const prova = user.config.dataProva;
   const diasAteProva = prova ? diffDias(hoje, prova) : null;
-  const projecao = ritmo > 0 ? Math.ceil((restantes / ritmo) * 7) : null;
-  let situacao: ResumoAcompanhamento['situacao'] = null;
-  if (restantes === 0) situacao = 'ok';
-  else if (diasAteProva === null || diasAteProva < 0) situacao = 'sem-prova';
-  else if (projecao === null) situacao = 'sem-ritmo';
-  else situacao = projecao <= diasAteProva ? 'ok' : 'atras';
+  const situacao: ResumoAcompanhamento['situacao'] =
+    r.situacao === 'concluido' || r.situacao === 'ok' ? 'ok' : r.situacao === 'atras' || r.situacao === 'prazo-encerrado' ? 'atras' : r.situacao;
 
   return {
     totalConteudos: c.total,
@@ -108,8 +100,8 @@ export function resumir(seed: Seed, user: UserData, hoje: string): ResumoAcompan
     revisoesAtrasadas: revisoesDevidas(seed.topicos, user, hoje).length,
     dataProva: prova,
     diasAteProva,
-    ritmoSemanal: ritmo,
-    projecaoDias: projecao,
+    ritmoSemanal: r.atualDia * 7,
+    projecaoDias: r.projecaoDias,
     situacao,
   };
 }

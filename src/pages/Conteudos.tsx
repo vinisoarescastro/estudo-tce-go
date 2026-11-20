@@ -25,8 +25,8 @@ export function Conteudos({ params }: { params: URLSearchParams }) {
   const [disc, setDisc] = useState(params.get('d') ?? '');
   const [status, setStatus] = useState<Status | ''>('');
   const [prio, setPrio] = useState<Prioridade | ''>('');
-  const [extra, setExtra] = useState<Extra>('');
-  const [maisFiltros, setMaisFiltros] = useState(false);
+  const [extra, setExtra] = useState<Extra>((params.get('extra') as Extra) ?? '');
+  const [maisFiltros, setMaisFiltros] = useState(!!params.get('extra'));
   const [abertas, setAbertas] = useState<Set<string>>(() => new Set(params.get('d') ? [params.get('d')!] : []));
 
   const minPorTopico = useMemo(() => porTopico(u.sessoes), [u.sessoes]);
