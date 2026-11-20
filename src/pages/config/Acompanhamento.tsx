@@ -5,6 +5,7 @@ import type { DetalheAcompanhamento, ResumoAcompanhamento } from '../../domain/a
 import { fmtDia, fmtMin, fmtPct } from '../../domain/util';
 import { Barras } from '../../ui/charts';
 import { Barra, Cabecalho, Icone, Painel } from '../../ui/primitives';
+import { CONCURSOS } from '../../domain/concursos';
 
 export type Resumo = ResumoAcompanhamento;
 
@@ -60,7 +61,9 @@ export function PaginaAcompanhamento({ id }: { id: number }) {
   const { usuario } = useApp();
   const [conta, setConta] = useState<ContaBasica | null>(null);
   const [cargoNome, setCargoNome] = useState('');
-  const [dados, setDados] = useState<{ resumo: Resumo | null; detalhe: DetalheAcompanhamento | null } | null>(null);
+  type EditalDet = { cargoId: string; codigo: string; nomeCurto: string; concursoId: string; principal: boolean };
+  const [dados, setDados] = useState<{ cargoId: string; editais: EditalDet[]; resumo: Resumo | null; detalhe: DetalheAcompanhamento | null } | null>(null);
+  const [cargoSel, setCargoSel] = useState('');
   const [erro, setErro] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [atualizadoEm, setAtualizadoEm] = useState<Date | null>(null);
@@ -72,18 +75,18 @@ export function PaginaAcompanhamento({ id }: { id: number }) {
     setErro(null);
     Promise.all([
       api<{ usuarios: ContaBasica[]; cargos: { id: string; codigo: string; nome: string }[] }>('/api/admin/usuarios'),
-      api<{ resumo: Resumo | null; detalhe: DetalheAcompanhamento | null }>(`/api/admin/acompanhamento/detalhe?id=${id}`),
+      api<{ cargoId: string; editais: EditalDet[]; resumo: Resumo | null; detalhe: DetalheAcompanhamento | null }>(`/api/admin/acompanhamento/detalhe?id=${id}${cargoSel ? `&cargo=${encodeURIComponent(cargoSel)}` : ''}`),
     ])
       .then(([lista, det]) => {
         const c = lista.usuarios.find((u) => u.id === id) ?? null;
         setConta(c);
-        setCargoNome(lista.cargos.find((x) => x.id === c?.cargoId)?.nome ?? '');
+        setCargoNome(lista.cargos.find((x) => x.id === det.cargoId)?.nome ?? '');
         setDados(det);
         setAtualizadoEm(new Date());
       })
       .catch((e: Error) => setErro(e.message))
       .finally(() => setCarregando(false));
-  }, [id]);
+  }, [id, cargoSel]);
   useEffect(carregar, [carregar]);
 
   const nome = conta ? conta.nome || conta.email.split('@')[0] : 'Conta';
@@ -130,14 +133,27 @@ export function PaginaAcompanhamento({ id }: { id: number }) {
       titulo={nome}
       subtitulo={
         <>
-          {conta.email} · {cargoNome || conta.cargoId}{' '}
+          {conta.email} · {cargoNome || dados.cargoId}{' '}
           <span className={`chip ${conta.ativo ? 'chip-ok' : 'chip-erro'}`}>{conta.ativo ? 'Ativa' : 'Desativada'}</span>{' '}
           {conta.papel === 'admin' && <span className="chip">Administrador</span>}{' '}
           {conta.senhaProvisoria && <span className="chip chip-aviso">Senha provisória</span>}
           {conta.id === usuario.id && <> <span className="chip">você</span></>}
         </>
       }
-      acoes={<>{hora && <span className="nota" aria-live="polite">Atualizado às {hora}</span>}{atualizar}</>}
+      acoes={
+        <>
+          {dados.editais.length > 1 && (
+            <>
+              <label className="sr-only" htmlFor="ac-edital">Edital acompanhado</label>
+              <select id="ac-edital" value={dados.cargoId} onChange={(e) => setCargoSel(e.target.value)}>
+                {dados.editais.map((e) => <option key={e.cargoId} value={e.cargoId}>{CONCURSOS[e.concursoId]?.sigla ?? e.concursoId} · {e.nomeCurto}{e.principal ? ' (principal)' : ''}</option>)}
+              </select>
+            </>
+          )}
+          {hora && <span className="nota" aria-live="polite">Atualizado às {hora}</span>}
+          {atualizar}
+        </>
+      }
     />
   );
 
@@ -146,7 +162,7 @@ export function PaginaAcompanhamento({ id }: { id: number }) {
       <div className="pagina">
         {voltar}
         {cabecalho}
-        <Painel><p className="nota">Esta pessoa ainda não entrou na plataforma, então não há estudos para mostrar. Quando ela começar a estudar, os números aparecem aqui.</p></Painel>
+        <Painel><p className="nota">{dados.editais.length > 1 ? 'Esta pessoa ainda não abriu este edital, então não há estudos para mostrar nele.' : 'Esta pessoa ainda não entrou na plataforma, então não há estudos para mostrar.'} Quando ela começar a estudar, os números aparecem aqui.</p></Painel>
       </div>
     );
   }

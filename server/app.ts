@@ -7,10 +7,11 @@ import { limparCfg, POMODORO_PADRAO } from '../src/domain/pomodoro';
 import type { BD } from './sqlite';
 import { prep } from './db';
 import { listarCargos } from './edital';
+import { definirInscricao, definirPrincipal, listarInscricoes } from './inscricoes';
 import { CONCURSO_PADRAO, CONCURSOS, PDF_LEGADO, PDFS_EDITAIS } from '../src/domain/concursos';
 import type { Config } from './config';
 import * as auth from './auth';
-import { ServicoDados } from './servico';
+import { ErroEdital, ServicoDados } from './servico';
 import { detalhar, resumir } from '../src/domain/acompanhamento';
 import { definirFuso, isoDia } from '../src/domain/util';
 import { acharFoto, removerFoto, salvarFotoBytes } from './foto';
@@ -60,6 +61,10 @@ interface Req {
 
 export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
   const servico = new ServicoDados(db, seeds);
+  const editalAtivo = (r: Req) => {
+    const h = r.req.headers['x-edital'];
+    return servico.editalDe(r.usuario!.id, typeof h === 'string' && h ? h : null);
+  };
   const nomeCookie = cfg.cookieSeguro ? '__Host-sid' : 'sid';
 
   const backupAntesDeSubstituir = () => {
@@ -137,25 +142,29 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
       },
     },
 
-    // O edital devolvido é sempre o do cargo da conta; não há como pedir o de outro cargo.
-    { metodo: 'GET', caminho: '/api/edital', privada: true, h: (r) => servico.seedDe(r.usuario!.id) },
+    // Edital, dados, ações e exportação são sempre do edital ativo (cabeçalho X-Edital), entre os editais
+    // em que a conta está inscrita; sem o cabeçalho, do edital principal. Não há como pedir o de outra conta.
+    { metodo: 'GET', caminho: '/api/edital', privada: true, h: (r) => servico.seedDe(r.usuario!.id, editalAtivo(r)) },
     {
       metodo: 'GET', caminho: '/api/dados', privada: true,
       h: (r) => {
-        const c = servico.obter(r.usuario!.id);
-        if (r.url.searchParams.get('versao') === String(c.versao)) return { versao: c.versao, inalterado: true };
-        return { versao: c.versao, dados: c.dados };
+        const ed = editalAtivo(r);
+        const c = servico.obter(r.usuario!.id, ed);
+        const cronometroOutro = servico.cronometroEmOutro(r.usuario!.id, ed);
+        if (r.url.searchParams.get('versao') === String(c.versao)) return { versao: c.versao, inalterado: true, cronometroOutro };
+        return { versao: c.versao, dados: c.dados, cronometroOutro };
       },
     },
     {
       metodo: 'POST', caminho: '/api/acoes', privada: true, limite: 25 * 1024 * 1024,
-      h: (r, corpo) => servico.aplicar(r.usuario!.id, corpo ?? {}, backupAntesDeSubstituir),
+      h: (r, corpo) => servico.aplicar(r.usuario!.id, editalAtivo(r), corpo ?? {}, backupAntesDeSubstituir),
     },
     {
       metodo: 'GET', caminho: '/api/exportar', privada: true,
       h: (r) => {
-        const { dados } = servico.obter(r.usuario!.id);
-        r.res.setHeader('Content-Disposition', `attachment; filename="estudo-backup-${servico.hoje(r.usuario!.id)}.json"`);
+        const ed = editalAtivo(r);
+        const { dados } = servico.obter(r.usuario!.id, ed);
+        r.res.setHeader('Content-Disposition', `attachment; filename="estudo-backup-${ed.toLowerCase()}-${servico.hoje(r.usuario!.id, ed)}.json"`);
         return dados;
       },
     },
@@ -220,6 +229,7 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
   };
   const contaAdmin = (u: ReturnType<typeof auth.listarUsuarios>[number]) => ({
     id: u.id, email: u.email, nome: u.nome, papel: u.papel, ativo: u.ativo, cargoId: u.cargoId,
+    inscricoes: listarInscricoes(db, u.id),
     senhaProvisoria: u.senhaProvisoria, criadoEm: u.criadoEm, ultimoAcesso: u.ultimoAcesso,
   });
   const alvo = (corpo: any) => {
@@ -229,10 +239,10 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
     return u;
   };
   // Acompanhamento: números agregados de progresso. Não inclui notas nem texto das sessões.
-  const acompanhar = (id: number) => {
-    const dados = servico.lerSemCriar(id);
-    if (!dados) return null; // a pessoa ainda não entrou
-    const seed = servico.seedDe(id);
+  const acompanhar = (id: number, cargoId = servico.principal(id)) => {
+    const dados = servico.lerSemCriar(id, cargoId);
+    if (!dados) return null; // a pessoa ainda não estudou neste edital
+    const seed = servico.seedDe(id, cargoId);
     definirFuso(dados.user.config.fusoHorario);
     const hoje = isoDia();
     return { dados, seed, hoje };
@@ -242,12 +252,18 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
       metodo: 'GET', caminho: '/api/admin/acompanhamento', privada: true,
       h: (r) => {
         exigirAdmin(r);
+        // resumos: o do edital principal de cada conta; porEdital: o de cada edital ativo.
         const resumos: Record<number, unknown> = {};
+        const porEdital: Record<number, Record<string, unknown>> = {};
         for (const u of auth.listarUsuarios(db)) {
-          const a = acompanhar(u.id);
-          resumos[u.id] = a ? resumir(a.seed, a.dados.user, a.hoje) : null;
+          porEdital[u.id] = {};
+          for (const e of servico.editais(u.id)) {
+            const a = acompanhar(u.id, e.cargoId);
+            porEdital[u.id][e.cargoId] = a ? resumir(a.seed, a.dados.user, a.hoje) : null;
+          }
+          resumos[u.id] = porEdital[u.id][u.cargoId] ?? null;
         }
-        return { resumos };
+        return { resumos, porEdital };
       },
     },
     {
@@ -255,9 +271,12 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
       h: (r) => {
         exigirAdmin(r);
         const u = alvo({ id: r.url.searchParams.get('id') });
-        const a = acompanhar(u.id);
-        if (!a) return { resumo: null, detalhe: null };
-        return { resumo: resumir(a.seed, a.dados.user, a.hoje), detalhe: detalhar(a.seed, a.dados.user, a.hoje) };
+        const pedido = r.url.searchParams.get('cargo');
+        const cargoId = pedido && servico.inscrito(u.id, pedido) ? pedido : u.cargoId;
+        const editais = servico.editais(u.id);
+        const a = acompanhar(u.id, cargoId);
+        if (!a) return { cargoId, editais, resumo: null, detalhe: null };
+        return { cargoId, editais, resumo: resumir(a.seed, a.dados.user, a.hoje), detalhe: detalhar(a.seed, a.dados.user, a.hoje) };
       },
     },
     {
@@ -283,6 +302,38 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
         } catch (e) {
           throw new ErroHttp(400, (e as Error).message);
         }
+      },
+    },
+    {
+      // Inscreve a conta num edital (ou reativa) ou retira a inscrição. Vale também para a própria conta.
+      metodo: 'POST', caminho: '/api/admin/usuarios/editais', privada: true, limite: 1024,
+      h: (r, corpo) => {
+        exigirAdmin(r);
+        const u = alvo(corpo);
+        const cargoId = typeof corpo?.cargoId === 'string' ? corpo.cargoId : '';
+        if (typeof corpo?.ativa !== 'boolean') throw new ErroHttp(400, 'Informe se a inscrição deve ficar ativa.');
+        try {
+          definirInscricao(db, u.id, cargoId, corpo.ativa);
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+        log('info', corpo.ativa ? 'edital acrescentado à conta' : 'edital retirado da conta', { admin: r.usuario!.id, usuario: u.id, cargo: cargoId });
+        return { inscricoes: listarInscricoes(db, u.id) };
+      },
+    },
+    {
+      metodo: 'POST', caminho: '/api/admin/usuarios/principal', privada: true, limite: 1024,
+      h: (r, corpo) => {
+        exigirAdmin(r);
+        const u = alvo(corpo);
+        const cargoId = typeof corpo?.cargoId === 'string' ? corpo.cargoId : '';
+        try {
+          definirPrincipal(db, u.id, cargoId);
+        } catch (e) {
+          throw new ErroHttp(400, (e as Error).message);
+        }
+        log('info', 'edital principal trocado', { admin: r.usuario!.id, usuario: u.id, cargo: cargoId });
+        return { inscricoes: listarInscricoes(db, u.id) };
       },
     },
     {
@@ -329,7 +380,7 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
     return { tema: (p?.tema ?? 'sistema') as 'sistema' | 'claro' | 'escuro', menuRecolhido: p?.menu_recolhido === 1, pomodoro };
   }
 
-  const publico = (u: auth.Usuario) => ({ id: u.id, email: u.email, nome: u.nome, papel: u.papel, cargoId: u.cargoId, senhaProvisoria: u.senhaProvisoria, criadoEm: u.criadoEm, senhaAlteradaEm: u.senhaAlteradaEm, foto: acharFoto(cfg.pastaDados, u.id)?.versao ?? null });
+  const publico = (u: auth.Usuario) => ({ id: u.id, email: u.email, nome: u.nome, papel: u.papel, cargoId: u.cargoId, editais: servico.editais(u.id), senhaProvisoria: u.senhaProvisoria, criadoEm: u.criadoEm, senhaAlteradaEm: u.senhaAlteradaEm, foto: acharFoto(cfg.pastaDados, u.id)?.versao ?? null });
 
   // -------------------------------------------------------------------------
   // Cookies
@@ -500,6 +551,8 @@ export function criarApp(db: BD, seeds: Record<string, Seed>, cfg: Config) {
         res.destroy();
       } else if (e instanceof ErroHttp) {
         enviarJson(res, e.status, { erro: e.message, ...e.extra });
+      } else if (e instanceof ErroEdital) {
+        enviarJson(res, 409, { erro: e.message, editalInvalido: true });
       } else if (e instanceof ErroAcao) {
         enviarJson(res, 422, { erro: e.message });
       } else {

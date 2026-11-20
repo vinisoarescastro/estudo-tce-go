@@ -259,7 +259,7 @@ describe('vários usuários e cargos (API)', () => {
     // Quem ainda não entrou aparece sem dados, e a consulta não cria o plano inicial dela.
     const nova = await auth.criarUsuario(db, { email: 'nunca@exemplo.com', nome: 'Nunca', senha: 'frase-secreta-4455', cargoId: 'B02' });
     expect((await req('/api/admin/acompanhamento', { cookie: adm })).json.resumos[nova.id]).toBeNull();
-    expect((await req(`/api/admin/acompanhamento/detalhe?id=${nova.id}`, { cookie: adm })).json).toEqual({ resumo: null, detalhe: null });
+    expect((await req(`/api/admin/acompanhamento/detalhe?id=${nova.id}`, { cookie: adm })).json).toMatchObject({ resumo: null, detalhe: null });
     expect(db.prepare('SELECT COUNT(*) AS n FROM configuracoes WHERE usuario_id = ?').get(nova.id)).toMatchObject({ n: 0 });
     expect((await req('/api/admin/acompanhamento/detalhe?id=99999', { cookie: adm })).status).toBe(404);
 
@@ -305,15 +305,16 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO sessoes_estudo (usuario_id, id, seq, data, disciplina_id, topico_id, planejado_min, realizado_min, origem, criado_em, atualizado_em)
         VALUES (1, 's1', 1, '2026-10-01', 'lp', 't001', 60, 50, 'manual', '${agora}', '${agora}');`);
 
-    expect(migrar(db)).toEqual([3, 4, 5]);
+    expect(migrar(db)).toEqual([3, 4, 5, 6]);
 
     expect(db.prepare('SELECT email, cargo_id, senha_provisoria, versao_dados FROM usuarios').get()).toMatchObject({ email: 'antigo@exemplo.com', cargo_id: 'B02', senha_provisoria: 0, versao_dados: 7 });
     expect(db.prepare('SELECT cargo_id FROM disciplinas').all()).toMatchObject([{ cargo_id: 'B02' }]);
     expect(db.prepare('SELECT cargo_id FROM fatos').all()).toMatchObject([{ cargo_id: 'B02' }]);
     expect(db.prepare('SELECT id, seed_versao, concurso_id FROM cargos').all()).toMatchObject([{ id: 'B02', seed_versao: 1, concurso_id: 'tce-go-2026' }]);
     expect(db.prepare('SELECT cargo_id, nucleo_id, descricao FROM cargo_nucleos').all()).toMatchObject([{ cargo_id: 'B02', nucleo_id: 'CG', descricao: 'desc CG' }]);
-    expect(db.prepare('SELECT meta_diaria_min, meta_semanal_min FROM configuracoes').get()).toMatchObject({ meta_diaria_min: 111, meta_semanal_min: 222 });
-    expect(db.prepare('SELECT id, realizado_min FROM sessoes_estudo').all()).toMatchObject([{ id: 's1', realizado_min: 50 }]);
+    expect(db.prepare('SELECT cargo_id, meta_diaria_min, meta_semanal_min FROM configuracoes').get()).toMatchObject({ cargo_id: 'B02', meta_diaria_min: 111, meta_semanal_min: 222 });
+    expect(db.prepare('SELECT id, cargo_id, realizado_min FROM sessoes_estudo').all()).toMatchObject([{ id: 's1', cargo_id: 'B02', realizado_min: 50 }]);
+    expect(db.prepare('SELECT usuario_id, cargo_id, ativa FROM inscricoes').all()).toMatchObject([{ usuario_id: 1, cargo_id: 'B02', ativa: 1 }]);
 
     // Rodar de novo não faz nada; a versão do edital do B02 já gravada não é regravada, e o A01 entra sem tocar no B02.
     expect(migrar(db)).toEqual([]);
@@ -369,7 +370,7 @@ describe('migração e seeds por cargo', () => {
       INSERT INTO nucleos VALUES ('CG', 'Conhecimentos Gerais', 'Núcleo comum', 'desc CG', 19, 0);
       INSERT INTO disciplinas (id, nome, nome_curto, nucleo_id, ordem_edital, paginas, texto_oficial, ordem) VALUES ('lp', 'Língua Portuguesa', 'LP', 'CG', 1, '[19]', 'texto', 0);
       INSERT INTO topicos VALUES ('t001', 1, 'lp', 'Redação Oficial', 0, 'Média', 'x', 'Não estudado', 0);`);
-    expect(migrar(db)).toEqual([5]);
+    expect(migrar(db)).toEqual([5, 6]);
     expect(db.prepare('SELECT id, nome, concurso_id, seed_versao FROM cargos').all()).toMatchObject([{ id: 'B02', nome: 'TI', concurso_id: 'tce-go-2026', seed_versao: 1 }]);
     expect(db.prepare('SELECT id, titulo FROM topicos').all()).toMatchObject([{ id: 't001', titulo: 'Redação Oficial' }]);
     // O edital do IFG entra sem tocar no B02.

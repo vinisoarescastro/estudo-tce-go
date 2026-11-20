@@ -52,7 +52,7 @@ export interface Usuario {
   nome: string;
   papel: 'admin' | 'usuario';
   ativo: boolean;
-  cargoId: string; // cargo fixo da conta, definido na criação
+  cargoId: string; // edital principal da conta (a conta pode estar inscrita em outros: tabela inscricoes)
   senhaProvisoria: boolean; // criada por um administrador: o dono deve trocá-la
   criadoEm: string;
   senhaAlteradaEm: string;
@@ -98,6 +98,8 @@ export async function criarUsuario(
   const agora = new Date().toISOString();
   const r = prep(db, `INSERT INTO usuarios (email, nome, senha_hash, papel, cargo_id, senha_provisoria, senha_alterada_em, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(p.email.trim().toLowerCase(), p.nome.trim().slice(0, 120), hash, p.papel ?? 'usuario', p.cargoId, p.provisoria ? 1 : 0, agora, agora, agora);
+  // O cargo da criação é o edital principal e a primeira inscrição da conta.
+  prep(db, 'INSERT INTO inscricoes (usuario_id, cargo_id, ativa, criada_em) VALUES (?, ?, 1, ?)').run(Number(r.lastInsertRowid), p.cargoId, agora);
   return buscarUsuario(db, Number(r.lastInsertRowid))!;
 }
 

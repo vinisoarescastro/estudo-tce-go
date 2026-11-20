@@ -236,11 +236,13 @@ O comando confere a integridade do arquivo, guarda uma cópia do banco atual (`-
 
 ## Mais usuários no futuro
 
-O banco separa todos os dados por `usuario_id`, e cada conta tem dados, preferências e sessões próprios. Cada conta pertence a **um cargo fixo** (`B02` ou `A01`, do TCE-GO; `IFG308`, do IFG), definido na criação, que determina o edital verticalizado que ela vê, a marca e o PDF do edital.
+O banco separa todos os dados por `usuario_id` e, dentro da conta, por edital (`cargo_id`). Cada conta tem um **edital principal** (`B02` ou `A01`, do TCE-GO; `IFG308`, do IFG), definido na criação, e pode ser inscrita pelo administrador em outros editais (tabela `inscricoes`). Cada edital tem ciclo, metas, progresso, sessões e histórico próprios; o edital aberto define a marca e o PDF que a pessoa vê.
 
 Para criar outra conta, o administrador usa **Configurações → Usuários** na própria plataforma (nome, e-mail, cargo e senha provisória) ou o terminal: `node build/cli.mjs usuario:criar --email outra@pessoa.com --nome "Nome" --cargo A01`. Não há cadastro aberto pela internet, de propósito.
 
 **Atualização e segurança dos dados:** a atualização aplica a migração 3 do banco automaticamente na primeira inicialização. Ela só acrescenta colunas e tabelas; contas, dados de estudo e o edital do B02 existentes permanecem como estão (o cargo padrão é `B02`). Antes de atualizar, faça `node build/cli.mjs backup`. Se for preciso voltar a uma versão anterior do sistema depois que contas do A01 tiverem sido criadas, restaure o backup feito antes da atualização, pois as versões antigas não conhecem cargos.
+
+**Atualização para vários editais por conta (migração 6):** cria a tabela `inscricoes` (uma inscrição por conta, no cargo atual dela) e passa todos os dados de estudo existentes para o edital atual de cada conta. Quatro tabelas (`configuracoes`, `ciclos`, `ciclo_itens`, `historico`) são recriadas com o edital na chave, copiando as mesmas linhas; as demais só ganham a coluna `cargo_id`. Tudo roda numa transação: se algo falhar, o banco fica como estava. Faça `node build/cli.mjs backup` antes de atualizar. Voltar a uma versão anterior do sistema exige restaurar esse backup, porque as versões antigas não conhecem a nova estrutura.
 
 **Atualização para o IFG (migração 5):** só acrescenta a coluna `concurso_id` à tabela de cargos; B02 e A01 ficam no concurso do TCE-GO e nada nos dados de estudo muda. Na inicialização, o servidor grava o edital do cargo `IFG308`. O PDF do TCE-GO passou para `editais/tce-go-2026.pdf`, e o endereço antigo `edital.pdf` continua funcionando. Faça `node build/cli.mjs backup` antes de atualizar.
 

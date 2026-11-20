@@ -4,6 +4,7 @@ import { useApp, seed } from '../../store/AppStore';
 import { api } from '../../api';
 import { Cabecalho, Icone, Painel, Vazio } from '../../ui/primitives';
 import { useUi } from '../../ui/UiContext';
+import { CONCURSOS } from '../../domain/concursos';
 
 interface SessaoLogin { atual: boolean; criadaEm: string; ultimoUso: string; expiraEm: string; ip: string; agente: string }
 
@@ -145,13 +146,24 @@ export function ConfigConta() {
           <div className="config-secao">
             <div className="config-desc">
               <h2>Conta</h2>
-              <p>A conta e o cargo são definidos na criação e não mudam depois.</p>
+              <p>Os editais da conta são definidos pelo administrador. O principal é o que abre por padrão.</p>
             </div>
             <dl className="dados-linhas">
               <div><dt>E-mail</dt><dd>{usuario.email}</dd></div>
               {usuario.nome && <div><dt>Nome</dt><dd>{usuario.nome}</dd></div>}
               <div><dt>Perfil</dt><dd>{usuario.papel === 'admin' ? 'Administrador' : 'Usuário'}</dd></div>
-              {seed.cargo && <div><dt>Cargo</dt><dd>{seed.cargo.codigo} · {seed.cargo.nome}</dd></div>}
+              <div>
+                <dt>{usuario.editais.length > 1 ? 'Editais' : 'Edital'}</dt>
+                <dd>
+                  {usuario.editais.map((e) => (
+                    <div key={e.cargoId}>
+                      {CONCURSOS[e.concursoId]?.sigla ?? e.concursoId} · {e.nomeCurto}
+                      {e.principal && usuario.editais.length > 1 && <> <span className="chip">principal</span></>}
+                      {e.cargoId === seed.cargo?.id && usuario.editais.length > 1 && <> <span className="chip chip-pri">aberto agora</span></>}
+                    </div>
+                  ))}
+                </dd>
+              </div>
               <div><dt>Criada em</dt><dd>{quando(usuario.criadoEm)}</dd></div>
               <div><dt>Senha alterada em</dt><dd>{quando(usuario.senhaAlteradaEm)}</dd></div>
             </dl>

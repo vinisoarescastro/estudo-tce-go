@@ -255,6 +255,102 @@ export const MIGRACOES: { versao: number; nome: string; sql: string }[] = [
     // Só acrescenta uma coluna. Os cargos que já existem (B02 e A01) são do concurso do TCE-GO, o valor padrão.
     sql: `ALTER TABLE cargos ADD COLUMN concurso_id TEXT NOT NULL DEFAULT 'tce-go-2026';`,
   },
+  {
+    versao: 6,
+    nome: 'inscrições: uma conta pode estudar para mais de um edital',
+    // Cada conta passa a ter um conjunto de dados de estudo por edital (cargo). Tudo o que já existe pertence
+    // ao cargo atual da conta (usuarios.cargo_id, que passa a ser o edital principal), então nada muda para
+    // quem já usa. Quatro tabelas têm a conta (ou a conta e o id) como chave e precisam incluir o cargo nela:
+    // são recriadas com as mesmas linhas. As demais só ganham a coluna. Roda dentro de uma transação.
+    sql: `
+      CREATE TABLE inscricoes (
+        usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+        cargo_id TEXT NOT NULL REFERENCES cargos(id),
+        ativa INTEGER NOT NULL DEFAULT 1 CHECK (ativa IN (0, 1)),
+        criada_em TEXT NOT NULL,
+        PRIMARY KEY (usuario_id, cargo_id)
+      );
+      INSERT INTO inscricoes (usuario_id, cargo_id, ativa, criada_em) SELECT id, cargo_id, 1, criado_em FROM usuarios;
+
+      CREATE TABLE configuracoes_v6 (
+        usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+        cargo_id TEXT NOT NULL,
+        meta_diaria_min INTEGER NOT NULL,
+        meta_semanal_min INTEGER NOT NULL,
+        duracao_padrao_min INTEGER NOT NULL,
+        revisao_dias TEXT NOT NULL,
+        data_prova TEXT NOT NULL DEFAULT '',
+        fuso_horario TEXT NOT NULL DEFAULT 'America/Sao_Paulo',
+        schema_dados INTEGER NOT NULL DEFAULT 1,
+        seed_versao INTEGER NOT NULL,
+        PRIMARY KEY (usuario_id, cargo_id)
+      );
+      INSERT INTO configuracoes_v6 (usuario_id, cargo_id, meta_diaria_min, meta_semanal_min, duracao_padrao_min, revisao_dias, data_prova, fuso_horario, schema_dados, seed_versao)
+        SELECT c.usuario_id, u.cargo_id, c.meta_diaria_min, c.meta_semanal_min, c.duracao_padrao_min, c.revisao_dias, c.data_prova, c.fuso_horario, c.schema_dados, c.seed_versao
+        FROM configuracoes c JOIN usuarios u ON u.id = c.usuario_id;
+      DROP TABLE configuracoes;
+      ALTER TABLE configuracoes_v6 RENAME TO configuracoes;
+
+      CREATE TABLE ciclos_v6 (
+        usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+        cargo_id TEXT NOT NULL,
+        proximo_item_id TEXT,
+        numero INTEGER NOT NULL,
+        PRIMARY KEY (usuario_id, cargo_id)
+      );
+      INSERT INTO ciclos_v6 (usuario_id, cargo_id, proximo_item_id, numero)
+        SELECT c.usuario_id, u.cargo_id, c.proximo_item_id, c.numero FROM ciclos c JOIN usuarios u ON u.id = c.usuario_id;
+      DROP TABLE ciclos;
+      ALTER TABLE ciclos_v6 RENAME TO ciclos;
+
+      CREATE TABLE ciclo_itens_v6 (
+        usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+        cargo_id TEXT NOT NULL,
+        id TEXT NOT NULL,
+        posicao INTEGER NOT NULL,
+        disciplina_id TEXT NOT NULL REFERENCES disciplinas(id),
+        minutos INTEGER NOT NULL,
+        ativo INTEGER NOT NULL CHECK (ativo IN (0, 1)),
+        PRIMARY KEY (usuario_id, cargo_id, id)
+      );
+      INSERT INTO ciclo_itens_v6 (usuario_id, cargo_id, id, posicao, disciplina_id, minutos, ativo)
+        SELECT c.usuario_id, u.cargo_id, c.id, c.posicao, c.disciplina_id, c.minutos, c.ativo FROM ciclo_itens c JOIN usuarios u ON u.id = c.usuario_id;
+      DROP TABLE ciclo_itens;
+      ALTER TABLE ciclo_itens_v6 RENAME TO ciclo_itens;
+
+      CREATE TABLE historico_v6 (
+        usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+        cargo_id TEXT NOT NULL,
+        id TEXT NOT NULL,
+        seq INTEGER NOT NULL,
+        ts TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        descricao TEXT NOT NULL,
+        topico_id TEXT,
+        disciplina_id TEXT,
+        PRIMARY KEY (usuario_id, cargo_id, id)
+      );
+      INSERT INTO historico_v6 (usuario_id, cargo_id, id, seq, ts, tipo, descricao, topico_id, disciplina_id)
+        SELECT h.usuario_id, u.cargo_id, h.id, h.seq, h.ts, h.tipo, h.descricao, h.topico_id, h.disciplina_id FROM historico h JOIN usuarios u ON u.id = h.usuario_id;
+      DROP TABLE historico;
+      ALTER TABLE historico_v6 RENAME TO historico;
+      CREATE INDEX ix_historico_seq ON historico(usuario_id, cargo_id, seq);
+
+      ALTER TABLE estados_topico ADD COLUMN cargo_id TEXT NOT NULL DEFAULT '';
+      ALTER TABLE prioridades_disciplina ADD COLUMN cargo_id TEXT NOT NULL DEFAULT '';
+      ALTER TABLE dependencias ADD COLUMN cargo_id TEXT NOT NULL DEFAULT '';
+      ALTER TABLE sessoes_estudo ADD COLUMN cargo_id TEXT NOT NULL DEFAULT '';
+      ALTER TABLE cronometros ADD COLUMN cargo_id TEXT NOT NULL DEFAULT '';
+      UPDATE estados_topico SET cargo_id = (SELECT cargo_id FROM usuarios WHERE id = usuario_id);
+      UPDATE prioridades_disciplina SET cargo_id = (SELECT cargo_id FROM usuarios WHERE id = usuario_id);
+      UPDATE dependencias SET cargo_id = (SELECT cargo_id FROM usuarios WHERE id = usuario_id);
+      UPDATE sessoes_estudo SET cargo_id = (SELECT cargo_id FROM usuarios WHERE id = usuario_id);
+      UPDATE cronometros SET cargo_id = (SELECT cargo_id FROM usuarios WHERE id = usuario_id);
+      CREATE INDEX ix_estados_topico_cargo ON estados_topico(usuario_id, cargo_id);
+      CREATE INDEX ix_dependencias_cargo ON dependencias(usuario_id, cargo_id);
+      CREATE INDEX ix_sessoes_estudo_cargo ON sessoes_estudo(usuario_id, cargo_id, data);
+    `,
+  },
 ];
 
 export function abrirBanco(caminho: string): BD {

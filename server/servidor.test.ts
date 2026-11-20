@@ -43,8 +43,8 @@ describe('banco de dados', () => {
     const db = bancoNovo();
     const id = criarUsuarioDireto(db);
     let d = criarDados(seed, '2026-10-01', Date.parse('2026-10-01T12:00:00Z'));
-    transacao(db, () => gravarDados(db, id, null, d));
-    expect(carregarDados(db, id)).toEqual(d);
+    transacao(db, () => gravarDados(db, id, 'B02', null, d));
+    expect(carregarDados(db, id, 'B02')).toEqual(d);
 
     // Uma sequência de ações de todos os tipos, gravando só a diferença a cada passo.
     const t = seed.topicos;
@@ -73,29 +73,29 @@ describe('banco de dados', () => {
     for (const a of acoes) {
       agora += 60_000 * 7;
       const novo = reduzir(d, a, { seed, agora });
-      transacao(db, () => gravarDados(db, id, d, novo));
+      transacao(db, () => gravarDados(db, id, 'B02', d, novo));
       d = novo;
-      expect(carregarDados(db, id), `depois de ${a.t}`).toEqual(d);
+      expect(carregarDados(db, id, 'B02'), `depois de ${a.t}`).toEqual(d);
     }
     // Finaliza o cronômetro e exclui uma sessão
     d = reduzir(d, { t: 'timerFinalizar', notas: 'fim', novoStatus: null }, { seed, agora: agora + 3_600_000 });
     const s = d.user.sessoes[0];
     const d2 = reduzir(d, { t: 'sessaoExcluir', id: s.id }, { seed, agora: agora + 3_700_000 });
-    transacao(db, () => gravarDados(db, id, carregarDados(db, id), d));
-    transacao(db, () => gravarDados(db, id, d, d2));
-    expect(carregarDados(db, id)).toEqual(d2);
+    transacao(db, () => gravarDados(db, id, 'B02', carregarDados(db, id, 'B02'), d));
+    transacao(db, () => gravarDados(db, id, 'B02', d, d2));
+    expect(carregarDados(db, id, 'B02')).toEqual(d2);
   });
 
   test('uma falha no meio da gravação desfaz tudo', () => {
     const db = bancoNovo();
     const id = criarUsuarioDireto(db);
     const d = criarDados(seed);
-    transacao(db, () => gravarDados(db, id, null, d));
+    transacao(db, () => gravarDados(db, id, 'B02', null, d));
     const ruim = structuredClone(d);
     ruim.user.sessoes.push({ id: 's1', data: '2026-10-02', disciplinaId: 'nao-existe', topicoId: null, planejadoMin: 1, realizadoMin: 1, notas: '', origem: 'manual', cicloItemId: null, criadoEm: '', atualizadoEm: '' });
     ruim.user.config.metaDiariaMin = 1;
-    expect(() => transacao(db, () => gravarDados(db, id, d, ruim))).toThrow();
-    expect(carregarDados(db, id)).toEqual(d);
+    expect(() => transacao(db, () => gravarDados(db, id, 'B02', d, ruim))).toThrow();
+    expect(carregarDados(db, id, 'B02')).toEqual(d);
   });
 });
 

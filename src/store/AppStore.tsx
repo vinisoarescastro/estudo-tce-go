@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { AppData, Seed } from '../domain/types';
 import { reduzir, ErroAcao, type Acao } from '../domain/actions';
 import { definirFuso, uid } from '../domain/util';
-import { api, definirAoExpirar, ErroApi, type Preferencias, type UsuarioPublico } from '../api';
+import { api, definirAoEditalInvalido, definirAoExpirar, definirEditalAtivo, ErroApi, type CronometroOutro, type Preferencias, type UsuarioPublico } from '../api';
 import { POMODORO_PADRAO } from '../domain/pomodoro';
 import { definirSeed, seed } from './seed';
 import { Login } from '../pages/Login';
@@ -25,6 +25,32 @@ interface Ctx {
   recarregarUsuario: () => Promise<void>;
   prefs: Preferencias;
   definirPrefs: (p: Partial<Preferencias>) => void;
+  editalAtivo: string; // cargo do edital aberto nesta aba
+  trocarEdital: (cargoId: string) => void;
+  cronometroOutro: CronometroOutro | null; // cronômetro da conta em outro edital
+}
+
+// O edital escolhido fica guardado neste navegador, por conta (é só uma conveniência: sem ele, abre o principal).
+const chaveEdital = (usuarioId: number) => `estudo:edital:${usuarioId}`;
+function lerEditalSalvo(usuarioId: number): string | null {
+  try {
+    return localStorage.getItem(chaveEdital(usuarioId));
+  } catch {
+    return null;
+  }
+}
+function salvarEdital(usuarioId: number, cargoId: string | null): void {
+  try {
+    if (cargoId) localStorage.setItem(chaveEdital(usuarioId), cargoId);
+    else localStorage.removeItem(chaveEdital(usuarioId));
+  } catch {
+    /* sem armazenamento local: cada abertura começa no principal */
+  }
+}
+// Edital que a aba abre: o guardado, se a conta ainda estiver inscrita nele, ou o principal.
+function escolherEdital(u: UsuarioPublico): string {
+  const salvo = lerEditalSalvo(u.id);
+  return salvo && u.editais?.some((e) => e.cargoId === salvo) ? salvo : u.cargoId;
 }
 
 const AppCtx = createContext<Ctx | null>(null);
@@ -62,6 +88,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [salvo, setSalvo] = useState<EstadoSalvo>('carregando');
   const [prefs, setPrefs] = useState<Preferencias>(PREFS_PADRAO);
+  const [editalAtivo, setEditalAtivo] = useState<string>('');
+  const [cronometroOutro, setCronometroOutro] = useState<CronometroOutro | null>(null);
 
   const confirmado = useRef<{ dados: AppData; versao: number } | null>(null);
   const pendentes = useRef<Pendente[]>([]);
@@ -124,8 +152,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
           pendentes.current.shift();
           avisar('erro', err.message);
           try {
-            const d = await api<{ versao: number; dados: AppData }>('/api/dados');
+            const d = await api<{ versao: number; dados: AppData; cronometroOutro: CronometroOutro | null }>('/api/dados');
             confirmado.current = { dados: d.dados, versao: d.versao };
+            setCronometroOutro(d.cronometroOutro ?? null);
           } catch {
             /* mantém o último estado confirmado */
           }
@@ -147,13 +176,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const carregar = useCallback(async (u: UsuarioPublico) => {
     setErroCarga(null);
+    const ed = escolherEdital(u);
+    definirEditalAtivo(ed);
+    setEditalAtivo(ed);
     try {
       const [s, d, p] = await Promise.all([
         api<Seed>('/api/edital'),
-        api<{ versao: number; dados: AppData }>('/api/dados'),
+        api<{ versao: number; dados: AppData; cronometroOutro: CronometroOutro | null }>('/api/dados'),
         api<Preferencias>('/api/preferencias'),
       ]);
       definirSeed(s);
+      setCronometroOutro(d.cronometroOutro ?? null);
       if (usuarioId.current !== u.id) pendentes.current = [];
       usuarioId.current = u.id;
       confirmado.current = { dados: d.dados, versao: d.versao };
@@ -178,13 +211,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setUsuario(null);
       avisar('info', 'Sua sessão expirou. Entre novamente para continuar.');
     });
+    // O edital desta aba deixou de estar disponível (o administrador retirou a inscrição): volta ao principal.
+    definirAoEditalInvalido(() => {
+      if (usuarioId.current !== null) salvarEdital(usuarioId.current, null);
+      pendentes.current = [];
+      window.location.reload();
+    });
     api<{ usuario: UsuarioPublico }>('/api/auth/eu', { silenciar401: true })
       .then((r) => entrou(r.usuario))
       .catch((e: ErroApi) => {
         if (e.status === 401) setUsuario(null);
         else setErroCarga(e.message);
       });
-    return () => definirAoExpirar(null);
+    return () => {
+      definirAoExpirar(null);
+      definirAoEditalInvalido(null);
+    };
   }, [avisar, entrou]);
 
   // Ao voltar para a aba, busca mudanças feitas em outro dispositivo.
@@ -192,7 +234,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const h = async () => {
       if (document.visibilityState !== 'visible' || !confirmado.current || pendentes.current.length || enviando.current) return;
       try {
-        const r = await api<{ versao: number; dados?: AppData; inalterado?: boolean }>(`/api/dados?versao=${confirmado.current.versao}`);
+        const r = await api<{ versao: number; dados?: AppData; inalterado?: boolean; cronometroOutro?: CronometroOutro | null }>(`/api/dados?versao=${confirmado.current.versao}`);
+        setCronometroOutro(r.cronometroOutro ?? null);
         if (r.dados && !pendentes.current.length) {
           confirmado.current = { dados: r.dados, versao: r.versao };
           rebasear();
@@ -269,9 +312,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     confirmado.current = null;
     atual.current = null;
     usuarioId.current = null;
+    definirEditalAtivo(null);
     setDados(null);
     setUsuario(null);
   }, [avisar]);
+
+  // Troca o edital desta aba. A página recarrega: edital, dados e telas passam a ser os do outro edital.
+  const trocarEdital = useCallback((cargoId: string) => {
+    if (!usuario || cargoId === editalAtivo) return;
+    if (pendentes.current.length) {
+      avisar('erro', 'Ainda há alterações sendo salvas. Aguarde um instante e troque de edital de novo.');
+      return;
+    }
+    salvarEdital(usuario.id, cargoId);
+    window.location.reload();
+  }, [avisar, editalAtivo, usuario]);
 
   // Atualiza os dados da conta (foto, senha provisória) sem recarregar os estudos.
   const recarregarUsuario = useCallback(async () => {
@@ -280,8 +335,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs } : null),
-    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs],
+    () => (dados && usuario ? { dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro } : null),
+    [dados, despachar, toasts, avisar, fecharToast, salvo, usuario, sair, recarregarUsuario, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro],
   );
 
   if (erroCarga)

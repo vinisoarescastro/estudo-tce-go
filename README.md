@@ -55,9 +55,11 @@ A plataforma atende mais de uma pessoa, cada uma com o seu próprio ambiente (co
 
 A marca, o PDF do edital e os textos que mudam de um edital para outro vêm do concurso do cargo da conta (`src/domain/concursos.ts`). A tela de login é neutra, porque aparece antes de se saber o concurso.
 
-- **O cargo é fixo e definido na criação da conta.** Cada conta só enxerga o edital e os dados do seu cargo; o servidor recusa ids de outro cargo e não existe forma de trocar o cargo depois.
+- **Uma conta pode estudar para mais de um edital.** O cargo escolhido na criação é o edital principal; o administrador acrescenta outros, retira (os estudos ficam guardados e voltam se o edital for acrescentado de novo) e troca o principal em **Configurações → Usuários → Gerenciar**, inclusive na própria conta. Cada edital tem os seus próprios dados: ciclo, metas, data da prova, progresso, sessões e histórico. Quem tem mais de um edital troca o edital aberto no menu lateral; a escolha fica guardada no navegador.
+- **O edital aberto** vai em toda chamada à API (cabeçalho `X-Edital`); sem ele vale o principal. O servidor só aceita editais em que a conta está inscrita e recusa ids de conteúdos de outro edital.
+- **Um só cronômetro por conta:** com um cronômetro em andamento num edital, os outros mostram um aviso e não iniciam outro.
 - **O administrador** (primeira conta criada) cria contas em **Configurações → Usuários**: informa nome, e-mail, cargo e uma senha provisória. A pessoa é convidada a trocá-la no primeiro acesso. Também é possível redefinir senhas e desativar/reativar contas (os dados são mantidos). O administrador também acompanha o progresso de cada conta (números agregados: % do edital, horas, último estudo, ritmo, disciplinas e pendências prioritárias), sem acesso a notas nem ao texto das sessões.
-- Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` (ou `B02`, `IFG308`) e `node build/cli.mjs cargos`.
+- Pelo terminal: `node build/cli.mjs usuario:criar --email E --nome N --cargo A01` (ou `B02`, `IFG308`), `node build/cli.mjs usuario:edital --email E --cargo IFG308 [--principal | --retirar]` e `node build/cli.mjs cargos`. `importar` e `exportar` aceitam `--cargo` para escolher o edital.
 
 ### Trazer os dados da versão anterior
 
@@ -243,7 +245,7 @@ dist/                 versão anterior (arquivo único com dados no navegador), 
 
 ### Testes
 
-`npm test` roda 85 testes:
+`npm test` roda 91 testes:
 - **domínio**: estrutura do edital, progresso, cronômetro, ciclo, distribuição, pré-requisitos, recomendações, revisões, horas, importação, metas, série mensal, ids determinísticos e reinício;
 - **banco**: o edital volta idêntico; gravar e ler, ação por ação, não perde dados nem a ordem das listas; uma falha no meio desfaz tudo; fuso horário;
 - **vários cargos e usuários**: cada conta vê só o edital e os dados do seu cargo; ids e backups de outro cargo são recusados; só o administrador gerencia contas; desativar bloqueia o acesso sem apagar dados; as migrações 3 e 5 mantêm intactos contas, edital e dados de estudo existentes; o edital do IFG é coerente com o PDF; os PDFs dos editais exigem login;

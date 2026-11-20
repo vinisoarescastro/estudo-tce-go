@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AppProvider, useApp, seed } from './store/AppStore';
 import { Ui, type PresetSessao, type UiCtx } from './ui/UiContext';
 import { Icone, useConfirmacao, type NomeIcone } from './ui/primitives';
-import { concursoDe } from './domain/concursos';
+import { CONCURSOS, concursoDe } from './domain/concursos';
 import { TopicoDetalhe } from './ui/TopicoDetalhe';
 import { SessaoForm } from './ui/SessaoForm';
 import { Cronometro } from './ui/Cronometro';
@@ -100,7 +100,7 @@ function useMarcaDocumento() {
 }
 
 function Shell() {
-  const { dados, despachar, toasts, fecharToast, salvo, usuario, sair, prefs, definirPrefs } = useApp();
+  const { dados, despachar, toasts, fecharToast, salvo, usuario, sair, prefs, definirPrefs, editalAtivo, trocarEdital, cronometroOutro } = useApp();
   const { confirmar, dialogo } = useConfirmacao();
   const [loc, setLoc] = useState(lerHash);
   const [menu, setMenu] = useState(false);
@@ -258,6 +258,17 @@ function Shell() {
             <Icone nome={recolhido ? 'direita' : 'esquerda'} tam={14} />
           </button>
 
+          {usuario.editais.length > 1 && (
+            <div className="edital-troca">
+              <label htmlFor="edital-ativo">Edital</label>
+              <select id="edital-ativo" value={editalAtivo} onChange={(e) => trocarEdital(e.target.value)}>
+                {usuario.editais.map((e) => (
+                  <option key={e.cargoId} value={e.cargoId}>{CONCURSOS[e.concursoId]?.sigla ?? e.concursoId} · {e.nomeCurto}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div className="nav">
             <ul>{item(INICIO)}</ul>
             {GRUPOS.map((g) => {
@@ -293,6 +304,17 @@ function Shell() {
         {menu && <div className="veu" onClick={() => setMenu(false)} aria-hidden="true" />}
 
         <main id="conteudo" tabIndex={-1}>
+          {cronometroOutro && (
+            <p className="aviso-senha" role="status">
+              <Icone nome="sessoes" tam={16} />
+              <span>
+                Há um cronômetro {cronometroOutro.rodando ? 'em andamento' : 'pausado'} no edital {cronometroOutro.nomeCurto}. A conta tem um só cronômetro: finalize ou descarte esse antes de iniciar outro.{' '}
+                {usuario.editais.some((e) => e.cargoId === cronometroOutro.cargoId) && (
+                  <button type="button" className="link-botao" onClick={() => trocarEdital(cronometroOutro.cargoId)}>Ir para esse edital</button>
+                )}
+              </span>
+            </p>
+          )}
           {pagina}
         </main>
         <Cronometro />

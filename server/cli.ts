@@ -10,21 +10,24 @@ import { ServicoDados } from './servico';
 import { conferirArquivoBanco, criarBackup, listarBackups, rotacionarBackups } from './backup';
 import { configurarLog } from './log';
 import { salvarFoto } from './foto';
+import { definirInscricao, definirPrincipal, listarInscricoes } from './inscricoes';
 
 // Administração pelo terminal do servidor. Só quem tem acesso à máquina consegue rodar,
 // por isso é o caminho para criar a primeira conta e redefinir senhas esquecidas.
 
 const AJUDA = `Uso: node build/cli.mjs <comando> [opções]   (ou npm run <script> -- [opções])
 
-  usuario:criar  --email E --cargo B02|A01 [--nome N] [--importar backup.json]
-                                                                 cria uma conta (pede a senha). O cargo é fixo e não muda depois
+  usuario:criar  --email E --cargo B02|A01|IFG308 [--nome N] [--importar backup.json]
+                                                                 cria uma conta (pede a senha). O cargo é o edital principal
+  usuario:edital --email E --cargo C [--retirar] [--principal]   inscreve a conta em outro edital, retira a inscrição
+                                                                 (os dados ficam guardados) ou o torna o principal
   cargos                                                         lista os cargos disponíveis
   usuario:senha  --email E                                       redefine a senha e encerra as sessões
   usuario:nome   --email E --nome N                              define o nome exibido na saudação
   usuario:foto   --email E --arquivo imagem.png                  define a foto de perfil (.webp, .png ou .jpg, até 2 MB)
   usuario:listar                                                 lista as contas
-  importar       --email E --arquivo backup.json                 importa um backup JSON do app
-  exportar       --email E [--saida arquivo.json]                exporta os dados de estudo em JSON
+  importar       --email E --arquivo backup.json [--cargo C]     importa um backup JSON do app no edital (padrão: o principal)
+  exportar       --email E [--saida arquivo.json] [--cargo C]    exporta os dados de estudo de um edital em JSON
   backup                                                         cria uma cópia do banco agora
   backups                                                        lista as cópias existentes
   restaurar      --arquivo copia.db --confirmar                  substitui o banco por uma cópia (pare o servidor antes)
@@ -124,13 +127,22 @@ async function main() {
       return sair('O arquivo não é um JSON válido.');
     }
   };
+  // Edital indicado em --cargo (precisa ser uma inscrição ativa da conta) ou o principal.
+  const editalDaConta = (usuarioId: number) => {
+    try {
+      return servico.editalDe(usuarioId, typeof o.cargo === 'string' ? o.cargo.trim().toUpperCase() : null);
+    } catch (e) {
+      return sair((e as Error).message);
+    }
+  };
   const importar = (usuarioId: number, arq: string) => {
     const dados = lerBackupJson(arq);
-    const r = servico.aplicar(usuarioId, { acao: { t: 'importar', dados } }, () => {
+    const cargoId = editalDaConta(usuarioId);
+    const r = servico.aplicar(usuarioId, cargoId, { acao: { t: 'importar', dados } }, () => {
       const c = criarBackup(db, cfg.pastaBackups, 'antes-substituir');
       console.log(`Cópia de segurança: ${c}`);
     });
-    const d = servico.obter(usuarioId).dados.user;
+    const d = servico.obter(usuarioId, cargoId).dados.user;
     console.log(`Importado: ${d.sessoes.length} sessões, ${Object.keys(d.topicos).length} conteúdos com situação registrada, ${d.historico.length} eventos (versão ${r.versao}).`);
   };
 
@@ -141,7 +153,7 @@ async function main() {
         if (!auth.emailValido(email)) sair('E-mail inválido.');
         if (auth.buscarPorEmail(db, email)) sair('Já existe uma conta com esse e-mail.');
         const validos = listarCargos(db).map((c) => c.id);
-        const cargoId = typeof o.cargo === 'string' ? o.cargo.trim().toUpperCase() : sair(`Informe --cargo (${validos.join(' ou ')}). O cargo é fixo: não pode ser trocado depois.`);
+        const cargoId = typeof o.cargo === 'string' ? o.cargo.trim().toUpperCase() : sair(`Informe --cargo (${validos.join(' ou ')}). O cargo é o edital principal; outros podem ser acrescentados com usuario:edital.`);
         if (!validos.includes(cargoId)) sair(`Cargo desconhecido: ${cargoId}. Opções: ${validos.join(', ')}.`);
         const senha = await lerSenhaNova(email);
         const u = await auth.criarUsuario(db, { email, nome: typeof o.nome === 'string' ? o.nome : '', senha, cargoId, papel: auth.contarUsuarios(db) === 0 ? 'admin' : 'usuario' });
@@ -172,8 +184,24 @@ async function main() {
         }
         break;
       }
+      case 'usuario:edital': {
+        const u = conta();
+        const cargoId = typeof o.cargo === 'string' ? o.cargo.trim().toUpperCase() : sair('Informe --cargo.');
+        try {
+          if (o.retirar) definirInscricao(db, u.id, cargoId, false);
+          else {
+            definirInscricao(db, u.id, cargoId, true);
+            if (o.principal) definirPrincipal(db, u.id, cargoId);
+          }
+        } catch (e) {
+          sair((e as Error).message);
+        }
+        for (const i of listarInscricoes(db, u.id)) console.log(`${i.cargoId}${i.principal ? '  (principal)' : ''}${i.ativa ? '' : '  (retirado)'}`);
+        break;
+      }
       case 'usuario:listar':
-        for (const u of db.prepare('SELECT id, email, nome, papel, cargo_id, ativo, criado_em FROM usuarios ORDER BY id').all()) console.log(u);
+        for (const u of db.prepare(`SELECT u.id, u.email, u.nome, u.papel, u.cargo_id, u.ativo, u.criado_em,
+          (SELECT group_concat(cargo_id, ', ') FROM inscricoes i WHERE i.usuario_id = u.id AND i.ativa = 1) AS editais FROM usuarios u ORDER BY u.id`).all()) console.log(u);
         break;
       case 'cargos':
         for (const c of listarCargos(db)) console.log(`${c.id}  ${c.nome}`);
@@ -183,7 +211,7 @@ async function main() {
         break;
       case 'exportar': {
         const u = conta();
-        const json = JSON.stringify(servico.obter(u.id).dados, null, 2);
+        const json = JSON.stringify(servico.obter(u.id, editalDaConta(u.id)).dados, null, 2);
         if (typeof o.saida === 'string') {
           writeFileSync(o.saida, json);
           console.log(`Dados exportados para ${o.saida}`);

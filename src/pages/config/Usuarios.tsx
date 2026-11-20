@@ -12,7 +12,8 @@ interface Conta {
   nome: string;
   papel: 'admin' | 'usuario';
   ativo: boolean;
-  cargoId: string;
+  cargoId: string; // edital principal
+  inscricoes: { cargoId: string; ativa: boolean; principal: boolean }[];
   senhaProvisoria: boolean;
   criadoEm: string;
   ultimoAcesso: string | null;
@@ -28,7 +29,7 @@ const nomeDe = (c: Conta) => c.nome || c.email.split('@')[0];
 // Administração de contas: só aparece para administradores (o servidor também confere).
 // O administrador cria e gerencia contas e acompanha o progresso (só números: nada de notas nem de texto das sessões).
 export function ConfigUsuarios() {
-  const { usuario, avisar } = useApp();
+  const { usuario, avisar, recarregarUsuario } = useApp();
   const { confirmar } = useUi();
   const [contas, setContas] = useState<Conta[] | null>(null);
   const [cargos, setCargos] = useState<CargoOpcao[]>([]);
@@ -82,7 +83,7 @@ export function ConfigUsuarios() {
     const q = busca.trim().toLowerCase();
     const lista = (contas ?? []).filter((c) => {
       if (q && !`${c.nome} ${c.email}`.toLowerCase().includes(q)) return false;
-      if (cargoFiltro && c.cargoId !== cargoFiltro) return false;
+      if (cargoFiltro && !c.inscricoes.some((i) => i.ativa && i.cargoId === cargoFiltro)) return false;
       if (filtro === 'paradas') return c.ativo && parada(c);
       if (filtro === 'atrasadas') return c.ativo && atrasada(c);
       if (filtro === 'nunca') return c.ativo && nuncaEstudou(c);
@@ -103,7 +104,7 @@ export function ConfigUsuarios() {
   const criar = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro(null);
-    if (!form.cargoId) return setErro('Escolha o cargo. Ele não poderá ser trocado depois.');
+    if (!form.cargoId) return setErro('Escolha o edital principal da conta.');
     if (form.senha.length < 10) return setErro('A senha provisória precisa ter pelo menos 10 caracteres.');
     setEnviando(true);
     try {
@@ -147,6 +148,27 @@ export function ConfigUsuarios() {
       avisar('ok', 'Senha redefinida. As sessões abertas dessa conta foram encerradas.');
       setGerenciando(null);
       carregar();
+    } catch (err) {
+      avisar('erro', (err as Error).message);
+    }
+  };
+
+  // Editais da conta: acrescentar, retirar (os dados ficam guardados) e escolher o principal.
+  const alterarEdital = async (c: Conta, cargoId: string, acao: 'acrescentar' | 'retirar' | 'principal') => {
+    if (acao === 'retirar') {
+      const ok = await confirmar(
+        'Retirar este edital da conta?',
+        `${nomeDe(c)} deixa de ver o edital ${nomeCargo(cargoId)}. Os estudos feitos nele ficam guardados e voltam se o edital for acrescentado de novo.`,
+        'Retirar',
+      );
+      if (!ok) return;
+    }
+    try {
+      if (acao === 'principal') await api('/api/admin/usuarios/principal', { metodo: 'POST', corpo: { id: c.id, cargoId } });
+      else await api('/api/admin/usuarios/editais', { metodo: 'POST', corpo: { id: c.id, cargoId, ativa: acao === 'acrescentar' } });
+      avisar('ok', acao === 'acrescentar' ? 'Edital acrescentado à conta.' : acao === 'retirar' ? 'Edital retirado da conta. Os estudos dele ficam guardados.' : 'Edital principal alterado.');
+      carregar();
+      if (c.id === usuario.id) await recarregarUsuario();
     } catch (err) {
       avisar('erro', (err as Error).message);
     }
@@ -221,7 +243,7 @@ export function ConfigUsuarios() {
                 <thead>
                   <tr>
                     <th scope="col">Pessoa</th>
-                    <th scope="col">Cargo</th>
+                    <th scope="col">Editais</th>
                     <th scope="col">Progresso do edital</th>
                     <th scope="col">Últimos 7 dias</th>
                     <th scope="col">Último estudo</th>
@@ -244,7 +266,13 @@ export function ConfigUsuarios() {
                             </div>
                           </div>
                         </td>
-                        <td><span className="chip chip-pri" title={cargos.find((x) => x.id === c.cargoId)?.nome}>{nomeCargo(c.cargoId)}</span></td>
+                        <td>
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                            {c.inscricoes.filter((i) => i.ativa).sort((a, b) => Number(b.principal) - Number(a.principal)).map((i) => (
+                              <span key={i.cargoId} className={`chip ${i.principal ? 'chip-pri' : ''}`} title={`${cargos.find((x) => x.id === i.cargoId)?.nome ?? i.cargoId}${i.principal && c.inscricoes.filter((x) => x.ativa).length > 1 ? ' (principal)' : ''}`}>{nomeCargo(i.cargoId)}</span>
+                            ))}
+                          </div>
+                        </td>
                         <td style={{ minWidth: 190 }}>
                           {r ? (
                             <>
@@ -269,7 +297,7 @@ export function ConfigUsuarios() {
                         </td>
                         <td className="acoes-celula">
                           <a className="btn pq" href={`#/config/usuarios/acompanhar?id=${c.id}`} aria-label={`Acompanhar ${nomeDe(c)}`}>Acompanhar</a>{' '}
-                          {c.id !== usuario.id && <button className="btn pq" onClick={() => abrirGerenciar(c.id)} aria-label={`Gerenciar a conta de ${nomeDe(c)}`}>Gerenciar</button>}
+                          <button className="btn pq" onClick={() => abrirGerenciar(c.id)} aria-label={`Gerenciar a conta de ${nomeDe(c)}`}>Gerenciar</button>
                         </td>
                       </tr>
                     );
@@ -288,7 +316,7 @@ export function ConfigUsuarios() {
         aberto={criando}
         onFechar={() => setCriando(false)}
         titulo="Nova conta"
-        subtitulo="O cargo define o edital verticalizado da conta e não pode ser trocado depois."
+        subtitulo="O cargo escolhido é o edital principal da conta. Outros editais podem ser acrescentados depois, em Gerenciar."
         largura={520}
       >
         <form className="form" onSubmit={criar} style={{ display: 'grid', gap: 14 }}>
@@ -329,7 +357,32 @@ export function ConfigUsuarios() {
       >
         {alvo && (
           <div style={{ display: 'grid', gap: 22 }}>
-            <form className="form" onSubmit={redefinir} style={{ display: 'grid', gap: 10 }}>
+            <div style={{ display: 'grid', gap: 8 }}>
+              <b style={{ fontWeight: 550 }}>Editais da conta</b>
+              <p className="nota" style={{ margin: 0 }}>Cada edital tem o seu ciclo, metas e progresso. O principal é o que a conta abre por padrão. Retirar um edital guarda os estudos dele.</p>
+              <ul className="lista-editais">
+                {cargos.map((cg) => {
+                  const i = alvo.inscricoes.find((x) => x.cargoId === cg.id);
+                  const ativa = !!i?.ativa;
+                  return (
+                    <li key={cg.id}>
+                      <span>
+                        <b style={{ fontWeight: 550 }}>{cg.concurso} · {cg.nomeCurto}</b>
+                        {ativa && i!.principal && <> <span className="chip chip-pri">principal</span></>}
+                        {i && !ativa && <> <span className="chip">retirado, estudos guardados</span></>}
+                      </span>
+                      <span style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {!ativa && <button className="btn pq" onClick={() => void alterarEdital(alvo, cg.id, 'acrescentar')}>{i ? 'Acrescentar de novo' : 'Acrescentar'}</button>}
+                        {ativa && !i!.principal && <button className="btn pq" onClick={() => void alterarEdital(alvo, cg.id, 'principal')}>Tornar principal</button>}
+                        {ativa && !i!.principal && <button className="btn pq" onClick={() => void alterarEdital(alvo, cg.id, 'retirar')}>Retirar</button>}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            {alvo.id !== usuario.id && (<>
+            <form className="form" onSubmit={redefinir} style={{ display: 'grid', gap: 10, borderTop: '1px solid var(--linha)', paddingTop: 16 }}>
               <div className="campo">
                 <label htmlFor="u-nova">Nova senha provisória</label>
                 <input id="u-nova" type="text" required minLength={10} value={nova} onChange={(e) => setNova(e.target.value)} autoComplete="off" aria-describedby="u-nova-dica" />
@@ -346,6 +399,7 @@ export function ConfigUsuarios() {
               </p>
               <div><button className="btn" onClick={() => void alternarAtivo(alvo)}>{alvo.ativo ? 'Desativar conta' : 'Reativar conta'}</button></div>
             </div>
+            </>)}
           </div>
         )}
       </Modal>

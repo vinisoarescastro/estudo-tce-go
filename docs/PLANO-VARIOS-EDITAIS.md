@@ -1,6 +1,6 @@
 # Plano: vários editais na mesma plataforma
 
-Situação em 20/11/2026: fase 1 implementada; fases 2 e 3 por fazer.
+Situação em 20/11/2026: fases 1 e 2 implementadas; fase 3 por fazer.
 
 Hoje a plataforma atende um concurso (TCE-GO 2026, cargos B02 e A01). Este plano acrescenta o concurso do **IFG 2026, cargo 308 – Técnico de Laboratório/Área Química**, e permite que **uma mesma conta estude para mais de um edital**. A plataforma está em produção: nenhuma etapa pode mudar o que as contas atuais veem ou perder dados.
 
@@ -95,15 +95,18 @@ Como ficou:
 5. **Registro do cargo** em `server/cargos.ts`, com testes para um terceiro cargo.
 6. **Textos fixos de nomes de arquivos** exportados (backup e CSV) sem "tce-go".
 
-### Fase 2: várias inscrições por conta
+### Fase 2: várias inscrições por conta (implementada)
 
-1. **Migração 6**, só com acréscimos:
-   - Tabela `inscricoes` (conta, cargo, principal, ativa, criada em), preenchida a partir de `usuarios.cargo_id`.
-   - `cargo_id` em `configuracoes`, `ciclos`, `ciclo_itens` e `cronometros`, com o cargo atual de cada conta como valor.
-   - `configuracoes`, `ciclos` e `cronometros` têm a conta como chave primária e precisam ser recriadas com chave (conta, cargo). As linhas são copiadas dentro de uma transação. É o passo mais delicado de todo o plano.
-2. **API com edital ativo.** O navegador envia o edital ativo em cada chamada; se não vier, vale o principal. Uma aba aberta com a versão antiga continua funcionando.
-3. **Interface.** Seletor de edital ativo e "Editais da conta" na tela de Usuários.
-4. **Acompanhamento do administrador** por edital.
+Como ficou:
+- **Migração 6.** Tabela `inscricoes` (conta, cargo, ativa, criada em), uma por conta a partir de `usuarios.cargo_id`, que continua sendo o edital principal (não há coluna "principal" separada). Todos os dados de estudo ganharam `cargo_id`, preenchido com o cargo atual da conta:
+  - recriadas com o cargo na chave, copiando as mesmas linhas: `configuracoes`, `ciclos`, `ciclo_itens` e `historico`. Os ids dos itens do ciclo (`ci01`…) e o evento inicial (`ev-inicio`) se repetem entre editais;
+  - só ganharam a coluna: `estados_topico`, `prioridades_disciplina`, `dependencias`, `sessoes_estudo` e `cronometros`. Os ids de conteúdos e disciplinas já são únicos entre editais.
+  - `cronometros` manteve a conta como chave: **um só cronômetro por conta**. O serviço recusa iniciar outro em outro edital, e a tela mostra um aviso com o atalho para o edital do cronômetro.
+- **Documento por edital.** `ServicoDados` e `repositorio.ts` leem e gravam por (conta, edital). A versão dos dados continua sendo da conta: uma mudança em um edital faz a aba de outro receber os dados completos na próxima ação, o que é seguro. Trocar o principal sobe a versão, para uma aba antiga não gravar no edital errado.
+- **API.** O cabeçalho `X-Edital` escolhe o edital. Sem ele, vale o principal; com um edital em que a conta não está inscrita, a resposta é 409 (`editalInvalido`), e a tela volta ao principal. `/api/auth/eu` traz os editais da conta; `/api/dados` traz `cronometroOutro`; `/api/exportar` exporta o edital ativo.
+- **Administração.** `POST /api/admin/usuarios/editais` (acrescentar ou retirar) e `POST /api/admin/usuarios/principal`, também para a própria conta. O edital principal não pode ser retirado. Retirar só desativa a inscrição: os dados ficam e voltam. No terminal: `usuario:edital`, e `importar`/`exportar` com `--cargo`.
+- **Interface.** Seletor de edital no menu lateral (só para quem tem mais de um), guardado no navegador por conta; a troca recarrega a página. "Editais da conta" no Gerenciar da tela de Usuários, com a coluna Editais e o filtro por edital. O acompanhamento tem um seletor de edital, e a lista mostra o edital principal.
+- **Um edital novo** herda o fuso horário da conta. Metas, data da prova e ciclo vêm dos padrões do cargo.
 
 ### Fase 3: equivalências
 
